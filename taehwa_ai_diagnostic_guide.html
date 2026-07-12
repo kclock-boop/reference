@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>(주)태화기업 AI 컨설팅 사전 수준진단지 & 컨설팅 가이드</title>
+  <style>
+    :root {
+      --ink: #1d2733;
+      --muted: #5c6b7a;
+      --line: #d8dee6;
+      --panel: #ffffff;
+      --soft: #f6f8fb;
+      --brand: #0f766e;
+      --brand-soft: #dff5f1;
+      --accent: #b45309;
+      --accent-soft: #fff1e6;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Pretendard", "Malgun Gothic", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top right, rgba(15, 118, 110, 0.10), transparent 28%),
+        linear-gradient(180deg, #f4f8fb 0%, #eef3f8 100%);
+      line-height: 1.6;
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(15, 118, 110, 0.98), rgba(21, 94, 117, 0.92));
+      color: #fff;
+      border-radius: 28px;
+      padding: 40px;
+      box-shadow: 0 22px 44px rgba(15, 23, 42, 0.16);
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: 2rem;
+      line-height: 1.25;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 860px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .summary-card {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 20px;
+      padding: 18px 20px;
+      backdrop-filter: blur(8px);
+    }
+
+    .summary-card strong {
+      display: block;
+      font-size: 0.82rem;
+      letter-spacing: 0.02em;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .summary-card span {
+      display: block;
+      margin-top: 8px;
+      font-size: 1.08rem;
+      font-weight: 700;
+    }
+
+    .section {
+      margin-top: 26px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 16px 36px rgba(148, 163, 184, 0.10);
+    }
+
+    .section h2 {
+      margin: 0 0 10px;
+      font-size: 1.45rem;
+    }
+
+    .section p.lead {
+      margin: 0 0 18px;
+      color: var(--muted);
+    }
+
+    .subhead {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 22px 0 12px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      background: #fff;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 12px 14px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: var(--soft);
+      font-weight: 700;
+    }
+
+    .question-code {
+      width: 16%;
+      font-weight: 700;
+      background: #fbfcfe;
+    }
+
+    .choices {
+      display: grid;
+      gap: 8px;
+    }
+
+    .choice {
+      display: block;
+      padding-left: 1.6em;
+      text-indent: -1.6em;
+    }
+
+    .choice input {
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    .note-box {
+      margin-top: 16px;
+      border: 1px solid #f2d7b6;
+      background: var(--accent-soft);
+      border-radius: 18px;
+      padding: 16px 18px;
+    }
+
+    .note-box strong {
+      color: var(--accent);
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .score-card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px;
+      background: linear-gradient(180deg, #ffffff 0%, #f9fbfd 100%);
+    }
+
+    .score-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.02rem;
+    }
+
+    .score-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .level-table td strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .guide-list {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .guide-list li + li {
+      margin-top: 8px;
+    }
+
+    .memo-area {
+      width: 100%;
+      min-height: 160px;
+      margin-top: 12px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      font: inherit;
+      resize: vertical;
+      background: #fcfdff;
+    }
+
+    .footer {
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .page {
+        max-width: none;
+        padding: 0;
+      }
+
+      .hero,
+      .section {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <h1>&lt;(주)태화기업 AI 컨설팅 사전 수준진단지 &amp; 컨설팅 가이드&gt;</h1>
+      <p>본 문서는 태화기업의 성공적인 AI 도입 및 디지털 전환(AX)을 위한 사전 진단표와 교수용 컨설팅 방향 가이드를 한 화면에서 함께 검토할 수 있도록 정리한 배포용 HTML 문서입니다.</p>
+      <div class="summary-grid">
+        <div class="summary-card">
+          <strong>진단 대상</strong>
+          <span>(주)태화기업</span>
+        </div>
+        <div class="summary-card">
+          <strong>주요 목적</strong>
+          <span>AI 도입 준비도 진단 및 AX 로드맵 수립</span>
+        </div>
+        <div class="summary-card">
+          <strong>중점 영역</strong>
+          <span>생산, 품질, 설비, 전산, 물류</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>1. [기업 배포용] 중소기업 AI 수준조사 조사표</h2>
+      <p class="lead">귀사의 현재 데이터 관리 수준과 업무 자동화 니즈를 파악하여 최적의 AI 솔루션과 맞춤형 훈련 로드맵을 제안하기 위한 사전 진단표입니다. 각 항목에 대해 객관적으로 체크해 주시면 됩니다.</p>
+
+      <div class="subhead">Part 0. 기업 경영환경 및 조직 구성 분석</div>
+      <table>
+        <tr>
+          <th>평가항목</th>
+          <th>진단 문항 및 선택지</th>
+        </tr>
+        <tr>
+          <td class="question-code">M1. 경영환경</td>
+          <td>
+            <div class="choices">
+              <label class="choice"><input type="checkbox">① 원가 및 자재 부담: 원자재(구리, 철강 등) 공급망 불안정 및 제조 원가 상승 대응 필요</label>
+              <label class="choice"><input type="checkbox">② 인력 부족 및 숙련 기술 전수: 현장 작업자의 고령화, 신규 인력 유입 감소로 인한 숙련 기술 전수 문제</label>
+              <label class="choice"><input type="checkbox">③ 품질 규제 및 클레임 방지: 가전·자동차용 모터 시장의 엄격해진 품질 표준 및 글로벌 규제 대응 필요</label>
+              <label class="choice"><input type="checkbox">④ 납기 및 공정 효율성: 다품종 소량 생산 체계 확대로 인한 프레스/조립 공정 스케줄링의 복잡성 증가</label>
+              <label class="choice"><input type="checkbox">⑤ 디지털화 지연: 스마트공장 인프라(MES/ERP 등)는 있으나 누적된 데이터를 경영 의사결정에 활용하지 못함</label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="question-code">M2. 핵심 조직</td>
+          <td>
+            <div class="choices">
+              <label class="choice"><input type="checkbox">① 생산/공정관리 팀: 공정 스케줄링 최적화 및 설비 가동률 향상 담당 부서</label>
+              <label class="choice"><input type="checkbox">② 품질관리/생산기술 팀: 모터 성능 검사 및 외관 불량 원인 추적 담당 부서</label>
+              <label class="choice"><input type="checkbox">③ 설비/보전 팀: 핵심 엔지니어링 설비의 고장 예방 및 예지보전 담당 부서</label>
+              <label class="choice"><input type="checkbox">④ 전산/IT/경영지원 팀: 데이터 관리, 보안 인프라 구축 및 사내 시스템 연동 지원 부서</label>
+              <label class="choice"><input type="checkbox">⑤ 구매/물류/창고 팀: 자재 입출고 관리 및 재고 최적화 담당 부서</label>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <div class="subhead">Part A. 정보화 인프라 및 제조 데이터 환경</div>
+      <table>
+        <tr>
+          <th>평가항목</th>
+          <th>진단 문항 및 선택지</th>
+        </tr>
+        <tr>
+          <td class="question-code">A1. 시스템</td>
+          <td>
+            <div class="choices">
+              <label class="choice"><input type="checkbox">① 시스템 없음 (대부분 수기 또는 개인 PC 엑셀 관리)</label>
+              <label class="choice"><input type="checkbox">② 그룹웨어(GW) 및 사내 인트라넷</label>
+              <label class="choice"><input type="checkbox">③ 전사적자원관리 시스템 (ERP)</label>
+              <label class="choice"><input type="checkbox">④ 제조실행시스템 (MES) 또는 생산정보화시스템 (POP)</label>
+              <label class="choice"><input type="checkbox">⑤ 공급망관리 시스템 (SCM) 또는 고객관계관리 시스템 (CRM)</label>
+              <label class="choice"><input type="checkbox">⑥ 제품수명주기관리 시스템 (PLM / PDM)</label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="question-code">A2. 데이터 관리</td>
+          <td>
+            <div class="choices">
+              <label class="choice"><input type="checkbox">① 데이터를 거의 수집하고 있지 않거나, 작업자가 수기로 일지를 작성함</label>
+              <label class="choice"><input type="checkbox">② 일부 데이터를 한정적으로 수집하여 엑셀 등으로 관리함</label>
+              <label class="choice"><input type="checkbox">③ 주요 설비 데이터나 불량 유형 통계 데이터가 시스템(MES/DB)에 기록되나, 효과적인 분석에는 활용하지 못함</label>
+              <label class="choice"><input type="checkbox">④ 제조·유통·판매와 관련된 데이터가 주기적으로 자동 수집 및 정제되어 의사결정의 기준으로 활용됨</label>
+              <label class="choice"><input type="checkbox">⑤ 전 라인의 설비 데이터 및 품질 검사 Raw Data가 실시간으로 수집·분석되는 체계를 갖춤</label>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <div class="subhead">Part B. AI 역량 수준 진단</div>
+      <table>
+        <tr>
+          <th>평가항목</th>
+          <th>진단 문항 및 선택지</th>
+        </tr>
+        <tr>
+          <td class="question-code">B1. AI 이해도 및 활용</td>
+          <td>
+            <div class="choices">
+              <label class="choice"><input type="checkbox">① [미도입] 생성형 AI 기술에 대해 들어보았으나, 현업 업무에 어떻게 적용할지 전혀 모름</label>
+              <label class="choice"><input type="checkbox">② [개인적 체험] 일부 임직원이 개인적으로 단순 이메일 작성, 번역, 단순 정보 검색 등에 간헐적으로 사용함</label>
+              <label class="choice"><input type="checkbox">③ [초안 활용] 보고서 작성, 문서 요약, 아이디어 브레인스토밍 등 파편화된 업무의 초안 작성용 조수로 적극 활용함</label>
+              <label class="choice"><input type="checkbox">④ [업무 정착] 생성형 AI의 프롬프트 구성 요소를 이해하고 업무 생산성 향상에 체계적으로 적용함</label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="question-code">B2. AI 데이터 보안</td>
+          <td>
+            <div class="choices">
+              <label class="choice"><input type="checkbox">① 사내 보안 가이드라인이 없으며, 민감 정보를 그대로 복사하여 AI에 입력하는 경우가 있음</label>
+              <label class="choice"><input type="checkbox">② 위험성은 인지하고 있으나, 별도의 정제 없이 임직원 개개인의 주의에만 의존하여 사용함</label>
+              <label class="choice"><input type="checkbox">③ AI 입력 전 이름, 금액, 회사명 등 핵심 정보를 가명화/익명화하여 입력하는 보안 수칙을 실천함</label>
+              <label class="choice"><input type="checkbox">④ 사내 전용 보안 AI 공간(Enterprise/Private Cloud AI)이 구축되어 있어 데이터 유출 우려 없이 안전하게 활용함</label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="question-code">B3. 노코드 데이터 분석</td>
+          <td>
+            <div class="choices">
+              <label class="choice"><input type="checkbox">① 엑셀의 기본적인 계산 기능만 활용하며 데이터 시각화나 고도화된 분석은 수행하지 않음</label>
+              <label class="choice"><input type="checkbox">② AI 도구를 활용하여 텍스트 데이터를 표 형태로 정형화하거나 기초적인 차트를 생성함</label>
+              <label class="choice"><input type="checkbox">③ AI에게 명확한 데이터 분석 가이드라인을 제시하여 통계의 오류를 검증할 줄 앎</label>
+              <label class="choice"><input type="checkbox">④ 노코드 업무자동화(RPA) 도구 등을 활용하여 부서 내 반복적인 정형 업무 프로세스를 자동화함</label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="question-code">B4. 데이터 리터러시 및 검증</td>
+          <td>
+            <div class="choices">
+              <label class="choice"><input type="checkbox">① AI가 제공한 통계 수치나 그래프를 별도의 교차 검증 없이 그대로 인용함</label>
+              <label class="choice"><input type="checkbox">② AI 결과물에 포함된 고유명사나 숫자를 구글링 등으로 1차 팩트 체크하는 습관을 보유함</label>
+              <label class="choice"><input type="checkbox">③ AI가 생성한 엑셀 수식의 참조 범위나 논리 연산자 오류를 직접 검수할 수 있음</label>
+              <label class="choice"><input type="checkbox">④ 전체 평균 뒤에 숨겨진 하위 그룹별 특성이나 결측치를 인지하고 데이터를 쪼개서 입체적으로 분석함</label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="question-code">B5. 바이브코딩 활용 수준</td>
+          <td>
+            <div class="choices">
+              <label class="choice"><input type="checkbox">① AI 개발 도구를 전혀 사용하지 않으며, 모든 코딩 및 스크립트 작성은 수동으로 진행함</label>
+              <label class="choice"><input type="checkbox">② 일반 웹 챗봇 창에 질문하여 코드를 복사·붙여넣기 하는 수준임</label>
+              <label class="choice"><input type="checkbox">③ 텍스트 에디터 연동형 AI를 활용하여 자동 완성 및 코드 추천을 받으며 작업함</label>
+              <label class="choice"><input type="checkbox">④ CLI 기반 AI 에이전트 또는 로우코드 AI 빌더를 활용하여 자연어로 프로그래밍을 빌드함</label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="question-code">B6. 제조/피지컬 AI 응용</td>
+          <td>
+            <div class="choices">
+              <label class="choice"><input type="checkbox">① 설비 제어는 기존 PLC 및 SCADA 시스템의 정해진 규칙에만 의존하며, AI 분석은 전혀 적용되지 않음</label>
+              <label class="choice"><input type="checkbox">② 공정 설비에 부착된 IoT 센서 데이터를 수집하여 사후 불량 원인을 분석하는 수준임</label>
+              <label class="choice"><input type="checkbox">③ 머신비전 이미지 처리 기술이나 센서 시뮬레이션 기술을 도입하여 품질 불량을 실시간으로 판정하거나 예측함</label>
+              <label class="choice"><input type="checkbox">④ AI 알고리즘의 분석 결과가 실시간으로 설비 또는 자율주행 로봇의 동작 제어로 피드백되는 체계를 갖추고 있음</label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="question-code">B7. 전산/IT 조직 부서</td>
+          <td>
+            <div class="choices">
+              <label class="choice"><input type="checkbox">① 별도의 전산 부서가 없으며, PC 관리나 네트워킹 업무를 타 부서 직원이 겸임하거나 외주에 의존함</label>
+              <label class="choice"><input type="checkbox">② 전산 조직이 있으나 주로 ERP/MES 오류 수정 및 인프라 유지보수 역할에 국한됨</label>
+              <label class="choice"><input type="checkbox">③ 고정 부서는 없으나, 스마트공장이나 AI 과제 추진을 위해 별도 TF가 수시로 구성됨</label>
+              <label class="choice"><input type="checkbox">④ 독립적인 전산/DX 부서가 존재하며, 현업 부서의 AI 요구사항을 수렴하여 직접 시스템을 구축하거나 외주 개발을 리딩함</label>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <div class="subhead">Part C. AI 컨설팅 요구사항 및 바라는 점</div>
+      <table>
+        <tr>
+          <th>평가항목</th>
+          <th>진단 문항 및 선택지</th>
+        </tr>
+        <tr>
+          <td class="question-code">C1. 컨설팅 최종 목표</td>
+          <td>
+            <div class="choices">
+              <label class="choice"><input type="checkbox">① 생산성 및 가동률 향상: 반복 업무 자동화 및 공정 스케줄링 최적화로 리드타임 단축</label>
+              <label class="choice"><input type="checkbox">② 품질 비용 절감: 모터 성능 검사 및 외관 비전 검사의 AI 도입을 통한 불량률 감소</label>
+              <label class="choice"><input type="checkbox">③ 설비 유지보수 고도화: 프레스, 정밀 가공기 등 핵심 설비의 고장 예지보전 체계 구축</label>
+              <label class="choice"><input type="checkbox">④ 임직원 AX 역량 내재화: 실무진이 바이브코딩이나 노코드 툴을 직접 다룰 수 있는 자생력 확보</label>
+              <label class="choice"><input type="checkbox">⑤ 정부지원사업 연계: 차년도 스마트제조혁신추진단 고도화 사업 참여를 위한 마스터플랜 확보</label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="question-code">C2. 기타 건의</td>
+          <td>
+            이번 컨설팅 과정에서 전문 교수(컨설턴트)에게 특별히 조언을 구하고 싶거나 바라는 점이 있다면 자유롭게 작성해 주십시오.
+            <textarea class="memo-area" placeholder="예: 품질 데이터부터 어디까지 정비해야 하는지, ERP/MES 연계 가능 범위를 어떻게 봐야 하는지 등을 자유롭게 적어주세요."></textarea>
+          </td>
+        </tr>
+      </table>
+
+      <div class="note-box">
+        <strong>작성 안내</strong>
+        <div>Part A와 Part B는 점수화가 가능한 진단 문항이며, Part C는 컨설팅 방향 설계를 위한 정성 정보 수집 항목입니다.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>2. AI 수준진단 점수 산출 및 종합 결과표</h2>
+      <p class="lead">기업 현장에서 진단표 수거 후 각 문항의 점수를 합산하여 등급을 매기고, 컨설팅 방향성을 설정할 수 있도록 정리한 종합표입니다.</p>
+
+      <div class="score-grid">
+        <div class="score-card">
+          <h3>인프라 기초 체력</h3>
+          <p>A1, A2 문항 기준 총 20점. 기본 정보화 수준과 데이터 수집 체계를 평가합니다.</p>
+        </div>
+        <div class="score-card">
+          <h3>수준 1. 생성형 AI 기초</h3>
+          <p>B1, B2 문항 기준 총 20점. AI 친숙도와 데이터 보안 리터러시를 평가합니다.</p>
+        </div>
+        <div class="score-card">
+          <h3>수준 2. 노코드 분석</h3>
+          <p>B3, B4 문항 기준 총 20점. 현업 데이터 처리 및 자동화 준비 수준을 평가합니다.</p>
+        </div>
+        <div class="score-card">
+          <h3>수준 3. 제조 AI 고도화</h3>
+          <p>B5, B6, B7 문항 기준 총 40점. 바이브코딩, 피지컬 AI, 전산 조직 역량을 평가합니다.</p>
+        </div>
+      </div>
+
+      <table>
+        <tr>
+          <th>문항</th>
+          <th>배점 기준</th>
+        </tr>
+        <tr>
+          <td class="question-code">A1</td>
+          <td>① 2점 / ② 4점 / ③ 6점 / ④ 8점 / ⑤ 8점 / ⑥ 10점</td>
+        </tr>
+        <tr>
+          <td class="question-code">A2</td>
+          <td>① 2점 / ② 4점 / ③ 6점 / ④ 8점 / ⑤ 10점</td>
+        </tr>
+        <tr>
+          <td class="question-code">B1</td>
+          <td>① 2점 / ② 4점 / ③ 7점 / ④ 10점</td>
+        </tr>
+        <tr>
+          <td class="question-code">B2</td>
+          <td>① 2점 / ② 4점 / ③ 8점 / ④ 10점</td>
+        </tr>
+        <tr>
+          <td class="question-code">B3</td>
+          <td>① 2점 / ② 5점 / ③ 8점 / ④ 10점</td>
+        </tr>
+        <tr>
+          <td class="question-code">B4</td>
+          <td>① 2점 / ② 5점 / ③ 8점 / ④ 10점</td>
+        </tr>
+        <tr>
+          <td class="question-code">B5</td>
+          <td>① 3점 / ② 6점 / ③ 10점 / ④ 15점</td>
+        </tr>
+        <tr>
+          <td class="question-code">B6</td>
+          <td>① 3점 / ② 6점 / ③ 10점 / ④ 15점</td>
+        </tr>
+        <tr>
+          <td class="question-code">B7</td>
+          <td>① 2점 / ② 4점 / ③ 7점 / ④ 10점</td>
+        </tr>
+      </table>
+
+      <table class="level-table">
+        <tr>
+          <th>최종 총점</th>
+          <th>진단 등급</th>
+          <th>기업 현재 상태 정의</th>
+          <th>권장 컨설팅 방향 가이드</th>
+        </tr>
+        <tr>
+          <td>20점 ~ 40점</td>
+          <td><strong>Level 1</strong>AX 입문 단계</td>
+          <td>제조 현장 데이터가 파편화되어 있고, 임직원의 AI 활용이 개인 체험 수준에 머무는 상태</td>
+          <td>
+            <ul class="guide-list">
+              <li>프롬프트 활용법 교육과 보안 가이드 수립부터 시작합니다.</li>
+              <li>텍스트 기반 초안 작성, 문서 요약, 기본 행정 자동화 경험을 우선 제공합니다.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>41점 ~ 70점</td>
+          <td><strong>Level 2</strong>노코드 분석 단계</td>
+          <td>ERP/MES 등 기본 시스템이 구축되어 있으며, 데이터 자동화 및 분석 니즈가 본격화되는 단계</td>
+          <td>
+            <ul class="guide-list">
+              <li>엑셀 AI 기능과 노코드 툴을 결합한 데이터 분석 실습을 진행합니다.</li>
+              <li>현업 담당자가 오류를 검증하고 반복 정형 업무를 RPA로 자동화하도록 유도합니다.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>71점 ~ 100점</td>
+          <td><strong>Level 3</strong>바이브코딩 및 제조 AI 단계</td>
+          <td>데이터 인프라와 전산/TF 조직이 비교적 우수하며, 피지컬 AI와의 연동 가능성이 높은 고도화 상태</td>
+          <td>
+            <ul class="guide-list">
+              <li>바이브코딩 기반의 현장형 대시보드 빌드와 AI 업무 도구 내재화를 추진합니다.</li>
+              <li>품질 비전검사, 예지보전, 생산계획 최적화 중심의 AX 로드맵을 구체화합니다.</li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>3. 태화기업 맞춤 컨설팅 가이드</h2>
+      <p class="lead">모터 제조업 특성과 PDF 원문의 진단 의도를 바탕으로, 현장 인터뷰 시 바로 활용할 수 있도록 정리한 교수용 체크 포인트입니다.</p>
+
+      <table>
+        <tr>
+          <th>컨설팅 축</th>
+          <th>현장 확인 포인트</th>
+          <th>우선 제안 가능 과제</th>
+        </tr>
+        <tr>
+          <td class="question-code">생산/공정</td>
+          <td>프레스, 조립, 검사 공정의 작업지시 흐름이 수기인지, MES 기반인지, 그리고 다품종 소량 생산 시 일정 재편성이 얼마나 자주 발생하는지 확인</td>
+          <td>공정 스케줄링 대시보드, 작업일보 자동 요약, 납기 지연 사유 데이터화</td>
+        </tr>
+        <tr>
+          <td class="question-code">품질</td>
+          <td>모터 성능 검사 데이터, 외관 검사 기록, 클레임 이력의 저장 위치와 불량 분류 기준의 표준화 여부 확인</td>
+          <td>불량 유형 분류 체계 정비, 비전검사 PoC, 클레임 원인 추적 리포트 자동화</td>
+        </tr>
+        <tr>
+          <td class="question-code">설비/보전</td>
+          <td>설비별 고장 이력, 교체 주기, 알람 로그, 센서 데이터 취득 가능 범위 확인</td>
+          <td>예지보전 후보 설비 선정, 설비 이상 패턴 탐색, 정비 이력 표준화</td>
+        </tr>
+        <tr>
+          <td class="question-code">전산/데이터</td>
+          <td>ERP, MES, POP, 엑셀, 공용 폴더 사이에 데이터가 어떻게 이동하는지와 API 또는 파일 연계 가능성 확인</td>
+          <td>현황 데이터맵 작성, AI 입력용 마스킹 규칙 수립, 부서별 공용 데이터셋 설계</td>
+        </tr>
+        <tr>
+          <td class="question-code">인력/교육</td>
+          <td>현업 실무자가 보고서 작성, 수기 전표 정리, 자료 취합에 투입하는 시간과 AI 도구 수용성을 확인</td>
+          <td>직무별 프롬프트 교육, 노코드 실습, 바이브코딩 기반 미니 PoC 교육</td>
+        </tr>
+      </table>
+
+      <div class="note-box">
+        <strong>교수용 해석 팁</strong>
+        <div>M1에서 선택된 경영 과제와 C1의 최종 목표가 일치하는지 먼저 확인하시면, 단순 교육형 컨설팅이 아니라 실제 도입 과제형 컨설팅으로 연결하기가 훨씬 수월합니다.</div>
+      </div>
+    </section>
+
+    <div class="footer">문서명: (주)태화기업 AI 컨설팅 사전 수준진단지 &amp; 컨설팅 가이드</div>
+  </main>
+</body>
+</html>
