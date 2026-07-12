@@ -251,6 +251,50 @@
       color: var(--muted);
     }
 
+    .result-panel.is-hidden,
+    .results-block.is-hidden {
+      display: none;
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+      align-items: center;
+    }
+
+    .primary-button,
+    .secondary-button {
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 18px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary-button {
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .secondary-button {
+      background: #eaf3f2;
+      color: var(--brand);
+    }
+
+    .helper-text {
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .inline-note {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
     .guide-list {
       margin: 0;
       padding-left: 18px;
@@ -363,25 +407,27 @@
           <td class="question-code">A1. 시스템</td>
           <td>
             <div class="choices">
-              <label class="choice"><input type="checkbox">① 시스템 없음 (대부분 수기 또는 개인 PC 엑셀 관리)</label>
-              <label class="choice"><input type="checkbox">② 그룹웨어(GW) 및 사내 인트라넷</label>
-              <label class="choice"><input type="checkbox">③ 전사적자원관리 시스템 (ERP)</label>
-              <label class="choice"><input type="checkbox">④ 제조실행시스템 (MES) 또는 생산정보화시스템 (POP)</label>
-              <label class="choice"><input type="checkbox">⑤ 공급망관리 시스템 (SCM) 또는 고객관계관리 시스템 (CRM)</label>
-              <label class="choice"><input type="checkbox">⑥ 제품수명주기관리 시스템 (PLM / PDM)</label>
+              <label class="choice"><input type="checkbox" data-score-question="A1" data-score="2">① 시스템 없음 (대부분 수기 또는 개인 PC 엑셀 관리)</label>
+              <label class="choice"><input type="checkbox" data-score-question="A1" data-score="4">② 그룹웨어(GW) 및 사내 인트라넷</label>
+              <label class="choice"><input type="checkbox" data-score-question="A1" data-score="6">③ 전사적자원관리 시스템 (ERP)</label>
+              <label class="choice"><input type="checkbox" data-score-question="A1" data-score="8">④ 제조실행시스템 (MES) 또는 생산정보화시스템 (POP)</label>
+              <label class="choice"><input type="checkbox" data-score-question="A1" data-score="8">⑤ 공급망관리 시스템 (SCM) 또는 고객관계관리 시스템 (CRM)</label>
+              <label class="choice"><input type="checkbox" data-score-question="A1" data-score="10">⑥ 제품수명주기관리 시스템 (PLM / PDM)</label>
             </div>
+            <div class="inline-note">점수 산정을 위해 문항당 1개만 선택해 주세요.</div>
           </td>
         </tr>
         <tr>
           <td class="question-code">A2. 데이터 관리</td>
           <td>
             <div class="choices">
-              <label class="choice"><input type="checkbox">① 데이터를 거의 수집하고 있지 않거나, 작업자가 수기로 일지를 작성함</label>
-              <label class="choice"><input type="checkbox">② 일부 데이터를 한정적으로 수집하여 엑셀 등으로 관리함</label>
-              <label class="choice"><input type="checkbox">③ 주요 설비 데이터나 불량 유형 통계 데이터가 시스템(MES/DB)에 기록되나, 효과적인 분석에는 활용하지 못함</label>
-              <label class="choice"><input type="checkbox">④ 제조·유통·판매와 관련된 데이터가 주기적으로 자동 수집 및 정제되어 의사결정의 기준으로 활용됨</label>
-              <label class="choice"><input type="checkbox">⑤ 전 라인의 설비 데이터 및 품질 검사 Raw Data가 실시간으로 수집·분석되는 체계를 갖춤</label>
+              <label class="choice"><input type="checkbox" data-score-question="A2" data-score="2">① 데이터를 거의 수집하고 있지 않거나, 작업자가 수기로 일지를 작성함</label>
+              <label class="choice"><input type="checkbox" data-score-question="A2" data-score="4">② 일부 데이터를 한정적으로 수집하여 엑셀 등으로 관리함</label>
+              <label class="choice"><input type="checkbox" data-score-question="A2" data-score="6">③ 주요 설비 데이터나 불량 유형 통계 데이터가 시스템(MES/DB)에 기록되나, 효과적인 분석에는 활용하지 못함</label>
+              <label class="choice"><input type="checkbox" data-score-question="A2" data-score="8">④ 제조·유통·판매와 관련된 데이터가 주기적으로 자동 수집 및 정제되어 의사결정의 기준으로 활용됨</label>
+              <label class="choice"><input type="checkbox" data-score-question="A2" data-score="10">⑤ 전 라인의 설비 데이터 및 품질 검사 Raw Data가 실시간으로 수집·분석되는 체계를 갖춤</label>
             </div>
+            <div class="inline-note">점수 산정을 위해 문항당 1개만 선택해 주세요.</div>
           </td>
         </tr>
       </table>
@@ -396,77 +442,84 @@
           <td class="question-code">B1. AI 이해도 및 활용</td>
           <td>
             <div class="choices">
-              <label class="choice"><input type="checkbox">① [미도입] 생성형 AI 기술에 대해 들어보았으나, 현업 업무에 어떻게 적용할지 전혀 모름</label>
-              <label class="choice"><input type="checkbox">② [개인적 체험] 일부 임직원이 개인적으로 단순 이메일 작성, 번역, 단순 정보 검색 등에 간헐적으로 사용함</label>
-              <label class="choice"><input type="checkbox">③ [초안 활용] 보고서 작성, 문서 요약, 아이디어 브레인스토밍 등 파편화된 업무의 초안 작성용 조수로 적극 활용함</label>
-              <label class="choice"><input type="checkbox">④ [업무 정착] 생성형 AI의 프롬프트 구성 요소를 이해하고 업무 생산성 향상에 체계적으로 적용함</label>
+              <label class="choice"><input type="checkbox" data-score-question="B1" data-score="2">① [미도입] 생성형 AI 기술에 대해 들어보았으나, 현업 업무에 어떻게 적용할지 전혀 모름</label>
+              <label class="choice"><input type="checkbox" data-score-question="B1" data-score="4">② [개인적 체험] 일부 임직원이 개인적으로 단순 이메일 작성, 번역, 단순 정보 검색 등에 간헐적으로 사용함</label>
+              <label class="choice"><input type="checkbox" data-score-question="B1" data-score="7">③ [초안 활용] 보고서 작성, 문서 요약, 아이디어 브레인스토밍 등 파편화된 업무의 초안 작성용 조수로 적극 활용함</label>
+              <label class="choice"><input type="checkbox" data-score-question="B1" data-score="10">④ [업무 정착] 생성형 AI의 프롬프트 구성 요소를 이해하고 업무 생산성 향상에 체계적으로 적용함</label>
             </div>
+            <div class="inline-note">점수 산정을 위해 문항당 1개만 선택해 주세요.</div>
           </td>
         </tr>
         <tr>
           <td class="question-code">B2. AI 데이터 보안</td>
           <td>
             <div class="choices">
-              <label class="choice"><input type="checkbox">① 사내 보안 가이드라인이 없으며, 민감 정보를 그대로 복사하여 AI에 입력하는 경우가 있음</label>
-              <label class="choice"><input type="checkbox">② 위험성은 인지하고 있으나, 별도의 정제 없이 임직원 개개인의 주의에만 의존하여 사용함</label>
-              <label class="choice"><input type="checkbox">③ AI 입력 전 이름, 금액, 회사명 등 핵심 정보를 가명화/익명화하여 입력하는 보안 수칙을 실천함</label>
-              <label class="choice"><input type="checkbox">④ 사내 전용 보안 AI 공간(Enterprise/Private Cloud AI)이 구축되어 있어 데이터 유출 우려 없이 안전하게 활용함</label>
+              <label class="choice"><input type="checkbox" data-score-question="B2" data-score="2">① 사내 보안 가이드라인이 없으며, 민감 정보를 그대로 복사하여 AI에 입력하는 경우가 있음</label>
+              <label class="choice"><input type="checkbox" data-score-question="B2" data-score="4">② 위험성은 인지하고 있으나, 별도의 정제 없이 임직원 개개인의 주의에만 의존하여 사용함</label>
+              <label class="choice"><input type="checkbox" data-score-question="B2" data-score="8">③ AI 입력 전 이름, 금액, 회사명 등 핵심 정보를 가명화/익명화하여 입력하는 보안 수칙을 실천함</label>
+              <label class="choice"><input type="checkbox" data-score-question="B2" data-score="10">④ 사내 전용 보안 AI 공간(Enterprise/Private Cloud AI)이 구축되어 있어 데이터 유출 우려 없이 안전하게 활용함</label>
             </div>
+            <div class="inline-note">점수 산정을 위해 문항당 1개만 선택해 주세요.</div>
           </td>
         </tr>
         <tr>
           <td class="question-code">B3. 노코드 데이터 분석</td>
           <td>
             <div class="choices">
-              <label class="choice"><input type="checkbox">① 엑셀의 기본적인 계산 기능만 활용하며 데이터 시각화나 고도화된 분석은 수행하지 않음</label>
-              <label class="choice"><input type="checkbox">② AI 도구를 활용하여 텍스트 데이터를 표 형태로 정형화하거나 기초적인 차트를 생성함</label>
-              <label class="choice"><input type="checkbox">③ AI에게 명확한 데이터 분석 가이드라인을 제시하여 통계의 오류를 검증할 줄 앎</label>
-              <label class="choice"><input type="checkbox">④ 노코드 업무자동화(RPA) 도구 등을 활용하여 부서 내 반복적인 정형 업무 프로세스를 자동화함</label>
+              <label class="choice"><input type="checkbox" data-score-question="B3" data-score="2">① 엑셀의 기본적인 계산 기능만 활용하며 데이터 시각화나 고도화된 분석은 수행하지 않음</label>
+              <label class="choice"><input type="checkbox" data-score-question="B3" data-score="5">② AI 도구를 활용하여 텍스트 데이터를 표 형태로 정형화하거나 기초적인 차트를 생성함</label>
+              <label class="choice"><input type="checkbox" data-score-question="B3" data-score="8">③ AI에게 명확한 데이터 분석 가이드라인을 제시하여 통계의 오류를 검증할 줄 앎</label>
+              <label class="choice"><input type="checkbox" data-score-question="B3" data-score="10">④ 노코드 업무자동화(RPA) 도구 등을 활용하여 부서 내 반복적인 정형 업무 프로세스를 자동화함</label>
             </div>
+            <div class="inline-note">점수 산정을 위해 문항당 1개만 선택해 주세요.</div>
           </td>
         </tr>
         <tr>
           <td class="question-code">B4. 데이터 리터러시 및 검증</td>
           <td>
             <div class="choices">
-              <label class="choice"><input type="checkbox">① AI가 제공한 통계 수치나 그래프를 별도의 교차 검증 없이 그대로 인용함</label>
-              <label class="choice"><input type="checkbox">② AI 결과물에 포함된 고유명사나 숫자를 구글링 등으로 1차 팩트 체크하는 습관을 보유함</label>
-              <label class="choice"><input type="checkbox">③ AI가 생성한 엑셀 수식의 참조 범위나 논리 연산자 오류를 직접 검수할 수 있음</label>
-              <label class="choice"><input type="checkbox">④ 전체 평균 뒤에 숨겨진 하위 그룹별 특성이나 결측치를 인지하고 데이터를 쪼개서 입체적으로 분석함</label>
+              <label class="choice"><input type="checkbox" data-score-question="B4" data-score="2">① AI가 제공한 통계 수치나 그래프를 별도의 교차 검증 없이 그대로 인용함</label>
+              <label class="choice"><input type="checkbox" data-score-question="B4" data-score="5">② AI 결과물에 포함된 고유명사나 숫자를 구글링 등으로 1차 팩트 체크하는 습관을 보유함</label>
+              <label class="choice"><input type="checkbox" data-score-question="B4" data-score="8">③ AI가 생성한 엑셀 수식의 참조 범위나 논리 연산자 오류를 직접 검수할 수 있음</label>
+              <label class="choice"><input type="checkbox" data-score-question="B4" data-score="10">④ 전체 평균 뒤에 숨겨진 하위 그룹별 특성이나 결측치를 인지하고 데이터를 쪼개서 입체적으로 분석함</label>
             </div>
+            <div class="inline-note">점수 산정을 위해 문항당 1개만 선택해 주세요.</div>
           </td>
         </tr>
         <tr>
           <td class="question-code">B5. 바이브코딩 활용 수준</td>
           <td>
             <div class="choices">
-              <label class="choice"><input type="checkbox">① AI 개발 도구를 전혀 사용하지 않으며, 모든 코딩 및 스크립트 작성은 수동으로 진행함</label>
-              <label class="choice"><input type="checkbox">② 일반 웹 챗봇 창에 질문하여 코드를 복사·붙여넣기 하는 수준임</label>
-              <label class="choice"><input type="checkbox">③ 텍스트 에디터 연동형 AI를 활용하여 자동 완성 및 코드 추천을 받으며 작업함</label>
-              <label class="choice"><input type="checkbox">④ CLI 기반 AI 에이전트 또는 로우코드 AI 빌더를 활용하여 자연어로 프로그래밍을 빌드함</label>
+              <label class="choice"><input type="checkbox" data-score-question="B5" data-score="3">① AI 개발 도구를 전혀 사용하지 않으며, 모든 코딩 및 스크립트 작성은 수동으로 진행함</label>
+              <label class="choice"><input type="checkbox" data-score-question="B5" data-score="6">② 일반 웹 챗봇 창에 질문하여 코드를 복사·붙여넣기 하는 수준임</label>
+              <label class="choice"><input type="checkbox" data-score-question="B5" data-score="10">③ 텍스트 에디터 연동형 AI를 활용하여 자동 완성 및 코드 추천을 받으며 작업함</label>
+              <label class="choice"><input type="checkbox" data-score-question="B5" data-score="15">④ CLI 기반 AI 에이전트 또는 로우코드 AI 빌더를 활용하여 자연어로 프로그래밍을 빌드함</label>
             </div>
+            <div class="inline-note">점수 산정을 위해 문항당 1개만 선택해 주세요.</div>
           </td>
         </tr>
         <tr>
           <td class="question-code">B6. 제조/피지컬 AI 응용</td>
           <td>
             <div class="choices">
-              <label class="choice"><input type="checkbox">① 설비 제어는 기존 PLC 및 SCADA 시스템의 정해진 규칙에만 의존하며, AI 분석은 전혀 적용되지 않음</label>
-              <label class="choice"><input type="checkbox">② 공정 설비에 부착된 IoT 센서 데이터를 수집하여 사후 불량 원인을 분석하는 수준임</label>
-              <label class="choice"><input type="checkbox">③ 머신비전 이미지 처리 기술이나 센서 시뮬레이션 기술을 도입하여 품질 불량을 실시간으로 판정하거나 예측함</label>
-              <label class="choice"><input type="checkbox">④ AI 알고리즘의 분석 결과가 실시간으로 설비 또는 자율주행 로봇의 동작 제어로 피드백되는 체계를 갖추고 있음</label>
+              <label class="choice"><input type="checkbox" data-score-question="B6" data-score="3">① 설비 제어는 기존 PLC 및 SCADA 시스템의 정해진 규칙에만 의존하며, AI 분석은 전혀 적용되지 않음</label>
+              <label class="choice"><input type="checkbox" data-score-question="B6" data-score="6">② 공정 설비에 부착된 IoT 센서 데이터를 수집하여 사후 불량 원인을 분석하는 수준임</label>
+              <label class="choice"><input type="checkbox" data-score-question="B6" data-score="10">③ 머신비전 이미지 처리 기술이나 센서 시뮬레이션 기술을 도입하여 품질 불량을 실시간으로 판정하거나 예측함</label>
+              <label class="choice"><input type="checkbox" data-score-question="B6" data-score="15">④ AI 알고리즘의 분석 결과가 실시간으로 설비 또는 자율주행 로봇의 동작 제어로 피드백되는 체계를 갖추고 있음</label>
             </div>
+            <div class="inline-note">점수 산정을 위해 문항당 1개만 선택해 주세요.</div>
           </td>
         </tr>
         <tr>
           <td class="question-code">B7. 전산/IT 조직 부서</td>
           <td>
             <div class="choices">
-              <label class="choice"><input type="checkbox">① 별도의 전산 부서가 없으며, PC 관리나 네트워킹 업무를 타 부서 직원이 겸임하거나 외주에 의존함</label>
-              <label class="choice"><input type="checkbox">② 전산 조직이 있으나 주로 ERP/MES 오류 수정 및 인프라 유지보수 역할에 국한됨</label>
-              <label class="choice"><input type="checkbox">③ 고정 부서는 없으나, 스마트공장이나 AI 과제 추진을 위해 별도 TF가 수시로 구성됨</label>
-              <label class="choice"><input type="checkbox">④ 독립적인 전산/DX 부서가 존재하며, 현업 부서의 AI 요구사항을 수렴하여 직접 시스템을 구축하거나 외주 개발을 리딩함</label>
+              <label class="choice"><input type="checkbox" data-score-question="B7" data-score="2">① 별도의 전산 부서가 없으며, PC 관리나 네트워킹 업무를 타 부서 직원이 겸임하거나 외주에 의존함</label>
+              <label class="choice"><input type="checkbox" data-score-question="B7" data-score="4">② 전산 조직이 있으나 주로 ERP/MES 오류 수정 및 인프라 유지보수 역할에 국한됨</label>
+              <label class="choice"><input type="checkbox" data-score-question="B7" data-score="7">③ 고정 부서는 없으나, 스마트공장이나 AI 과제 추진을 위해 별도 TF가 수시로 구성됨</label>
+              <label class="choice"><input type="checkbox" data-score-question="B7" data-score="10">④ 독립적인 전산/DX 부서가 존재하며, 현업 부서의 AI 요구사항을 수렴하여 직접 시스템을 구축하거나 외주 개발을 리딩함</label>
             </div>
+            <div class="inline-note">점수 산정을 위해 문항당 1개만 선택해 주세요.</div>
           </td>
         </tr>
       </table>
@@ -502,9 +555,15 @@
         <strong>작성 안내</strong>
         <div>Part A와 Part B는 점수화가 가능한 진단 문항이며, Part C는 컨설팅 방향 설계를 위한 정성 정보 수집 항목입니다.</div>
       </div>
+
+      <div class="action-row">
+        <button type="button" class="primary-button" id="showResultsButton">결과 보기</button>
+        <button type="button" class="secondary-button" id="resetResultsButton">결과 초기화</button>
+        <span class="helper-text">설문자는 Part A와 Part B의 각 문항(A1~B7)에서 1개씩 체크한 뒤 결과를 확인하시면 됩니다.</span>
+      </div>
     </section>
 
-    <section class="section">
+    <section class="section results-block is-hidden" id="resultsSection">
       <h2>2. AI 수준진단 점수 산출 및 종합 결과표</h2>
       <p class="lead">기업 현장에서 진단표 수거 후 각 문항의 점수를 합산하여 등급을 매기고, 컨설팅 방향성을 설정할 수 있도록 정리한 종합표입니다.</p>
 
@@ -586,7 +645,7 @@
           <td>ERP, MES, POP, SCM, CRM, PLM 등 실사용 정보시스템 보유 및 활용 수준</td>
           <td>2 / 4 / 6 / 8 / 8 / 10</td>
           <td>
-            <select class="score-select" data-score-item="A1">
+            <select class="score-select" data-score-item="A1" disabled>
               <option value="">선택</option>
               <option value="2">2점</option>
               <option value="4">4점</option>
@@ -603,7 +662,7 @@
           <td>생산, 품질, 유통 데이터가 수기인지, 엑셀인지, 시스템 자동 수집인지 확인</td>
           <td>2 / 4 / 6 / 8 / 10</td>
           <td>
-            <select class="score-select" data-score-item="A2">
+            <select class="score-select" data-score-item="A2" disabled>
               <option value="">선택</option>
               <option value="2">2점</option>
               <option value="4">4점</option>
@@ -620,7 +679,7 @@
           <td>임직원의 생성형 AI 사용 경험과 실무 적용 정착 수준</td>
           <td>2 / 4 / 7 / 10</td>
           <td>
-            <select class="score-select" data-score-item="B1">
+            <select class="score-select" data-score-item="B1" disabled>
               <option value="">선택</option>
               <option value="2">2점</option>
               <option value="4">4점</option>
@@ -636,7 +695,7 @@
           <td>민감정보 처리 방식, 가명화 실천 여부, 사내 보안 가이드 존재 여부</td>
           <td>2 / 4 / 8 / 10</td>
           <td>
-            <select class="score-select" data-score-item="B2">
+            <select class="score-select" data-score-item="B2" disabled>
               <option value="">선택</option>
               <option value="2">2점</option>
               <option value="4">4점</option>
@@ -652,7 +711,7 @@
           <td>엑셀 AI, 시각화 툴, RPA 등 비개발형 도구 활용 수준</td>
           <td>2 / 5 / 8 / 10</td>
           <td>
-            <select class="score-select" data-score-item="B3">
+            <select class="score-select" data-score-item="B3" disabled>
               <option value="">선택</option>
               <option value="2">2점</option>
               <option value="5">5점</option>
@@ -668,7 +727,7 @@
           <td>AI가 만든 수치, 그래프, 수식을 현업이 검수할 수 있는 수준인지 확인</td>
           <td>2 / 5 / 8 / 10</td>
           <td>
-            <select class="score-select" data-score-item="B4">
+            <select class="score-select" data-score-item="B4" disabled>
               <option value="">선택</option>
               <option value="2">2점</option>
               <option value="5">5점</option>
@@ -684,7 +743,7 @@
           <td>웹 챗봇, 에디터 연동 AI, CLI 에이전트 등 개발형 AI 도구 활용 수준</td>
           <td>3 / 6 / 10 / 15</td>
           <td>
-            <select class="score-select" data-score-item="B5">
+            <select class="score-select" data-score-item="B5" disabled>
               <option value="">선택</option>
               <option value="3">3점</option>
               <option value="6">6점</option>
@@ -700,7 +759,7 @@
           <td>설비, 센서, 비전검사, 예지보전 등 제조 AI 접목 수준</td>
           <td>3 / 6 / 10 / 15</td>
           <td>
-            <select class="score-select" data-score-item="B6">
+            <select class="score-select" data-score-item="B6" disabled>
               <option value="">선택</option>
               <option value="3">3점</option>
               <option value="6">6점</option>
@@ -716,7 +775,7 @@
           <td>전산 전담 부서 또는 TFT 존재 여부와 내부 구축 리딩 가능성</td>
           <td>2 / 4 / 7 / 10</td>
           <td>
-            <select class="score-select" data-score-item="B7">
+            <select class="score-select" data-score-item="B7" disabled>
               <option value="">선택</option>
               <option value="2">2점</option>
               <option value="4">4점</option>
@@ -734,7 +793,7 @@
         </tr>
       </table>
 
-      <div class="result-panel">
+      <div class="result-panel is-hidden" id="resultPanel">
         <strong>자동 계산 결과</strong>
         <div class="result-grid">
           <div class="result-item">
@@ -847,6 +906,8 @@
   </main>
   <script>
     (() => {
+      const scoreQuestions = ["A1", "A2", "B1", "B2", "B3", "B4", "B5", "B6", "B7"];
+      const sourceInputs = Array.from(document.querySelectorAll("[data-score-question]"));
       const selects = Array.from(document.querySelectorAll(".score-select"));
       const totalScoreCell = document.getElementById("totalScoreCell");
       const totalScoreDisplay = document.getElementById("totalScoreDisplay");
@@ -854,6 +915,25 @@
       const remainingDisplay = document.getElementById("remainingDisplay");
       const recommendationDisplay = document.getElementById("recommendationDisplay");
       const scoreMessage = document.getElementById("scoreMessage");
+      const showResultsButton = document.getElementById("showResultsButton");
+      const resetResultsButton = document.getElementById("resetResultsButton");
+      const resultsSection = document.getElementById("resultsSection");
+      const resultPanel = document.getElementById("resultPanel");
+
+      sourceInputs.forEach((input) => {
+        input.addEventListener("change", () => {
+          if (!input.checked) {
+            return;
+          }
+
+          const question = input.dataset.scoreQuestion;
+          sourceInputs.forEach((candidate) => {
+            if (candidate !== input && candidate.dataset.scoreQuestion === question) {
+              candidate.checked = false;
+            }
+          });
+        });
+      });
 
       function getLevelInfo(totalScore, isComplete) {
         if (!isComplete) {
@@ -910,8 +990,55 @@
         scoreMessage.textContent = levelInfo.message;
       }
 
-      selects.forEach((select) => {
-        select.addEventListener("change", updateScoreSummary);
+      function syncScoresFromSurvey() {
+        const missing = [];
+
+        scoreQuestions.forEach((question) => {
+          const checked = document.querySelector(`[data-score-question="${question}"]:checked`);
+          const targetSelect = document.querySelector(`[data-score-item="${question}"]`);
+
+          if (!checked) {
+            missing.push(question);
+            targetSelect.value = "";
+            return;
+          }
+
+          targetSelect.value = checked.dataset.score;
+        });
+
+        updateScoreSummary();
+        return missing;
+      }
+
+      showResultsButton.addEventListener("click", () => {
+        const missing = syncScoresFromSurvey();
+
+        if (missing.length > 0) {
+          resultsSection.classList.remove("is-hidden");
+          resultPanel.classList.remove("is-hidden");
+          scoreMessage.textContent = `미선택 문항이 있습니다: ${missing.join(", ")}. 각 문항에서 1개씩 체크한 뒤 다시 결과 보기를 눌러 주세요.`;
+          remainingDisplay.textContent = `${missing.length}개`;
+          resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+          return;
+        }
+
+        resultsSection.classList.remove("is-hidden");
+        resultPanel.classList.remove("is-hidden");
+        resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+
+      resetResultsButton.addEventListener("click", () => {
+        sourceInputs.forEach((input) => {
+          input.checked = false;
+        });
+
+        selects.forEach((select) => {
+          select.value = "";
+        });
+
+        updateScoreSummary();
+        resultsSection.classList.add("is-hidden");
+        resultPanel.classList.add("is-hidden");
       });
 
       updateScoreSummary();
