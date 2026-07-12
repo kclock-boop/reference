@@ -86,6 +86,10 @@
       font-weight: 700;
     }
 
+    .summary-card a {
+      color: #fff;
+    }
+
     .section {
       margin-top: 26px;
       background: var(--panel);
@@ -116,6 +120,34 @@
       color: var(--brand);
       font-size: 0.92rem;
       font-weight: 700;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .field-block {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field-block label {
+      font-weight: 700;
+      font-size: 0.94rem;
+      color: var(--muted);
+    }
+
+    .text-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      font: inherit;
+      color: var(--ink);
     }
 
     table {
@@ -300,6 +332,12 @@
       color: var(--brand);
     }
 
+    .ghost-button {
+      background: #fff;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+
     .helper-text {
       color: var(--muted);
       font-size: 0.93rem;
@@ -309,6 +347,16 @@
       margin-top: 8px;
       color: var(--muted);
       font-size: 0.92rem;
+    }
+
+    .status-message {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f7fafc;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      font-size: 0.94rem;
     }
 
     .guide-list {
@@ -410,12 +458,36 @@
           <strong>중점 영역</strong>
           <span>생산, 품질, 설비, 전산, 물류</span>
         </div>
+        <div class="summary-card">
+          <strong>관리자 대시보드</strong>
+          <span><a href="./admin_dashboard.html">응답 통합 보기</a></span>
+        </div>
       </div>
     </section>
 
     <section class="section">
       <h2>1. [기업 배포용] 중소기업 AI 수준조사 조사표</h2>
       <p class="lead">귀사의 현재 데이터 관리 수준과 업무 자동화 니즈를 파악하여 최적의 AI 솔루션과 맞춤형 훈련 로드맵을 제안하기 위한 사전 진단표입니다. 각 항목에 대해 객관적으로 체크해 주시면 됩니다.</p>
+
+      <div class="subhead">응답자 정보</div>
+      <div class="form-grid">
+        <div class="field-block">
+          <label for="companyNameInput">회사명</label>
+          <input class="text-input" id="companyNameInput" type="text" value="(주)태화기업">
+        </div>
+        <div class="field-block">
+          <label for="respondentNameInput">응답자명</label>
+          <input class="text-input" id="respondentNameInput" type="text" placeholder="예: 김태화">
+        </div>
+        <div class="field-block">
+          <label for="departmentInput">부서명</label>
+          <input class="text-input" id="departmentInput" type="text" placeholder="예: 생산기술팀">
+        </div>
+        <div class="field-block">
+          <label for="positionInput">직책</label>
+          <input class="text-input" id="positionInput" type="text" placeholder="예: 팀장">
+        </div>
+      </div>
 
       <div class="action-row top-cta">
         <button type="button" class="primary-button" data-role="show-results">결과 보기</button>
@@ -433,11 +505,11 @@
           <td class="question-code">M1. 경영환경</td>
           <td>
             <div class="choices">
-              <label class="choice"><input type="checkbox">① 원가 및 자재 부담: 원자재(구리, 철강 등) 공급망 불안정 및 제조 원가 상승 대응 필요</label>
-              <label class="choice"><input type="checkbox">② 인력 부족 및 숙련 기술 전수: 현장 작업자의 고령화, 신규 인력 유입 감소로 인한 숙련 기술 전수 문제</label>
-              <label class="choice"><input type="checkbox">③ 품질 규제 및 클레임 방지: 가전·자동차용 모터 시장의 엄격해진 품질 표준 및 글로벌 규제 대응 필요</label>
-              <label class="choice"><input type="checkbox">④ 납기 및 공정 효율성: 다품종 소량 생산 체계 확대로 인한 프레스/조립 공정 스케줄링의 복잡성 증가</label>
-              <label class="choice"><input type="checkbox">⑤ 디지털화 지연: 스마트공장 인프라(MES/ERP 등)는 있으나 누적된 데이터를 경영 의사결정에 활용하지 못함</label>
+              <label class="choice"><input type="checkbox" data-meta-question="M1">① 원가 및 자재 부담: 원자재(구리, 철강 등) 공급망 불안정 및 제조 원가 상승 대응 필요</label>
+              <label class="choice"><input type="checkbox" data-meta-question="M1">② 인력 부족 및 숙련 기술 전수: 현장 작업자의 고령화, 신규 인력 유입 감소로 인한 숙련 기술 전수 문제</label>
+              <label class="choice"><input type="checkbox" data-meta-question="M1">③ 품질 규제 및 클레임 방지: 가전·자동차용 모터 시장의 엄격해진 품질 표준 및 글로벌 규제 대응 필요</label>
+              <label class="choice"><input type="checkbox" data-meta-question="M1">④ 납기 및 공정 효율성: 다품종 소량 생산 체계 확대로 인한 프레스/조립 공정 스케줄링의 복잡성 증가</label>
+              <label class="choice"><input type="checkbox" data-meta-question="M1">⑤ 디지털화 지연: 스마트공장 인프라(MES/ERP 등)는 있으나 누적된 데이터를 경영 의사결정에 활용하지 못함</label>
             </div>
           </td>
         </tr>
@@ -445,11 +517,11 @@
           <td class="question-code">M2. 핵심 조직</td>
           <td>
             <div class="choices">
-              <label class="choice"><input type="checkbox">① 생산/공정관리 팀: 공정 스케줄링 최적화 및 설비 가동률 향상 담당 부서</label>
-              <label class="choice"><input type="checkbox">② 품질관리/생산기술 팀: 모터 성능 검사 및 외관 불량 원인 추적 담당 부서</label>
-              <label class="choice"><input type="checkbox">③ 설비/보전 팀: 핵심 엔지니어링 설비의 고장 예방 및 예지보전 담당 부서</label>
-              <label class="choice"><input type="checkbox">④ 전산/IT/경영지원 팀: 데이터 관리, 보안 인프라 구축 및 사내 시스템 연동 지원 부서</label>
-              <label class="choice"><input type="checkbox">⑤ 구매/물류/창고 팀: 자재 입출고 관리 및 재고 최적화 담당 부서</label>
+              <label class="choice"><input type="checkbox" data-meta-question="M2">① 생산/공정관리 팀: 공정 스케줄링 최적화 및 설비 가동률 향상 담당 부서</label>
+              <label class="choice"><input type="checkbox" data-meta-question="M2">② 품질관리/생산기술 팀: 모터 성능 검사 및 외관 불량 원인 추적 담당 부서</label>
+              <label class="choice"><input type="checkbox" data-meta-question="M2">③ 설비/보전 팀: 핵심 엔지니어링 설비의 고장 예방 및 예지보전 담당 부서</label>
+              <label class="choice"><input type="checkbox" data-meta-question="M2">④ 전산/IT/경영지원 팀: 데이터 관리, 보안 인프라 구축 및 사내 시스템 연동 지원 부서</label>
+              <label class="choice"><input type="checkbox" data-meta-question="M2">⑤ 구매/물류/창고 팀: 자재 입출고 관리 및 재고 최적화 담당 부서</label>
             </div>
           </td>
         </tr>
@@ -592,11 +664,11 @@
           <td class="question-code">C1. 컨설팅 최종 목표</td>
           <td>
             <div class="choices">
-              <label class="choice"><input type="checkbox">① 생산성 및 가동률 향상: 반복 업무 자동화 및 공정 스케줄링 최적화로 리드타임 단축</label>
-              <label class="choice"><input type="checkbox">② 품질 비용 절감: 모터 성능 검사 및 외관 비전 검사의 AI 도입을 통한 불량률 감소</label>
-              <label class="choice"><input type="checkbox">③ 설비 유지보수 고도화: 프레스, 정밀 가공기 등 핵심 설비의 고장 예지보전 체계 구축</label>
-              <label class="choice"><input type="checkbox">④ 임직원 AX 역량 내재화: 실무진이 바이브코딩이나 노코드 툴을 직접 다룰 수 있는 자생력 확보</label>
-              <label class="choice"><input type="checkbox">⑤ 정부지원사업 연계: 차년도 스마트제조혁신추진단 고도화 사업 참여를 위한 마스터플랜 확보</label>
+              <label class="choice"><input type="checkbox" data-meta-question="C1">① 생산성 및 가동률 향상: 반복 업무 자동화 및 공정 스케줄링 최적화로 리드타임 단축</label>
+              <label class="choice"><input type="checkbox" data-meta-question="C1">② 품질 비용 절감: 모터 성능 검사 및 외관 비전 검사의 AI 도입을 통한 불량률 감소</label>
+              <label class="choice"><input type="checkbox" data-meta-question="C1">③ 설비 유지보수 고도화: 프레스, 정밀 가공기 등 핵심 설비의 고장 예지보전 체계 구축</label>
+              <label class="choice"><input type="checkbox" data-meta-question="C1">④ 임직원 AX 역량 내재화: 실무진이 바이브코딩이나 노코드 툴을 직접 다룰 수 있는 자생력 확보</label>
+              <label class="choice"><input type="checkbox" data-meta-question="C1">⑤ 정부지원사업 연계: 차년도 스마트제조혁신추진단 고도화 사업 참여를 위한 마스터플랜 확보</label>
             </div>
           </td>
         </tr>
@@ -604,7 +676,7 @@
           <td class="question-code">C2. 기타 건의</td>
           <td>
             이번 컨설팅 과정에서 전문 교수(컨설턴트)에게 특별히 조언을 구하고 싶거나 바라는 점이 있다면 자유롭게 작성해 주십시오.
-            <textarea class="memo-area" placeholder="예: 품질 데이터부터 어디까지 정비해야 하는지, ERP/MES 연계 가능 범위를 어떻게 봐야 하는지 등을 자유롭게 적어주세요."></textarea>
+            <textarea class="memo-area" id="consultingMemoInput" placeholder="예: 품질 데이터부터 어디까지 정비해야 하는지, ERP/MES 연계 가능 범위를 어떻게 봐야 하는지 등을 자유롭게 적어주세요."></textarea>
           </td>
         </tr>
       </table>
@@ -617,6 +689,7 @@
       <div class="action-row">
         <button type="button" class="primary-button" data-role="show-results">결과 보기</button>
         <button type="button" class="secondary-button" data-role="reset-results">결과 초기화</button>
+        <button type="button" class="ghost-button" id="openAdminButton">관리자 대시보드</button>
         <span class="helper-text">설문자는 Part A와 Part B의 각 문항(A1~B7)에서 1개씩 체크한 뒤 결과를 확인하시면 됩니다.</span>
       </div>
     </section>
@@ -873,9 +946,12 @@
         </div>
         <p id="scoreMessage">A1부터 B7까지 점수를 모두 선택하시면 총점, 등급, 권장 컨설팅 방향이 자동으로 계산됩니다.</p>
         <div class="result-actions">
+          <button type="button" class="secondary-button" id="saveResponseButton">응답 저장</button>
           <button type="button" class="primary-button" id="printResultsButton">출력하기</button>
-          <span class="helper-text">결과 보기를 완료한 뒤 누르시면 현재 계산된 결과표를 인쇄하거나 PDF로 저장할 수 있습니다.</span>
+          <button type="button" class="ghost-button" id="openAdminFromResultsButton">관리자 대시보드</button>
+          <span class="helper-text">결과 보기를 완료한 뒤 저장, 인쇄, 관리자 대시보드 이동까지 이어서 진행할 수 있습니다.</span>
         </div>
+        <div class="status-message" id="saveStatusMessage">응답을 저장하면 관리자 대시보드에서 전체 결과를 모아 볼 수 있습니다.</div>
       </div>
 
       <table class="level-table">
@@ -977,11 +1053,21 @@
       const remainingDisplay = document.getElementById("remainingDisplay");
       const recommendationDisplay = document.getElementById("recommendationDisplay");
       const scoreMessage = document.getElementById("scoreMessage");
+      const companyNameInput = document.getElementById("companyNameInput");
+      const respondentNameInput = document.getElementById("respondentNameInput");
+      const departmentInput = document.getElementById("departmentInput");
+      const positionInput = document.getElementById("positionInput");
+      const consultingMemoInput = document.getElementById("consultingMemoInput");
       const showResultsButtons = Array.from(document.querySelectorAll('[data-role="show-results"]'));
       const resetResultsButtons = Array.from(document.querySelectorAll('[data-role="reset-results"]'));
       const printResultsButton = document.getElementById("printResultsButton");
+      const saveResponseButton = document.getElementById("saveResponseButton");
+      const openAdminButton = document.getElementById("openAdminButton");
+      const openAdminFromResultsButton = document.getElementById("openAdminFromResultsButton");
+      const saveStatusMessage = document.getElementById("saveStatusMessage");
       const resultsSection = document.getElementById("resultsSection");
       const resultPanel = document.getElementById("resultPanel");
+      const storageKey = "taehwa_ai_assessment_responses";
 
       sourceInputs.forEach((input) => {
         input.addEventListener("change", () => {
@@ -1028,6 +1114,66 @@
           recommendation: "AX 입문 및 보안 체계 정비",
           message: "기초 데이터 수집, AI 보안 수칙, 프롬프트 활용 교육부터 정리한 뒤 간단한 자동화 과제로 진입하는 것이 적합합니다."
         };
+      }
+
+      function getCheckedLabels(questionCode) {
+        return Array.from(document.querySelectorAll(`[data-meta-question="${questionCode}"]:checked`))
+          .map((input) => input.parentElement.textContent.trim());
+      }
+
+      function getScoreMap() {
+        const scoreMap = {};
+        selects.forEach((select) => {
+          scoreMap[select.dataset.scoreItem] = select.value === "" ? null : Number(select.value);
+        });
+        return scoreMap;
+      }
+
+      function getResponsePayload() {
+        const total = Number(totalScoreDisplay.textContent.replace(/[^\d]/g, "")) || 0;
+        const remaining = Number(remainingDisplay.textContent.replace(/[^\d]/g, "")) || 0;
+        const level = levelDisplay.textContent;
+        return {
+          id: `resp-${Date.now()}`,
+          companyName: companyNameInput.value.trim() || "(주)태화기업",
+          respondentName: respondentNameInput.value.trim(),
+          department: departmentInput.value.trim(),
+          position: positionInput.value.trim(),
+          submittedAt: new Date().toISOString(),
+          totalScore: total,
+          remainingCount: remaining,
+          level,
+          recommendation: recommendationDisplay.textContent.trim(),
+          scoreMessage: scoreMessage.textContent.trim(),
+          scoreMap: getScoreMap(),
+          managementIssues: getCheckedLabels("M1"),
+          targetDepartments: getCheckedLabels("M2"),
+          consultingGoals: getCheckedLabels("C1"),
+          consultingMemo: consultingMemoInput.value.trim()
+        };
+      }
+
+      function saveResponse() {
+        const missing = syncScoresFromSurvey();
+        if (missing.length > 0) {
+          resultsSection.classList.remove("is-hidden");
+          resultPanel.classList.remove("is-hidden");
+          saveStatusMessage.textContent = `저장 전에 ${missing.join(", ")} 문항을 먼저 선택해 주세요.`;
+          scoreMessage.textContent = `미선택 문항이 있습니다: ${missing.join(", ")}. 각 문항에서 1개씩 체크한 뒤 다시 시도해 주세요.`;
+          return;
+        }
+
+        if (!respondentNameInput.value.trim()) {
+          saveStatusMessage.textContent = "응답자명을 입력한 뒤 저장해 주세요.";
+          respondentNameInput.focus();
+          return;
+        }
+
+        const payload = getResponsePayload();
+        const stored = JSON.parse(localStorage.getItem(storageKey) || "[]");
+        stored.unshift(payload);
+        localStorage.setItem(storageKey, JSON.stringify(stored));
+        saveStatusMessage.textContent = `${payload.respondentName || "응답자"}님의 결과가 저장되었습니다. 관리자 대시보드에서 바로 확인할 수 있습니다.`;
       }
 
       function updateScoreSummary() {
@@ -1112,6 +1258,8 @@
         button.addEventListener("click", handleResetResults);
       });
 
+      saveResponseButton.addEventListener("click", saveResponse);
+
       printResultsButton.addEventListener("click", () => {
         const missing = syncScoresFromSurvey();
 
@@ -1127,6 +1275,12 @@
         resultsSection.classList.remove("is-hidden");
         resultPanel.classList.remove("is-hidden");
         window.print();
+      });
+
+      [openAdminButton, openAdminFromResultsButton].forEach((button) => {
+        button.addEventListener("click", () => {
+          window.location.href = "./admin_dashboard.html";
+        });
       });
 
       updateScoreSummary();

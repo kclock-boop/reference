@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>태화기업 AI 수준진단 관리자 대시보드</title>
+  <style>
+    :root {
+      --ink: #1d2733;
+      --muted: #5c6b7a;
+      --line: #d8dee6;
+      --panel: #ffffff;
+      --soft: #f6f8fb;
+      --brand: #0f766e;
+      --brand-soft: #dff5f1;
+      --warn: #92400e;
+      --warn-soft: #fff7ed;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Pretendard", "Malgun Gothic", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, #f5f8fb 0%, #eef3f8 100%);
+    }
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 36px 20px 80px;
+    }
+    .hero, .section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 18px 38px rgba(148, 163, 184, 0.10);
+    }
+    .hero {
+      padding: 34px;
+      background: linear-gradient(135deg, rgba(15, 118, 110, 0.98), rgba(21, 94, 117, 0.92));
+      color: #fff;
+    }
+    .hero h1 { margin: 0 0 10px; font-size: 2rem; }
+    .hero p { margin: 0; color: rgba(255,255,255,0.88); max-width: 860px; }
+    .hero-actions, .toolbar { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; align-items: center; }
+    .section { margin-top: 24px; padding: 24px; }
+    .section h2 { margin: 0 0 8px; font-size: 1.35rem; }
+    .lead { margin: 0 0 18px; color: var(--muted); }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fff 0%, #f9fbfd 100%);
+      padding: 18px;
+    }
+    .card strong { display: block; color: var(--muted); font-size: 0.86rem; margin-bottom: 6px; }
+    .card span { font-size: 1.2rem; font-weight: 700; }
+    .button, .danger {
+      border: 0;
+      border-radius: 14px;
+      padding: 11px 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .button { background: var(--brand); color: #fff; }
+    .button.secondary { background: #eaf3f2; color: var(--brand); }
+    .danger { background: var(--warn-soft); color: var(--warn); border: 1px solid #f1d5b5; }
+    .text-input, .select {
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      font: inherit;
+      background: #fff;
+      color: var(--ink);
+    }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 14px; background: #fff; }
+    th, td { border: 1px solid var(--line); padding: 12px 14px; text-align: left; vertical-align: top; }
+    th { background: var(--soft); }
+    .muted { color: var(--muted); }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+    .detail-box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      background: #fff;
+    }
+    .status {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f7fafc;
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+    .pill {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <h1>태화기업 AI 수준진단 관리자 대시보드</h1>
+      <p>응답자 설문 결과를 브라우저 로컬 저장소에 모아 보고, 총점·등급·부서별 응답 현황을 한 화면에서 확인하는 관리자용 페이지입니다.</p>
+      <div class="hero-actions">
+        <a class="button" href="./taehwa_ai_diagnostic_guide.html">설문 페이지로 이동</a>
+        <button type="button" class="button secondary" id="refreshDashboardButton">새로고침</button>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>대시보드 요약</h2>
+      <p class="lead">저장된 응답을 기준으로 전체 건수, 평균 점수, 최고 점수, 등급 분포를 즉시 확인할 수 있습니다.</p>
+      <div class="card-grid">
+        <div class="card"><strong>총 응답 수</strong><span id="totalResponsesCard">0건</span></div>
+        <div class="card"><strong>평균 점수</strong><span id="averageScoreCard">0점</span></div>
+        <div class="card"><strong>최고 점수</strong><span id="maxScoreCard">0점</span></div>
+        <div class="card"><strong>Level 1</strong><span id="level1Card">0건</span></div>
+        <div class="card"><strong>Level 2</strong><span id="level2Card">0건</span></div>
+        <div class="card"><strong>Level 3</strong><span id="level3Card">0건</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>응답 목록</h2>
+      <p class="lead">응답자명, 부서, 총점, 등급을 기준으로 필터링하고 상세 내용을 선택해서 볼 수 있습니다.</p>
+      <div class="toolbar">
+        <input class="text-input" id="searchInput" type="text" placeholder="응답자명, 부서, 회사명 검색">
+        <select class="select" id="levelFilter">
+          <option value="">전체 등급</option>
+          <option value="Level 1">Level 1</option>
+          <option value="Level 2">Level 2</option>
+          <option value="Level 3">Level 3</option>
+        </select>
+        <button type="button" class="button secondary" id="exportCsvButton">CSV 내보내기</button>
+        <button type="button" class="danger" id="clearStorageButton">저장 응답 전체 삭제</button>
+      </div>
+      <div class="status" id="dashboardStatus">저장된 응답이 없습니다. 설문 페이지에서 응답을 저장하면 이곳에 누적됩니다.</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>응답일시</th>
+              <th>회사명</th>
+              <th>응답자</th>
+              <th>부서/직책</th>
+              <th>총점</th>
+              <th>등급</th>
+              <th>상세</th>
+            </tr>
+          </thead>
+          <tbody id="responsesTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>선택 응답 상세</h2>
+      <p class="lead">응답 목록에서 선택한 건의 세부 점수, 경영환경, 컨설팅 목표, 메모를 확인합니다.</p>
+      <div id="detailEmpty" class="status">상세를 확인할 응답을 목록에서 선택해 주세요.</div>
+      <div id="detailContent" style="display:none;">
+        <div class="detail-grid">
+          <div class="detail-box">
+            <strong class="muted">기본 정보</strong>
+            <div id="detailBasic"></div>
+          </div>
+          <div class="detail-box">
+            <strong class="muted">점수 요약</strong>
+            <div id="detailScore"></div>
+          </div>
+          <div class="detail-box">
+            <strong class="muted">경영환경 / 핵심 조직</strong>
+            <div id="detailMeta"></div>
+          </div>
+          <div class="detail-box">
+            <strong class="muted">컨설팅 목표 / 메모</strong>
+            <div id="detailConsulting"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const storageKey = "taehwa_ai_assessment_responses";
+      const totalResponsesCard = document.getElementById("totalResponsesCard");
+      const averageScoreCard = document.getElementById("averageScoreCard");
+      const maxScoreCard = document.getElementById("maxScoreCard");
+      const level1Card = document.getElementById("level1Card");
+      const level2Card = document.getElementById("level2Card");
+      const level3Card = document.getElementById("level3Card");
+      const searchInput = document.getElementById("searchInput");
+      const levelFilter = document.getElementById("levelFilter");
+      const exportCsvButton = document.getElementById("exportCsvButton");
+      const clearStorageButton = document.getElementById("clearStorageButton");
+      const refreshDashboardButton = document.getElementById("refreshDashboardButton");
+      const dashboardStatus = document.getElementById("dashboardStatus");
+      const responsesTableBody = document.getElementById("responsesTableBody");
+      const detailEmpty = document.getElementById("detailEmpty");
+      const detailContent = document.getElementById("detailContent");
+      const detailBasic = document.getElementById("detailBasic");
+      const detailScore = document.getElementById("detailScore");
+      const detailMeta = document.getElementById("detailMeta");
+      const detailConsulting = document.getElementById("detailConsulting");
+
+      let responses = [];
+
+      function loadResponses() {
+        responses = JSON.parse(localStorage.getItem(storageKey) || "[]");
+      }
+
+      function formatDate(iso) {
+        const date = new Date(iso);
+        if (Number.isNaN(date.getTime())) return "-";
+        return date.toLocaleString("ko-KR");
+      }
+
+      function getFilteredResponses() {
+        const keyword = searchInput.value.trim().toLowerCase();
+        const level = levelFilter.value;
+        return responses.filter((item) => {
+          const matchesKeyword = keyword === "" || [
+            item.companyName,
+            item.respondentName,
+            item.department,
+            item.position
+          ].join(" ").toLowerCase().includes(keyword);
+          const matchesLevel = level === "" || item.level === level;
+          return matchesKeyword && matchesLevel;
+        });
+      }
+
+      function renderSummary(items) {
+        const total = items.length;
+        const totalScore = items.reduce((sum, item) => sum + (item.totalScore || 0), 0);
+        const maxScore = items.reduce((max, item) => Math.max(max, item.totalScore || 0), 0);
+        totalResponsesCard.textContent = `${total}건`;
+        averageScoreCard.textContent = `${total === 0 ? 0 : Math.round(totalScore / total)}점`;
+        maxScoreCard.textContent = `${maxScore}점`;
+        level1Card.textContent = `${items.filter((item) => item.level === "Level 1").length}건`;
+        level2Card.textContent = `${items.filter((item) => item.level === "Level 2").length}건`;
+        level3Card.textContent = `${items.filter((item) => item.level === "Level 3").length}건`;
+      }
+
+      function renderTable(items) {
+        responsesTableBody.innerHTML = "";
+        if (items.length === 0) {
+          dashboardStatus.textContent = responses.length === 0
+            ? "저장된 응답이 없습니다. 설문 페이지에서 응답을 저장하면 이곳에 누적됩니다."
+            : "현재 필터 조건에 맞는 응답이 없습니다.";
+          return;
+        }
+
+        dashboardStatus.textContent = `현재 ${items.length}건의 응답이 조회되었습니다.`;
+        items.forEach((item) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${formatDate(item.submittedAt)}</td>
+            <td>${item.companyName || "-"}</td>
+            <td>${item.respondentName || "-"}</td>
+            <td>${[item.department || "-", item.position || "-"].join(" / ")}</td>
+            <td>${item.totalScore || 0}점</td>
+            <td><span class="pill">${item.level || "미산정"}</span></td>
+            <td><button type="button" class="button secondary" data-response-id="${item.id}">보기</button></td>
+          `;
+          responsesTableBody.appendChild(tr);
+        });
+      }
+
+      function renderDetail(item) {
+        detailEmpty.style.display = "none";
+        detailContent.style.display = "block";
+        detailBasic.innerHTML = `
+          <div>회사명: ${item.companyName || "-"}</div>
+          <div>응답자: ${item.respondentName || "-"}</div>
+          <div>부서: ${item.department || "-"}</div>
+          <div>직책: ${item.position || "-"}</div>
+          <div>저장일시: ${formatDate(item.submittedAt)}</div>
+        `;
+        detailScore.innerHTML = `
+          <div>총점: ${item.totalScore || 0}점</div>
+          <div>등급: ${item.level || "미산정"}</div>
+          <div>권장 방향: ${item.recommendation || "-"}</div>
+          <div class="muted" style="margin-top:8px;">세부 점수: ${Object.entries(item.scoreMap || {}).map(([k, v]) => `${k} ${v ?? "-"}`).join(" / ")}</div>
+        `;
+        detailMeta.innerHTML = `
+          <div><strong>M1</strong><br>${(item.managementIssues || []).join("<br>") || "-"}</div>
+          <div style="margin-top:10px;"><strong>M2</strong><br>${(item.targetDepartments || []).join("<br>") || "-"}</div>
+        `;
+        detailConsulting.innerHTML = `
+          <div><strong>C1</strong><br>${(item.consultingGoals || []).join("<br>") || "-"}</div>
+          <div style="margin-top:10px;"><strong>C2 메모</strong><br>${item.consultingMemo || "-"}</div>
+        `;
+      }
+
+      function downloadCsv(items) {
+        if (items.length === 0) {
+          dashboardStatus.textContent = "내보낼 응답이 없습니다.";
+          return;
+        }
+        const header = ["submittedAt","companyName","respondentName","department","position","totalScore","level","recommendation","managementIssues","targetDepartments","consultingGoals","consultingMemo"];
+        const lines = [
+          header.join(","),
+          ...items.map((item) => header.map((key) => {
+            const raw = Array.isArray(item[key]) ? item[key].join(" | ") : (item[key] ?? "");
+            return `"${String(raw).replace(/"/g, '""')}"`;
+          }).join(","))
+        ];
+        const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "taehwa-ai-assessment-dashboard.csv";
+        link.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function refreshDashboard() {
+        loadResponses();
+        const filtered = getFilteredResponses();
+        renderSummary(filtered);
+        renderTable(filtered);
+      }
+
+      responsesTableBody.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-response-id]");
+        if (!button) return;
+        const item = responses.find((response) => response.id === button.dataset.responseId);
+        if (item) renderDetail(item);
+      });
+
+      searchInput.addEventListener("input", refreshDashboard);
+      levelFilter.addEventListener("change", refreshDashboard);
+      exportCsvButton.addEventListener("click", () => downloadCsv(getFilteredResponses()));
+      refreshDashboardButton.addEventListener("click", refreshDashboard);
+      clearStorageButton.addEventListener("click", () => {
+        localStorage.removeItem(storageKey);
+        detailEmpty.style.display = "block";
+        detailContent.style.display = "none";
+        refreshDashboard();
+      });
+
+      refreshDashboard();
+    })();
+  </script>
+</body>
+</html>
