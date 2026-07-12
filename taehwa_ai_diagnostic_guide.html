@@ -264,6 +264,14 @@
       align-items: center;
     }
 
+    .action-row.top-cta {
+      margin: 12px 0 22px;
+      padding: 16px 18px;
+      border: 1px solid #cde8e3;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #f7fffd 0%, #eefaf7 100%);
+    }
+
     .primary-button,
     .secondary-button {
       border: 0;
@@ -364,6 +372,12 @@
     <section class="section">
       <h2>1. [기업 배포용] 중소기업 AI 수준조사 조사표</h2>
       <p class="lead">귀사의 현재 데이터 관리 수준과 업무 자동화 니즈를 파악하여 최적의 AI 솔루션과 맞춤형 훈련 로드맵을 제안하기 위한 사전 진단표입니다. 각 항목에 대해 객관적으로 체크해 주시면 됩니다.</p>
+
+      <div class="action-row top-cta">
+        <button type="button" class="primary-button" data-role="show-results">결과 보기</button>
+        <button type="button" class="secondary-button" data-role="reset-results">결과 초기화</button>
+        <span class="helper-text">설문 작성 후 언제든 바로 결과를 확인할 수 있도록 상단에도 버튼을 배치했습니다.</span>
+      </div>
 
       <div class="subhead">Part 0. 기업 경영환경 및 조직 구성 분석</div>
       <table>
@@ -557,8 +571,8 @@
       </div>
 
       <div class="action-row">
-        <button type="button" class="primary-button" id="showResultsButton">결과 보기</button>
-        <button type="button" class="secondary-button" id="resetResultsButton">결과 초기화</button>
+        <button type="button" class="primary-button" data-role="show-results">결과 보기</button>
+        <button type="button" class="secondary-button" data-role="reset-results">결과 초기화</button>
         <span class="helper-text">설문자는 Part A와 Part B의 각 문항(A1~B7)에서 1개씩 체크한 뒤 결과를 확인하시면 됩니다.</span>
       </div>
     </section>
@@ -915,8 +929,8 @@
       const remainingDisplay = document.getElementById("remainingDisplay");
       const recommendationDisplay = document.getElementById("recommendationDisplay");
       const scoreMessage = document.getElementById("scoreMessage");
-      const showResultsButton = document.getElementById("showResultsButton");
-      const resetResultsButton = document.getElementById("resetResultsButton");
+      const showResultsButtons = Array.from(document.querySelectorAll('[data-role="show-results"]'));
+      const resetResultsButtons = Array.from(document.querySelectorAll('[data-role="reset-results"]'));
       const resultsSection = document.getElementById("resultsSection");
       const resultPanel = document.getElementById("resultPanel");
 
@@ -1010,7 +1024,7 @@
         return missing;
       }
 
-      showResultsButton.addEventListener("click", () => {
+      function handleShowResults() {
         const missing = syncScoresFromSurvey();
 
         if (missing.length > 0) {
@@ -1025,9 +1039,9 @@
         resultsSection.classList.remove("is-hidden");
         resultPanel.classList.remove("is-hidden");
         resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
+      }
 
-      resetResultsButton.addEventListener("click", () => {
+      function handleResetResults() {
         sourceInputs.forEach((input) => {
           input.checked = false;
         });
@@ -1039,6 +1053,14 @@
         updateScoreSummary();
         resultsSection.classList.add("is-hidden");
         resultPanel.classList.add("is-hidden");
+      }
+
+      showResultsButtons.forEach((button) => {
+        button.addEventListener("click", handleShowResults);
+      });
+
+      resetResultsButtons.forEach((button) => {
+        button.addEventListener("click", handleResetResults);
       });
 
       updateScoreSummary();
