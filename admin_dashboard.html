@@ -45,6 +45,11 @@
     .section { margin-top: 24px; padding: 24px; }
     .section h2 { margin: 0 0 8px; font-size: 1.35rem; }
     .lead { margin: 0 0 18px; color: var(--muted); }
+    .subtle {
+      color: rgba(255,255,255,0.84);
+      font-size: 0.94rem;
+      margin-top: 10px;
+    }
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -118,6 +123,7 @@
     <section class="hero">
       <h1>태화기업 AI 수준진단 관리자 대시보드</h1>
       <p>응답자 설문 결과를 브라우저 로컬 저장소에 모아 보고, 총점·등급·부서별 응답 현황을 한 화면에서 확인하는 관리자용 페이지입니다.</p>
+      <div class="subtle" id="dataSourceBadge">현재 데이터 소스: Google Sheets 연동 대기</div>
       <div class="hero-actions">
         <a class="button" href="./taehwa_ai_diagnostic_guide.html">설문 페이지로 이동</a>
         <button type="button" class="button secondary" id="refreshDashboardButton">새로고침</button>
@@ -197,9 +203,13 @@
     </section>
   </main>
 
+  <script src="./sheet_config.js"></script>
   <script>
     (() => {
+      const appConfig = window.TAEHWA_CONFIG || {};
       const storageKey = "taehwa_ai_assessment_responses";
+      const googleSheetsWebAppUrl = appConfig.googleSheetsWebAppUrl || "";
+      const useGoogleSheets = appConfig.storageMode === "google-sheets" && googleSheetsWebAppUrl !== "";
       const totalResponsesCard = document.getElementById("totalResponsesCard");
       const averageScoreCard = document.getElementById("averageScoreCard");
       const maxScoreCard = document.getElementById("maxScoreCard");
@@ -212,6 +222,7 @@
       const clearStorageButton = document.getElementById("clearStorageButton");
       const refreshDashboardButton = document.getElementById("refreshDashboardButton");
       const dashboardStatus = document.getElementById("dashboardStatus");
+      const dataSourceBadge = document.getElementById("dataSourceBadge");
       const responsesTableBody = document.getElementById("responsesTableBody");
       const detailEmpty = document.getElementById("detailEmpty");
       const detailContent = document.getElementById("detailContent");
@@ -221,8 +232,25 @@
       const detailConsulting = document.getElementById("detailConsulting");
 
       let responses = [];
+      dataSourceBadge.textContent = useGoogleSheets
+        ? "현재 데이터 소스: Google Sheets 중앙 저장"
+        : "현재 데이터 소스: localStorage PoC 저장";
 
-      function loadResponses() {
+      async function loadResponses() {
+        if (useGoogleSheets) {
+          try {
+            const response = await fetch(`${googleSheetsWebAppUrl}?action=list`);
+            const result = await response.json();
+            if (!response.ok || !result.ok) {
+              throw new Error(result.error || "Google Sheets 조회 실패");
+            }
+            responses = result.responses || [];
+            return;
+          } catch (error) {
+            dashboardStatus.textContent = `Google Sheets 조회에 실패하여 로컬 응답으로 대체합니다. (${error.message})`;
+          }
+        }
+
         responses = JSON.parse(localStorage.getItem(storageKey) || "[]");
       }
 
@@ -332,8 +360,8 @@
         URL.revokeObjectURL(url);
       }
 
-      function refreshDashboard() {
-        loadResponses();
+      async function refreshDashboard() {
+        await loadResponses();
         const filtered = getFilteredResponses();
         renderSummary(filtered);
         renderTable(filtered);

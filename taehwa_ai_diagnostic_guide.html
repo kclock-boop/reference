@@ -458,9 +458,13 @@
           <strong>중점 영역</strong>
           <span>생산, 품질, 설비, 전산, 물류</span>
         </div>
-        <div class="summary-card">
+      <div class="summary-card">
           <strong>관리자 대시보드</strong>
           <span><a href="./admin_dashboard.html">응답 통합 보기</a></span>
+        </div>
+        <div class="summary-card">
+          <strong>저장 방식</strong>
+          <span id="storageModeBadge">Google Sheets 연동 대기</span>
         </div>
       </div>
     </section>
@@ -690,7 +694,7 @@
         <button type="button" class="primary-button" data-role="show-results">결과 보기</button>
         <button type="button" class="secondary-button" data-role="reset-results">결과 초기화</button>
         <button type="button" class="ghost-button" id="openAdminButton">관리자 대시보드</button>
-        <span class="helper-text">설문자는 Part A와 Part B의 각 문항(A1~B7)에서 1개씩 체크한 뒤 결과를 확인하시면 됩니다.</span>
+        <span class="helper-text" id="storageHelperText">설문자는 Part A와 Part B의 각 문항(A1~B7)에서 1개씩 체크한 뒤 결과를 확인하시면 됩니다.</span>
       </div>
     </section>
 
@@ -1042,8 +1046,10 @@
 
     <div class="footer">문서명: (주)태화기업 AI 컨설팅 사전 수준진단지 &amp; 컨설팅 가이드</div>
   </main>
+  <script src="./sheet_config.js"></script>
   <script>
     (() => {
+      const appConfig = window.TAEHWA_CONFIG || {};
       const scoreQuestions = ["A1", "A2", "B1", "B2", "B3", "B4", "B5", "B6", "B7"];
       const sourceInputs = Array.from(document.querySelectorAll("[data-score-question]"));
       const selects = Array.from(document.querySelectorAll(".score-select"));
@@ -1058,6 +1064,8 @@
       const departmentInput = document.getElementById("departmentInput");
       const positionInput = document.getElementById("positionInput");
       const consultingMemoInput = document.getElementById("consultingMemoInput");
+      const storageModeBadge = document.getElementById("storageModeBadge");
+      const storageHelperText = document.getElementById("storageHelperText");
       const showResultsButtons = Array.from(document.querySelectorAll('[data-role="show-results"]'));
       const resetResultsButtons = Array.from(document.querySelectorAll('[data-role="reset-results"]'));
       const printResultsButton = document.getElementById("printResultsButton");
@@ -1068,6 +1076,13 @@
       const resultsSection = document.getElementById("resultsSection");
       const resultPanel = document.getElementById("resultPanel");
       const storageKey = "taehwa_ai_assessment_responses";
+      const googleSheetsWebAppUrl = appConfig.googleSheetsWebAppUrl || "";
+      const useGoogleSheets = appConfig.storageMode === "google-sheets" && googleSheetsWebAppUrl !== "";
+
+      storageModeBadge.textContent = useGoogleSheets ? "Google Sheets 중앙 저장" : "로컬 PoC 저장";
+      storageHelperText.textContent = useGoogleSheets
+        ? "현재 설정은 Google Sheets 중앙 저장 방식입니다. 응답 저장 시 관리자 대시보드에서 통합 조회할 수 있습니다."
+        : "현재는 로컬 PoC 저장 방식입니다. sheet_config.js에 Apps Script URL을 넣으면 중앙 저장으로 전환됩니다.";
 
       sourceInputs.forEach((input) => {
         input.addEventListener("change", () => {
@@ -1170,10 +1185,43 @@
         }
 
         const payload = getResponsePayload();
+        saveResponseRemoteFirst(payload);
+      }
+
+      async function saveResponseRemoteFirst(payload) {
+        if (useGoogleSheets) {
+          try {
+            const response = await fetch(googleSheetsWebAppUrl, {
+              method: "POST",
+              headers: {
+                "Content-Type": "text/plain;charset=utf-8"
+              },
+              body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            if (!response.ok || !result.ok) {
+              throw new Error(result.error || "Google Sheets 저장 실패");
+            }
+
+            saveStatusMessage.textContent = `${payload.respondentName || "응답자"}님의 결과가 Google Sheets에 저장되었습니다. 관리자 대시보드에서 통합 조회할 수 있습니다.`;
+            return;
+          } catch (error) {
+            if (!appConfig.saveFallbackToLocal) {
+              saveStatusMessage.textContent = `Google Sheets 저장 실패: ${error.message}`;
+              return;
+            }
+
+            saveStatusMessage.textContent = `Google Sheets 저장에 실패하여 현재 브라우저에 임시 저장했습니다. (${error.message})`;
+          }
+        }
+
         const stored = JSON.parse(localStorage.getItem(storageKey) || "[]");
         stored.unshift(payload);
         localStorage.setItem(storageKey, JSON.stringify(stored));
-        saveStatusMessage.textContent = `${payload.respondentName || "응답자"}님의 결과가 저장되었습니다. 관리자 대시보드에서 바로 확인할 수 있습니다.`;
+        if (!useGoogleSheets) {
+          saveStatusMessage.textContent = `${payload.respondentName || "응답자"}님의 결과가 현재 브라우저에 저장되었습니다. 관리자 대시보드에서 확인할 수 있습니다.`;
+        }
       }
 
       function updateScoreSummary() {
