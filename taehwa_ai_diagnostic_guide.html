@@ -251,6 +251,14 @@
       color: var(--muted);
     }
 
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+      align-items: center;
+    }
+
     .result-panel.is-hidden,
     .results-block.is-hidden {
       display: none;
@@ -336,14 +344,50 @@
         background: #fff;
       }
 
+      .hero,
+      .top-cta,
+      .action-row,
+      .result-actions,
+      .inline-note,
+      .note-box,
+      textarea,
+      button {
+        display: none !important;
+      }
+
       .page {
         max-width: none;
         padding: 0;
       }
 
-      .hero,
       .section {
         box-shadow: none;
+        border: 0;
+        padding: 0;
+        margin-top: 0;
+      }
+
+      .results-block {
+        display: block !important;
+      }
+
+      .result-panel {
+        display: block !important;
+        border: 1px solid #ccc;
+        border-radius: 0;
+        background: #fff;
+      }
+
+      .score-select {
+        border: 0;
+        padding: 0;
+        background: transparent;
+        appearance: none;
+        -webkit-appearance: none;
+      }
+
+      .footer {
+        margin-top: 16px;
       }
     }
   </style>
@@ -828,6 +872,10 @@
           </div>
         </div>
         <p id="scoreMessage">A1부터 B7까지 점수를 모두 선택하시면 총점, 등급, 권장 컨설팅 방향이 자동으로 계산됩니다.</p>
+        <div class="result-actions">
+          <button type="button" class="primary-button" id="printResultsButton">출력하기</button>
+          <span class="helper-text">결과 보기를 완료한 뒤 누르시면 현재 계산된 결과표를 인쇄하거나 PDF로 저장할 수 있습니다.</span>
+        </div>
       </div>
 
       <table class="level-table">
@@ -931,6 +979,7 @@
       const scoreMessage = document.getElementById("scoreMessage");
       const showResultsButtons = Array.from(document.querySelectorAll('[data-role="show-results"]'));
       const resetResultsButtons = Array.from(document.querySelectorAll('[data-role="reset-results"]'));
+      const printResultsButton = document.getElementById("printResultsButton");
       const resultsSection = document.getElementById("resultsSection");
       const resultPanel = document.getElementById("resultPanel");
 
@@ -1061,6 +1110,23 @@
 
       resetResultsButtons.forEach((button) => {
         button.addEventListener("click", handleResetResults);
+      });
+
+      printResultsButton.addEventListener("click", () => {
+        const missing = syncScoresFromSurvey();
+
+        if (missing.length > 0) {
+          resultsSection.classList.remove("is-hidden");
+          resultPanel.classList.remove("is-hidden");
+          scoreMessage.textContent = `출력 전 확인이 필요합니다: ${missing.join(", ")} 문항이 아직 선택되지 않았습니다.`;
+          remainingDisplay.textContent = `${missing.length}개`;
+          resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+          return;
+        }
+
+        resultsSection.classList.remove("is-hidden");
+        resultPanel.classList.remove("is-hidden");
+        window.print();
       });
 
       updateScoreSummary();
