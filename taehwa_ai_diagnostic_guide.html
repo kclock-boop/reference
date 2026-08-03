@@ -1565,6 +1565,8 @@
       const materialsStorageKey = "taehwa_ai_uploaded_materials";
       const remoteSaveTimeoutMs = 5000;
       const remoteUploadTimeoutMs = 20000;
+      const maxUploadFileSize = 15 * 1024 * 1024;
+      const maxUploadTotalSize = 30 * 1024 * 1024;
       const googleSheetsWebAppUrl = appConfig.googleSheetsWebAppUrl || "";
       const useGoogleSheets = appConfig.storageMode === "google-sheets" && googleSheetsWebAppUrl !== "";
 
@@ -1719,15 +1721,15 @@
           return;
         }
 
-        const hasOversizedFile = files.some((file) => file.size > 8 * 1024 * 1024);
+        const hasOversizedFile = files.some((file) => file.size > maxUploadFileSize);
         if (hasOversizedFile) {
-          setMaterialsStatus("파일당 최대 8MB까지 업로드할 수 있습니다. 파일 크기를 줄이거나 나누어 올려 주세요.");
+          setMaterialsStatus("파일당 최대 15MB까지 업로드할 수 있습니다. 파일 크기를 줄이거나 나누어 올려 주세요.");
           return;
         }
 
         const totalSize = files.reduce((sum, file) => sum + file.size, 0);
-        if (totalSize > 18 * 1024 * 1024) {
-          setMaterialsStatus("한 번에 업로드하는 전체 용량은 18MB 이내로 맞춰 주세요.");
+        if (totalSize > maxUploadTotalSize) {
+          setMaterialsStatus("한 번에 업로드하는 전체 용량은 30MB 이내로 맞춰 주세요.");
           return;
         }
 
