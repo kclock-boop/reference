@@ -12,69 +12,155 @@
       --panel: #ffffff;
       --soft: #f6f8fb;
       --brand: #0f766e;
+      --brand-deep: #155e75;
       --brand-soft: #dff5f1;
+      --blue: #2563eb;
+      --blue-soft: #dbeafe;
+      --amber: #b45309;
+      --amber-soft: #fff7ed;
       --warn: #92400e;
       --warn-soft: #fff7ed;
+      --shadow: 0 18px 38px rgba(148, 163, 184, 0.10);
     }
-    * { box-sizing: border-box; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: "Pretendard", "Malgun Gothic", sans-serif;
       color: var(--ink);
-      background: linear-gradient(180deg, #f5f8fb 0%, #eef3f8 100%);
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 30%),
+        linear-gradient(180deg, #f5f8fb 0%, #eef3f8 100%);
     }
+
     .page {
       max-width: 1280px;
       margin: 0 auto;
       padding: 36px 20px 80px;
     }
-    .hero, .section {
+
+    .hero,
+    .section {
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 24px;
-      box-shadow: 0 18px 38px rgba(148, 163, 184, 0.10);
+      box-shadow: var(--shadow);
     }
+
     .hero {
       padding: 34px;
       background: linear-gradient(135deg, rgba(15, 118, 110, 0.98), rgba(21, 94, 117, 0.92));
       color: #fff;
     }
-    .hero h1 { margin: 0 0 10px; font-size: 2rem; }
-    .hero p { margin: 0; color: rgba(255,255,255,0.88); max-width: 860px; }
-    .hero-actions, .toolbar { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; align-items: center; }
-    .section { margin-top: 24px; padding: 24px; }
-    .section h2 { margin: 0 0 8px; font-size: 1.35rem; }
-    .lead { margin: 0 0 18px; color: var(--muted); }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 2rem;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.88);
+      max-width: 860px;
+      line-height: 1.55;
+    }
+
+    .hero-actions,
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+      align-items: center;
+    }
+
+    .section {
+      margin-top: 24px;
+      padding: 24px;
+    }
+
+    .section h2 {
+      margin: 0 0 8px;
+      font-size: 1.35rem;
+    }
+
+    .lead {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
     .subtle {
-      color: rgba(255,255,255,0.84);
+      color: rgba(255, 255, 255, 0.84);
       font-size: 0.94rem;
       margin-top: 10px;
     }
+
     .card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 14px;
     }
-    .card {
+
+    .card,
+    .detail-box,
+    .viz-card {
       border: 1px solid var(--line);
       border-radius: 18px;
       background: linear-gradient(180deg, #fff 0%, #f9fbfd 100%);
       padding: 18px;
     }
-    .card strong { display: block; color: var(--muted); font-size: 0.86rem; margin-bottom: 6px; }
-    .card span { font-size: 1.2rem; font-weight: 700; }
-    .button, .danger {
+
+    .card strong,
+    .viz-card strong {
+      display: block;
+      color: var(--muted);
+      font-size: 0.86rem;
+      margin-bottom: 6px;
+    }
+
+    .card span,
+    .viz-card span {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .button,
+    .danger {
       border: 0;
       border-radius: 14px;
       padding: 11px 16px;
       font: inherit;
       font-weight: 700;
       cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
-    .button { background: var(--brand); color: #fff; }
-    .button.secondary { background: #eaf3f2; color: var(--brand); }
-    .danger { background: var(--warn-soft); color: var(--warn); border: 1px solid #f1d5b5; }
-    .text-input, .select {
+
+    .button {
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .button.secondary {
+      background: #eaf3f2;
+      color: var(--brand);
+    }
+
+    .danger {
+      background: var(--warn-soft);
+      color: var(--warn);
+      border: 1px solid #f1d5b5;
+    }
+
+    .text-input,
+    .select {
       padding: 11px 13px;
       border: 1px solid var(--line);
       border-radius: 14px;
@@ -82,23 +168,66 @@
       background: #fff;
       color: var(--ink);
     }
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; margin-top: 14px; background: #fff; }
-    th, td { border: 1px solid var(--line); padding: 12px 14px; text-align: left; vertical-align: top; }
-    th { background: var(--soft); }
-    .muted { color: var(--muted); }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      background: #fff;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 12px 14px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--soft);
+      white-space: nowrap;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
     .detail-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(12, 1fr);
       gap: 14px;
       margin-top: 12px;
     }
+
     .detail-box {
-      border: 1px solid var(--line);
-      border-radius: 18px;
       padding: 16px;
-      background: #fff;
     }
+
+    .span-3 {
+      grid-column: span 3;
+    }
+
+    .span-4 {
+      grid-column: span 4;
+    }
+
+    .span-6 {
+      grid-column: span 6;
+    }
+
+    .span-8 {
+      grid-column: span 8;
+    }
+
+    .span-12 {
+      grid-column: 1 / -1;
+    }
+
     .status {
       margin-top: 12px;
       padding: 12px 14px;
@@ -107,6 +236,7 @@
       color: var(--muted);
       border: 1px solid var(--line);
     }
+
     .pill {
       display: inline-block;
       padding: 5px 10px;
@@ -116,14 +246,236 @@
       font-size: 0.88rem;
       font-weight: 700;
     }
+
+    .viz-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .snapshot-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .snapshot-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .score-hero {
+      padding: 22px;
+      border-radius: 22px;
+      background:
+        linear-gradient(135deg, rgba(37, 99, 235, 0.16), rgba(15, 118, 110, 0.12)),
+        #ffffff;
+      border: 1px solid #d7e5fb;
+    }
+
+    .score-hero h3 {
+      margin: 0 0 8px;
+      font-size: 1.15rem;
+    }
+
+    .score-track {
+      margin-top: 14px;
+      height: 14px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #e7eef6;
+    }
+
+    .score-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), #38bdf8);
+      transition: width 0.3s ease;
+    }
+
+    .score-caption {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.93rem;
+      color: var(--muted);
+    }
+
+    .bars {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 72px;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .bar-label {
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .bar-track {
+      height: 12px;
+      border-radius: 999px;
+      background: #e6edf5;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--brand), #2dd4bf);
+    }
+
+    .bar-value {
+      text-align: right;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .journey {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .journey-step {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 16px;
+      min-height: 132px;
+    }
+
+    .journey-step::after {
+      content: "→";
+      position: absolute;
+      right: -11px;
+      top: calc(50% - 12px);
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brand);
+      font-weight: 800;
+    }
+
+    .journey-step:last-child::after {
+      display: none;
+    }
+
+    .journey-step strong {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--brand-deep);
+      font-size: 0.98rem;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #f5f9fc;
+      border: 1px solid #dde7f0;
+      color: #314356;
+      font-size: 0.9rem;
+    }
+
+    .diagram-note {
+      margin-top: 12px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #fff7ed, #fffdf8);
+      border: 1px solid #f3d7b3;
+      color: #8a5a1e;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1100px) {
+      .viz-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .snapshot-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .detail-grid {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+
+      .span-3,
+      .span-4,
+      .span-6,
+      .span-8,
+      .span-12 {
+        grid-column: auto;
+      }
+
+      .journey {
+        grid-template-columns: 1fr;
+      }
+
+      .journey-step::after {
+        display: none;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .page {
+        max-width: none;
+        padding: 0;
+      }
+
+      .hero,
+      .section {
+        box-shadow: none;
+      }
+
+      .hero-actions,
+      .toolbar,
+      #dashboardStatus,
+      #detailEmpty {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body>
   <main class="page">
     <section class="hero">
       <h1 id="dashboardTitle">AI훈련코치(강사회) 결과분석 보고서</h1>
-      <p>응답자 설문 결과를 브라우저 로컬 저장소에 모아 보고, 총점·등급·부서별 응답 현황을 한 화면에서 확인하는 관리자용 페이지입니다.</p>
-      <div class="subtle" id="dataSourceBadge">현재 데이터 소스: Google Sheets 연동 대기</div>
+      <p>응답자 설문 결과를 한 화면에서 비교하고, 선택한 기업의 수준·우선과제·실행순서를 도식화하여 빠르게 판단할 수 있도록 구성한 관리자용 화면입니다.</p>
+      <div class="subtle" id="dataSourceBadge">현재 데이터 소스: Google Sheets 중앙 저장</div>
       <div class="hero-actions">
         <a class="button" href="./taehwa_ai_diagnostic_guide.html">기업 사전 수준진단 화면</a>
         <button type="button" class="button secondary" id="refreshDashboardButton">새로고침</button>
@@ -133,7 +485,7 @@
 
     <section class="section">
       <h2>대시보드 요약</h2>
-      <p class="lead">저장된 응답을 기준으로 전체 건수, 평균 점수, 최고 점수, 등급 분포를 즉시 확인할 수 있습니다.</p>
+      <p class="lead">저장된 응답의 전체 규모와 점수 분포를 먼저 보고, 아래에서 개별 기업을 선택해 상세 결과를 확인합니다.</p>
       <div class="card-grid">
         <div class="card"><strong>총 응답 수</strong><span id="totalResponsesCard">0건</span></div>
         <div class="card"><strong>평균 점수</strong><span id="averageScoreCard">0점</span></div>
@@ -146,7 +498,7 @@
 
     <section class="section">
       <h2>응답 목록</h2>
-      <p class="lead">응답자명, 부서, 총점, 등급을 기준으로 필터링하고 상세 내용을 선택해서 볼 수 있습니다.</p>
+      <p class="lead">회사명, 응답자, 부서, 총점, 등급을 기준으로 빠르게 찾고 필요한 기업을 선택해 보세요.</p>
       <div class="toolbar">
         <input class="text-input" id="searchInput" type="text" placeholder="응답자명, 부서, 회사명 검색">
         <select class="select" id="levelFilter">
@@ -154,6 +506,9 @@
           <option value="Level 1">Level 1</option>
           <option value="Level 2">Level 2</option>
           <option value="Level 3">Level 3</option>
+          <option value="임시 Level 1">임시 Level 1</option>
+          <option value="임시 Level 2">임시 Level 2</option>
+          <option value="임시 Level 3">임시 Level 3</option>
         </select>
         <button type="button" class="button secondary" id="exportCsvButton">CSV 내보내기</button>
         <button type="button" class="danger" id="clearStorageButton">저장 응답 전체 삭제</button>
@@ -179,28 +534,55 @@
 
     <section class="section">
       <h2>선택 응답 상세</h2>
-      <p class="lead">응답 목록에서 선택한 건의 세부 점수, 경영환경, 컨설팅 목표, 메모를 확인합니다.</p>
+      <p class="lead">선택한 기업의 결과를 숫자, 막대, 우선과제 흐름으로 한 번에 볼 수 있게 정리했습니다.</p>
       <div id="selectedCompanyStatus" class="status">분석할 기업을 선택해 주세요.</div>
-      <div id="detailEmpty" class="status">상세를 확인할 응답을 목록에서 선택해 주세요.</div>
+      <div id="detailEmpty" class="status">응답 목록에서 분석할 기업의 "보기" 버튼을 눌러 주세요.</div>
       <div id="detailContent" style="display:none;">
+        <div class="viz-layout">
+          <div class="score-hero">
+            <h3>기업 분석 스냅샷</h3>
+            <div class="snapshot-grid" id="snapshotGrid"></div>
+            <div class="score-track">
+              <div class="score-fill" id="totalScoreFill" style="width:0%;"></div>
+            </div>
+            <div class="score-caption">
+              <span id="scoreSummaryLabel">총점 0점 / 100점</span>
+              <span id="scoreSummaryLevel">등급 미산정</span>
+            </div>
+            <div class="diagram-note" id="scoreNarrative">응답을 선택하면 한 줄 총평이 이곳에 표시됩니다.</div>
+          </div>
+          <div class="viz-card">
+            <strong>핵심 키워드</strong>
+            <div class="chips" id="insightChips"></div>
+          </div>
+        </div>
+
         <div class="detail-grid">
-          <div class="detail-box">
+          <div class="detail-box span-6">
+            <strong class="muted">영역별 점수 도식</strong>
+            <div class="bars" id="sectionBars"></div>
+          </div>
+          <div class="detail-box span-6">
+            <strong class="muted">우선 실행 로드맵</strong>
+            <div class="journey" id="priorityJourney"></div>
+          </div>
+          <div class="detail-box span-3">
             <strong class="muted">기본 정보</strong>
             <div id="detailBasic"></div>
           </div>
-          <div class="detail-box">
+          <div class="detail-box span-3">
             <strong class="muted">점수 요약</strong>
             <div id="detailScore"></div>
           </div>
-          <div class="detail-box">
+          <div class="detail-box span-3">
             <strong class="muted">경영환경 / 핵심 조직</strong>
             <div id="detailMeta"></div>
           </div>
-          <div class="detail-box">
+          <div class="detail-box span-3">
             <strong class="muted">컨설팅 목표 / 메모</strong>
             <div id="detailConsulting"></div>
           </div>
-          <div class="detail-box" style="grid-column: 1 / -1;">
+          <div class="detail-box span-12">
             <strong class="muted">자동 결과분석</strong>
             <div id="detailAnalysis"></div>
           </div>
@@ -216,6 +598,7 @@
       const storageKey = "taehwa_ai_assessment_responses";
       const googleSheetsWebAppUrl = appConfig.googleSheetsWebAppUrl || "";
       const useGoogleSheets = appConfig.storageMode === "google-sheets" && googleSheetsWebAppUrl !== "";
+
       const dashboardTitle = document.getElementById("dashboardTitle");
       const selectedCompanyStatus = document.getElementById("selectedCompanyStatus");
       const totalResponsesCard = document.getElementById("totalResponsesCard");
@@ -240,11 +623,20 @@
       const detailMeta = document.getElementById("detailMeta");
       const detailConsulting = document.getElementById("detailConsulting");
       const detailAnalysis = document.getElementById("detailAnalysis");
+      const snapshotGrid = document.getElementById("snapshotGrid");
+      const totalScoreFill = document.getElementById("totalScoreFill");
+      const scoreSummaryLabel = document.getElementById("scoreSummaryLabel");
+      const scoreSummaryLevel = document.getElementById("scoreSummaryLevel");
+      const scoreNarrative = document.getElementById("scoreNarrative");
+      const insightChips = document.getElementById("insightChips");
+      const sectionBars = document.getElementById("sectionBars");
+      const priorityJourney = document.getElementById("priorityJourney");
 
       let responses = [];
+
       dataSourceBadge.textContent = useGoogleSheets
         ? "현재 데이터 소스: Google Sheets 중앙 저장"
-        : "현재 데이터 소스: localStorage PoC 저장";
+        : "현재 데이터 소스: 현재 브라우저 로컬 저장";
 
       function getLocalResponses() {
         return JSON.parse(localStorage.getItem(storageKey) || "[]");
@@ -289,6 +681,19 @@
         return date.toLocaleString("ko-KR");
       }
 
+      function getCompanyLabel(item) {
+        return (item && item.companyName && String(item.companyName).trim()) || "기업명 미입력";
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
       function getFilteredResponses() {
         const keyword = searchInput.value.trim().toLowerCase();
         const level = levelFilter.value;
@@ -325,24 +730,20 @@
           return;
         }
 
-        dashboardStatus.textContent = `현재 ${items.length}건의 응답이 조회되었습니다.`;
+        dashboardStatus.textContent = `현재 ${items.length}건의 응답을 조회했습니다.`;
         items.forEach((item) => {
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${formatDate(item.submittedAt)}</td>
-            <td>${item.companyName || "-"}</td>
-            <td>${item.respondentName || "-"}</td>
-            <td>${[item.department || "-", item.position || "-"].join(" / ")}</td>
+            <td>${escapeHtml(item.companyName || "-")}</td>
+            <td>${escapeHtml(item.respondentName || "-")}</td>
+            <td>${escapeHtml([item.department || "-", item.position || "-"].join(" / "))}</td>
             <td>${item.totalScore || 0}점</td>
-            <td><span class="pill">${item.level || "미산정"}</span></td>
-            <td><button type="button" class="button secondary" data-response-id="${item.id}">보기</button></td>
+            <td><span class="pill">${escapeHtml(item.level || "미산정")}</span></td>
+            <td><button type="button" class="button secondary" data-response-id="${escapeHtml(item.id)}">보기</button></td>
           `;
           responsesTableBody.appendChild(tr);
         });
-      }
-
-      function getCompanyLabel(item) {
-        return (item && item.companyName && String(item.companyName).trim()) || "기업명 미입력";
       }
 
       function getPriorityTasks(item) {
@@ -352,18 +753,15 @@
           .sort((a, b) => a[1] - b[1]);
 
         const taskCatalog = {
-          A1: "기초 시스템 환경과 데이터 입력 체계를 우선 정비합니다.",
-          A2: "사내 데이터 공유 체계와 협업 흐름을 표준화합니다.",
-          A3: "데이터 수집 자동화와 현장-사무 연계 체계를 강화합니다.",
-          A4: "분석 리포트와 대시보드 활용 역량을 높입니다.",
-          A5: "AI 활용을 위한 보안·권한·인프라 기준을 점검합니다.",
-          B1: "현장 반복업무를 먼저 선정해 AI 자동화 과제로 연결합니다.",
-          B2: "품질·설비·생산 중심의 우선 적용 시나리오를 구체화합니다.",
-          B3: "실무자 교육과 관리자 의사결정 체계를 함께 설계합니다.",
-          B4: "사내 확산을 위한 파일럿 운영과 성과지표를 설정합니다.",
-          B5: "외부 솔루션 연계와 내부 데이터 정합성 점검을 병행합니다.",
-          B6: "전사 확산 전 검증 범위와 유지관리 역할을 분명히 합니다.",
-          B7: "경영진 보고용 성과지표와 실행 로드맵을 정리합니다."
+          A1: "기초 시스템 환경과 현장 입력 체계를 먼저 정비합니다.",
+          A2: "데이터 수집·공유 기준을 표준화하고 누락 구간을 줄입니다.",
+          B1: "생성형 AI 활용을 개인 체험에서 실무 적용 단계로 끌어올립니다.",
+          B2: "보안 가이드와 입력 데이터 익명화 원칙을 먼저 고정합니다.",
+          B3: "엑셀·노코드 기반 분석 자동화를 우선 실험합니다.",
+          B4: "AI 결과 검증 기준과 리포트 신뢰성 체크 절차를 세웁니다.",
+          B5: "바이브코딩 또는 로우코드 자동화 과제를 작은 범위로 시작합니다.",
+          B6: "설비·품질·비전검사 등 제조 AI 적용 시나리오를 구체화합니다.",
+          B7: "전산 조직 또는 TF의 역할을 명확히 정리해 실행력을 높입니다."
         };
 
         return partScores.slice(0, 3).map(([key, value], index) => ({
@@ -372,6 +770,18 @@
           text: taskCatalog[key] || `${key} 영역의 보완 계획을 우선 수립합니다.`,
           order: index + 1
         }));
+      }
+
+      function getSectionScores(item) {
+        const scoreMap = item.scoreMap || {};
+        const sum = (keys) => keys.reduce((acc, key) => acc + (Number(scoreMap[key]) || 0), 0);
+
+        return [
+          { label: "인프라", score: sum(["A1", "A2"]), max: 20 },
+          { label: "AI 기초", score: sum(["B1", "B2"]), max: 20 },
+          { label: "분석 자동화", score: sum(["B3", "B4"]), max: 20 },
+          { label: "고도화", score: sum(["B5", "B6", "B7"]), max: 40 }
+        ];
       }
 
       function buildAnalysisReport(item) {
@@ -401,7 +811,7 @@
           : "컨설팅 목표는 현장 문제와 데이터 활용 과제를 연결하는 방향으로 구체화하는 것이 좋습니다.";
 
         const priorityHtml = priorities.length > 0
-          ? priorities.map((priority) => `<div style="margin-top:10px;"><strong>${priority.order}. ${priority.key} (${priority.value}점)</strong><br>${priority.text}</div>`).join("")
+          ? priorities.map((priority) => `<div style="margin-top:10px;"><strong>${priority.order}. ${escapeHtml(priority.key)} (${priority.value}점)</strong><br>${escapeHtml(priority.text)}</div>`).join("")
           : `<div style="margin-top:10px;"><strong>1.</strong><br>세부 점수를 바탕으로 우선 과제를 추가 점검해 주세요.</div>`;
 
         const roadmap = priorities.length > 0
@@ -417,42 +827,119 @@
             ];
 
         return `
-          <div><strong>자동 총평</strong><br>${summaryParts.join(" ")} ${goalSentence}</div>
+          <div><strong>자동 총평</strong><br>${escapeHtml(summaryParts.join(" "))} ${escapeHtml(goalSentence)}</div>
           <div style="margin-top:14px;"><strong>도입 우선과제</strong>${priorityHtml}</div>
-          <div style="margin-top:14px;"><strong>권장 실행순서</strong><br>${roadmap.join("<br>")}</div>
-          <div style="margin-top:14px;"><strong>강사회 검토 메모</strong><br>${item.consultingMemo || "추가 메모 없음"}</div>
+          <div style="margin-top:14px;"><strong>권장 실행순서</strong><br>${roadmap.map((text) => escapeHtml(text)).join("<br>")}</div>
+          <div style="margin-top:14px;"><strong>강사회 검토 메모</strong><br>${escapeHtml(item.consultingMemo || "추가 메모 없음")}</div>
         `;
+      }
+
+      function renderSnapshot(item) {
+        const companyLabel = getCompanyLabel(item);
+        const totalScore = Number(item.totalScore || 0);
+        const scorePercent = Math.max(0, Math.min(100, totalScore));
+
+        snapshotGrid.innerHTML = `
+          <div class="viz-card"><strong>회사명</strong><span>${escapeHtml(companyLabel)}</span></div>
+          <div class="viz-card"><strong>총점</strong><span>${totalScore}점</span></div>
+          <div class="viz-card"><strong>진단 등급</strong><span>${escapeHtml(item.level || "미산정")}</span></div>
+          <div class="viz-card"><strong>권장 방향</strong><span>${escapeHtml(item.recommendation || "-")}</span></div>
+        `;
+
+        totalScoreFill.style.width = `${scorePercent}%`;
+        scoreSummaryLabel.textContent = `총점 ${totalScore}점 / 100점`;
+        scoreSummaryLevel.textContent = `등급 ${item.level || "미산정"}`;
+        scoreNarrative.textContent = item.scoreMessage || "응답을 기반으로 자동 총평을 준비했습니다.";
+      }
+
+      function renderSectionBars(item) {
+        const sections = getSectionScores(item);
+        sectionBars.innerHTML = sections.map((section) => {
+          const percent = section.max === 0 ? 0 : Math.round((section.score / section.max) * 100);
+          return `
+            <div class="bar-row">
+              <div class="bar-label">${escapeHtml(section.label)}</div>
+              <div class="bar-track"><div class="bar-fill" style="width:${percent}%;"></div></div>
+              <div class="bar-value">${section.score} / ${section.max}</div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      function buildChipItems(item) {
+        const chips = [];
+        chips.push(`등급 ${item.level || "미산정"}`);
+        if (item.recommendation) chips.push(item.recommendation);
+        (item.managementIssues || []).slice(0, 2).forEach((text) => chips.push(text));
+        (item.targetDepartments || []).slice(0, 2).forEach((text) => chips.push(text));
+        (item.consultingGoals || []).slice(0, 2).forEach((text) => chips.push(text));
+        return chips.slice(0, 8);
+      }
+
+      function renderChips(item) {
+        const chips = buildChipItems(item);
+        insightChips.innerHTML = chips.length > 0
+          ? chips.map((text) => `<span class="chip">${escapeHtml(text)}</span>`).join("")
+          : `<span class="chip">추가 키워드 없음</span>`;
+      }
+
+      function renderJourney(item) {
+        const priorities = getPriorityTasks(item);
+        const steps = priorities.length > 0
+          ? priorities
+          : [
+              { order: 1, key: "진단 검토", text: "응답 내용을 먼저 검토합니다." },
+              { order: 2, key: "현장 확인", text: "현장 인터뷰로 실제 과제를 좁힙니다." },
+              { order: 3, key: "실행 설계", text: "작은 파일럿부터 실행계획을 세웁니다." }
+            ];
+
+        priorityJourney.innerHTML = steps.map((step) => `
+          <div class="journey-step">
+            <strong>Step ${step.order}. ${escapeHtml(step.key)}</strong>
+            <div>${escapeHtml(step.text)}</div>
+          </div>
+        `).join("");
       }
 
       function renderDetail(item) {
         const companyLabel = getCompanyLabel(item);
         detailEmpty.style.display = "none";
         detailContent.style.display = "block";
+
         dashboardTitle.textContent = `${companyLabel} AI훈련코치(강사회) 결과분석 보고서`;
         document.title = `${companyLabel} AI훈련코치(강사회) 결과분석 보고서`;
         selectedCompanyStatus.textContent = `현재 분석 기업: ${companyLabel}`;
+
         detailBasic.innerHTML = `
-          <div>회사명: ${item.companyName || "-"}</div>
-          <div>응답자: ${item.respondentName || "-"}</div>
-          <div>부서: ${item.department || "-"}</div>
-          <div>직책: ${item.position || "-"}</div>
-          <div>저장일시: ${formatDate(item.submittedAt)}</div>
+          <div>회사명: ${escapeHtml(item.companyName || "-")}</div>
+          <div>응답자: ${escapeHtml(item.respondentName || "-")}</div>
+          <div>부서: ${escapeHtml(item.department || "-")}</div>
+          <div>직책: ${escapeHtml(item.position || "-")}</div>
+          <div>응답일시: ${escapeHtml(formatDate(item.submittedAt))}</div>
         `;
+
         detailScore.innerHTML = `
           <div>총점: ${item.totalScore || 0}점</div>
-          <div>등급: ${item.level || "미산정"}</div>
-          <div>권장 방향: ${item.recommendation || "-"}</div>
-          <div class="muted" style="margin-top:8px;">세부 점수: ${Object.entries(item.scoreMap || {}).map(([k, v]) => `${k} ${v ?? "-"}`).join(" / ")}</div>
+          <div>등급: ${escapeHtml(item.level || "미산정")}</div>
+          <div>권장 방향: ${escapeHtml(item.recommendation || "-")}</div>
+          <div class="muted" style="margin-top:8px;">세부 점수: ${Object.entries(item.scoreMap || {}).map(([key, value]) => `${escapeHtml(key)} ${escapeHtml(value ?? "-")}`).join(" / ")}</div>
         `;
+
         detailMeta.innerHTML = `
-          <div><strong>M1</strong><br>${(item.managementIssues || []).join("<br>") || "-"}</div>
-          <div style="margin-top:10px;"><strong>M2</strong><br>${(item.targetDepartments || []).join("<br>") || "-"}</div>
+          <div><strong>M1</strong><br>${(item.managementIssues || []).length ? item.managementIssues.map((text) => escapeHtml(text)).join("<br>") : "-"}</div>
+          <div style="margin-top:10px;"><strong>M2</strong><br>${(item.targetDepartments || []).length ? item.targetDepartments.map((text) => escapeHtml(text)).join("<br>") : "-"}</div>
         `;
+
         detailConsulting.innerHTML = `
-          <div><strong>C1</strong><br>${(item.consultingGoals || []).join("<br>") || "-"}</div>
-          <div style="margin-top:10px;"><strong>C2 메모</strong><br>${item.consultingMemo || "-"}</div>
+          <div><strong>C1</strong><br>${(item.consultingGoals || []).length ? item.consultingGoals.map((text) => escapeHtml(text)).join("<br>") : "-"}</div>
+          <div style="margin-top:10px;"><strong>C2 메모</strong><br>${escapeHtml(item.consultingMemo || "-")}</div>
         `;
+
         detailAnalysis.innerHTML = buildAnalysisReport(item);
+        renderSnapshot(item);
+        renderSectionBars(item);
+        renderChips(item);
+        renderJourney(item);
       }
 
       function downloadCsv(items) {
@@ -460,7 +947,8 @@
           dashboardStatus.textContent = "내보낼 응답이 없습니다.";
           return;
         }
-        const header = ["submittedAt","companyName","respondentName","department","position","totalScore","level","recommendation","managementIssues","targetDepartments","consultingGoals","consultingMemo"];
+
+        const header = ["submittedAt", "companyName", "respondentName", "department", "position", "totalScore", "level", "recommendation", "managementIssues", "targetDepartments", "consultingGoals", "consultingMemo"];
         const lines = [
           header.join(","),
           ...items.map((item) => header.map((key) => {
@@ -468,6 +956,7 @@
             return `"${String(raw).replace(/"/g, '""')}"`;
           }).join(","))
         ];
+
         const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -492,18 +981,19 @@
           return;
         }
 
-        const currentCompanyName = detailContent.style.display !== "none"
-          ? (detailBasic.textContent.match(/회사명:\s*([^\n]+)/)?.[1] || "").trim()
-          : "";
-        const selected = filtered.find((item) => getCompanyLabel(item) === currentCompanyName) || filtered[0];
+        const selectedResponseId = detailContent.dataset.selectedResponseId || "";
+        const selected = filtered.find((item) => item.id === selectedResponseId) || filtered[0];
         renderDetail(selected);
+        detailContent.dataset.selectedResponseId = selected.id || "";
       }
 
       responsesTableBody.addEventListener("click", (event) => {
         const button = event.target.closest("[data-response-id]");
         if (!button) return;
         const item = responses.find((response) => response.id === button.dataset.responseId);
-        if (item) renderDetail(item);
+        if (!item) return;
+        renderDetail(item);
+        detailContent.dataset.selectedResponseId = item.id || "";
       });
 
       searchInput.addEventListener("input", refreshDashboard);
@@ -515,6 +1005,7 @@
         localStorage.removeItem(storageKey);
         detailEmpty.style.display = "block";
         detailContent.style.display = "none";
+        detailContent.dataset.selectedResponseId = "";
         detailAnalysis.innerHTML = "";
         refreshDashboard();
       });
