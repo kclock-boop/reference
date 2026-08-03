@@ -121,7 +121,7 @@
 <body>
   <main class="page">
     <section class="hero">
-      <h1>AI훈련코치(강사회) 결과분석 보고서</h1>
+      <h1 id="dashboardTitle">AI훈련코치(강사회) 결과분석 보고서</h1>
       <p>응답자 설문 결과를 브라우저 로컬 저장소에 모아 보고, 총점·등급·부서별 응답 현황을 한 화면에서 확인하는 관리자용 페이지입니다.</p>
       <div class="subtle" id="dataSourceBadge">현재 데이터 소스: Google Sheets 연동 대기</div>
       <div class="hero-actions">
@@ -179,6 +179,7 @@
     <section class="section">
       <h2>선택 응답 상세</h2>
       <p class="lead">응답 목록에서 선택한 건의 세부 점수, 경영환경, 컨설팅 목표, 메모를 확인합니다.</p>
+      <div id="selectedCompanyStatus" class="status">분석할 기업을 선택해 주세요.</div>
       <div id="detailEmpty" class="status">상세를 확인할 응답을 목록에서 선택해 주세요.</div>
       <div id="detailContent" style="display:none;">
         <div class="detail-grid">
@@ -210,6 +211,8 @@
       const storageKey = "taehwa_ai_assessment_responses";
       const googleSheetsWebAppUrl = appConfig.googleSheetsWebAppUrl || "";
       const useGoogleSheets = appConfig.storageMode === "google-sheets" && googleSheetsWebAppUrl !== "";
+      const dashboardTitle = document.getElementById("dashboardTitle");
+      const selectedCompanyStatus = document.getElementById("selectedCompanyStatus");
       const totalResponsesCard = document.getElementById("totalResponsesCard");
       const averageScoreCard = document.getElementById("averageScoreCard");
       const maxScoreCard = document.getElementById("maxScoreCard");
@@ -312,9 +315,17 @@
         });
       }
 
+      function getCompanyLabel(item) {
+        return (item && item.companyName && String(item.companyName).trim()) || "기업명 미입력";
+      }
+
       function renderDetail(item) {
+        const companyLabel = getCompanyLabel(item);
         detailEmpty.style.display = "none";
         detailContent.style.display = "block";
+        dashboardTitle.textContent = `${companyLabel} AI훈련코치(강사회) 결과분석 보고서`;
+        document.title = `${companyLabel} AI훈련코치(강사회) 결과분석 보고서`;
+        selectedCompanyStatus.textContent = `현재 분석 기업: ${companyLabel}`;
         detailBasic.innerHTML = `
           <div>회사명: ${item.companyName || "-"}</div>
           <div>응답자: ${item.respondentName || "-"}</div>
@@ -365,6 +376,21 @@
         const filtered = getFilteredResponses();
         renderSummary(filtered);
         renderTable(filtered);
+
+        if (filtered.length === 0) {
+          dashboardTitle.textContent = "AI훈련코치(강사회) 결과분석 보고서";
+          document.title = "AI훈련코치(강사회) 결과분석 보고서";
+          selectedCompanyStatus.textContent = "분석할 기업을 선택해 주세요.";
+          detailEmpty.style.display = "block";
+          detailContent.style.display = "none";
+          return;
+        }
+
+        const currentCompanyName = detailContent.style.display !== "none"
+          ? (detailBasic.textContent.match(/회사명:\s*([^\n]+)/)?.[1] || "").trim()
+          : "";
+        const selected = filtered.find((item) => getCompanyLabel(item) === currentCompanyName) || filtered[0];
+        renderDetail(selected);
       }
 
       responsesTableBody.addEventListener("click", (event) => {
