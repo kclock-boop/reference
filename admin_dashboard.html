@@ -115,6 +115,46 @@
       padding: 18px;
     }
 
+    .materials-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .materials-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(180deg, #fff 0%, #f8fbff 100%);
+    }
+
+    .materials-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.96rem;
+      color: var(--ink);
+    }
+
+    .materials-item span {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .materials-link {
+      white-space: nowrap;
+      align-self: center;
+      color: var(--brand);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .materials-link:hover {
+      text-decoration: underline;
+    }
+
     .card strong,
     .viz-card strong {
       display: block;
@@ -1185,6 +1225,10 @@
             <strong class="muted">자동 결과분석</strong>
             <div id="detailAnalysis"></div>
           </div>
+          <div class="detail-box span-12">
+            <strong class="muted">제출 자료</strong>
+            <div id="detailMaterials" class="muted">선택한 기업의 제출 자료를 불러오는 중입니다.</div>
+          </div>
         </div>
       </div>
     </section>
@@ -1224,6 +1268,7 @@
       const detailMeta = document.getElementById("detailMeta");
       const detailConsulting = document.getElementById("detailConsulting");
       const detailAnalysis = document.getElementById("detailAnalysis");
+      const detailMaterials = document.getElementById("detailMaterials");
       const snapshotGrid = document.getElementById("snapshotGrid");
       const totalScoreFill = document.getElementById("totalScoreFill");
       const scoreSummaryLabel = document.getElementById("scoreSummaryLabel");
@@ -1300,6 +1345,53 @@
           .replace(/>/g, "&gt;")
           .replace(/"/g, "&quot;")
           .replace(/'/g, "&#39;");
+      }
+
+      function formatFileSize(bytes) {
+        const value = Number(bytes || 0);
+        if (!value) return "크기 정보 없음";
+        if (value >= 1024 * 1024) return `${(value / (1024 * 1024)).toFixed(1)}MB`;
+        if (value >= 1024) return `${Math.round(value / 1024)}KB`;
+        return `${value}B`;
+      }
+
+      async function loadCompanyMaterials(companyName) {
+        if (!useGoogleSheets || !companyName.trim()) {
+          detailMaterials.innerHTML = "현재 자료 업로드 조회는 Google Sheets/Drive 연동 시 사용할 수 있습니다.";
+          return;
+        }
+
+        detailMaterials.innerHTML = "제출 자료 목록을 불러오는 중입니다.";
+
+        try {
+          const response = await fetch(`${googleSheetsWebAppUrl}?action=list-files&companyName=${encodeURIComponent(companyName.trim())}`);
+          const result = await response.json();
+          if (!response.ok || !result.ok) {
+            throw new Error(result.error || "자료 목록 조회 실패");
+          }
+
+          const files = result.files || [];
+          if (files.length === 0) {
+            detailMaterials.innerHTML = "제출된 자료가 아직 없습니다.";
+            return;
+          }
+
+          detailMaterials.innerHTML = `
+            <div class="materials-list">
+              ${files.map((file) => `
+                <div class="materials-item">
+                  <div>
+                    <strong>${escapeHtml(file.name || "제출 자료")}</strong>
+                    <span>${escapeHtml(file.mimeType || "파일 형식")} · ${escapeHtml(formatFileSize(file.size || 0))} · ${escapeHtml(file.uploadedAt || "-")}</span>
+                  </div>
+                  <a class="materials-link" href="${escapeHtml(file.url || "#")}" target="_blank" rel="noopener noreferrer">열기</a>
+                </div>
+              `).join("")}
+            </div>
+          `;
+        } catch (error) {
+          detailMaterials.innerHTML = `제출 자료를 불러오지 못했습니다. (${escapeHtml(error.message)})`;
+        }
       }
 
       function getFilteredResponses() {
@@ -2090,6 +2182,8 @@
         `;
 
         detailAnalysis.innerHTML = buildAnalysisReport(item);
+        detailMaterials.innerHTML = "제출 자료 목록을 불러오는 중입니다.";
+        loadCompanyMaterials(companyLabel);
         renderSnapshot(item);
         renderSectionBars(item);
         renderChips(item);
@@ -2132,6 +2226,7 @@
           selectedCompanyStatus.textContent = "분석할 기업을 선택해 주세요.";
           detailEmpty.style.display = "block";
           detailContent.style.display = "none";
+          detailMaterials.innerHTML = "";
           return;
         }
 
@@ -2162,6 +2257,7 @@
         detailContent.style.display = "none";
         detailContent.dataset.selectedResponseId = "";
         detailAnalysis.innerHTML = "";
+        detailMaterials.innerHTML = "";
         refreshDashboard();
       });
 
