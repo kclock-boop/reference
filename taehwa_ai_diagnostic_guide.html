@@ -1766,6 +1766,10 @@
             throw new Error(result.error || "자료 업로드 실패");
           }
 
+          if (result.source !== "google-drive" || !Array.isArray(result.files) || result.files.length === 0) {
+            throw new Error("자료 업로드용 Apps Script가 아직 재배포되지 않았거나, 파일 저장 결과를 돌려주지 않았습니다.");
+          }
+
           cacheMaterials(companyName, result.files || []);
           renderMaterialsList(getCachedMaterials(companyName));
           materialFileInput.value = "";
