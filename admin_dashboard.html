@@ -1152,6 +1152,7 @@
           <thead>
             <tr>
               <th>응답일시</th>
+              <th>최근 자료 업로드</th>
               <th>회사명</th>
               <th>응답자</th>
               <th>부서/직책</th>
@@ -1279,6 +1280,7 @@
       const priorityJourney = document.getElementById("priorityJourney");
 
       let responses = [];
+      let materialsSummaryByCompany = new Map();
 
       dataSourceBadge.textContent = useGoogleSheets
         ? "현재 데이터 소스: Google Sheets 중앙 저장"
@@ -1312,6 +1314,7 @@
               throw new Error(result.error || "Google Sheets 조회 실패");
             }
             responses = mergeResponses(result.responses || [], localResponses);
+            await loadMaterialsSummary(responses);
             return;
           } catch (error) {
             dashboardStatus.textContent = `Google Sheets 조회에 실패하여 현재 브라우저 저장 응답으로 대체합니다. (${error.message})`;
@@ -1319,6 +1322,7 @@
         }
 
         responses = localResponses;
+        await loadMaterialsSummary(responses);
       }
 
       function formatDate(iso) {
@@ -1329,6 +1333,10 @@
 
       function getCompanyLabel(item) {
         return (item && item.companyName && String(item.companyName).trim()) || "기업명 미입력";
+      }
+
+      function getCompanyKey(companyName) {
+        return String(companyName || "").trim().toLowerCase();
       }
 
       function sanitizeFileName(value) {
@@ -1394,6 +1402,45 @@
         }
       }
 
+      async function loadMaterialsSummary(items) {
+        materialsSummaryByCompany = new Map();
+
+        if (!useGoogleSheets) {
+          return;
+        }
+
+        const companyNames = Array.from(new Set(
+          items
+            .map((item) => getCompanyLabel(item))
+            .filter((companyName) => String(companyName || "").trim())
+        ));
+
+        await Promise.all(companyNames.map(async (companyName) => {
+          try {
+            const response = await fetch(`${googleSheetsWebAppUrl}?action=list-files&companyName=${encodeURIComponent(companyName.trim())}`);
+            const result = await response.json();
+            const files = response.ok && result.ok ? (result.files || []) : [];
+
+            materialsSummaryByCompany.set(getCompanyKey(companyName), {
+              count: files.length,
+              latestUploadedAt: files.length > 0 ? (files[0].uploadedAt || "") : ""
+            });
+          } catch (error) {
+            materialsSummaryByCompany.set(getCompanyKey(companyName), {
+              count: 0,
+              latestUploadedAt: ""
+            });
+          }
+        }));
+      }
+
+      function getMaterialsSummary(companyName) {
+        return materialsSummaryByCompany.get(getCompanyKey(companyName)) || {
+          count: 0,
+          latestUploadedAt: ""
+        };
+      }
+
       function getFilteredResponses() {
         const keyword = searchInput.value.trim().toLowerCase();
         const level = levelFilter.value;
@@ -1432,9 +1479,14 @@
 
         dashboardStatus.textContent = `현재 ${items.length}건의 응답을 조회했습니다.`;
         items.forEach((item) => {
+          const materialsSummary = getMaterialsSummary(item.companyName);
+          const latestUploadedAt = materialsSummary.latestUploadedAt
+            ? `${materialsSummary.latestUploadedAt}${materialsSummary.count > 0 ? ` · ${materialsSummary.count}건` : ""}`
+            : "-";
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${formatDate(item.submittedAt)}</td>
+            <td>${escapeHtml(latestUploadedAt)}</td>
             <td>${escapeHtml(item.companyName || "-")}</td>
             <td>${escapeHtml(item.respondentName || "-")}</td>
             <td>${escapeHtml([item.department || "-", item.position || "-"].join(" / "))}</td>
