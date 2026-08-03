@@ -202,10 +202,96 @@
       grid-template-columns: repeat(12, 1fr);
       gap: 14px;
       margin-top: 12px;
+      position: relative;
     }
 
     .detail-box {
       padding: 16px;
+    }
+
+    .infographic-grid {
+      position: relative;
+    }
+
+    .infographic-grid::before {
+      content: "";
+      position: absolute;
+      left: 12.5%;
+      right: 12.5%;
+      top: 34px;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(59, 130, 246, 0.28), rgba(20, 184, 166, 0.4), rgba(249, 115, 22, 0.28));
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .info-panel {
+      position: relative;
+      overflow: hidden;
+      min-height: 286px;
+      padding: 18px 18px 20px;
+      z-index: 1;
+      box-shadow: 0 18px 30px rgba(148, 163, 184, 0.16);
+    }
+
+    .info-panel::before {
+      content: "";
+      position: absolute;
+      left: 42px;
+      top: 0;
+      width: 2px;
+      height: 26px;
+      background: currentColor;
+      opacity: 0.22;
+    }
+
+    .info-panel::after {
+      content: "";
+      position: absolute;
+      top: 24px;
+      right: -9px;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #fff;
+      border: 2px solid currentColor;
+      opacity: 0.45;
+    }
+
+    .info-panel:last-of-type::after {
+      display: none;
+    }
+
+    .panel-basic {
+      color: #2563eb;
+      background:
+        linear-gradient(180deg, rgba(219, 234, 254, 0.85), rgba(255, 255, 255, 0.96)),
+        #fff;
+      border-color: #bfdbfe;
+    }
+
+    .panel-score {
+      color: #0f766e;
+      background:
+        linear-gradient(180deg, rgba(204, 251, 241, 0.9), rgba(255, 255, 255, 0.96)),
+        #fff;
+      border-color: #99f6e4;
+    }
+
+    .panel-meta {
+      color: #b45309;
+      background:
+        linear-gradient(180deg, rgba(255, 237, 213, 0.9), rgba(255, 255, 255, 0.96)),
+        #fff;
+      border-color: #fdba74;
+    }
+
+    .panel-goal {
+      color: #7c3aed;
+      background:
+        linear-gradient(180deg, rgba(237, 233, 254, 0.9), rgba(255, 255, 255, 0.96)),
+        #fff;
+      border-color: #c4b5fd;
     }
 
     .span-3 {
@@ -429,6 +515,26 @@
       box-shadow: 0 10px 24px rgba(37, 99, 235, 0.2);
     }
 
+    .panel-basic .icon-badge {
+      background: linear-gradient(135deg, #2563eb, #60a5fa);
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
+    }
+
+    .panel-score .icon-badge {
+      background: linear-gradient(135deg, #0f766e, #2dd4bf);
+      box-shadow: 0 10px 24px rgba(15, 118, 110, 0.22);
+    }
+
+    .panel-meta .icon-badge {
+      background: linear-gradient(135deg, #d97706, #f59e0b);
+      box-shadow: 0 10px 24px rgba(217, 119, 6, 0.22);
+    }
+
+    .panel-goal .icon-badge {
+      background: linear-gradient(135deg, #7c3aed, #a78bfa);
+      box-shadow: 0 10px 24px rgba(124, 58, 237, 0.22);
+    }
+
     .icon-title {
       display: grid;
       gap: 4px;
@@ -536,6 +642,16 @@
       background: var(--amber-soft);
       border-color: #f6d4a7;
       color: #9a670d;
+    }
+
+    .connector-caption {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: currentColor;
+      opacity: 0.72;
+      text-transform: uppercase;
     }
 
     .diagram-note {
@@ -700,21 +816,27 @@
             <strong class="muted">우선 실행 로드맵</strong>
             <div class="journey" id="priorityJourney"></div>
           </div>
-          <div class="detail-box span-3">
+          <div class="detail-grid infographic-grid span-12">
+          <div class="detail-box info-panel panel-basic span-3">
             <strong class="muted">기본 정보</strong>
+            <div class="connector-caption">Profile Snapshot</div>
             <div id="detailBasic"></div>
           </div>
-          <div class="detail-box span-3">
+          <div class="detail-box info-panel panel-score span-3">
             <strong class="muted">점수 요약</strong>
+            <div class="connector-caption">Score Gauge</div>
             <div id="detailScore"></div>
           </div>
-          <div class="detail-box span-3">
+          <div class="detail-box info-panel panel-meta span-3">
             <strong class="muted">경영환경 / 핵심 조직</strong>
+            <div class="connector-caption">Issue Map</div>
             <div id="detailMeta"></div>
           </div>
-          <div class="detail-box span-3">
+          <div class="detail-box info-panel panel-goal span-3">
             <strong class="muted">컨설팅 목표 / 메모</strong>
+            <div class="connector-caption">Goal Board</div>
             <div id="detailConsulting"></div>
+          </div>
           </div>
           <div class="detail-box span-12">
             <strong class="muted">자동 결과분석</strong>
