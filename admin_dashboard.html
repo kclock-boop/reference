@@ -246,7 +246,26 @@
         ? "현재 데이터 소스: Google Sheets 중앙 저장"
         : "현재 데이터 소스: localStorage PoC 저장";
 
+      function getLocalResponses() {
+        return JSON.parse(localStorage.getItem(storageKey) || "[]");
+      }
+
+      function mergeResponses(primaryResponses, fallbackResponses) {
+        const merged = new Map();
+        [...fallbackResponses, ...primaryResponses].forEach((item) => {
+          if (!item || !item.id) return;
+          merged.set(item.id, item);
+        });
+        return Array.from(merged.values()).sort((a, b) => {
+          const aTime = new Date(a.submittedAt || 0).getTime();
+          const bTime = new Date(b.submittedAt || 0).getTime();
+          return bTime - aTime;
+        });
+      }
+
       async function loadResponses() {
+        const localResponses = getLocalResponses();
+
         if (useGoogleSheets) {
           try {
             const response = await fetch(`${googleSheetsWebAppUrl}?action=list`);
@@ -254,14 +273,14 @@
             if (!response.ok || !result.ok) {
               throw new Error(result.error || "Google Sheets 조회 실패");
             }
-            responses = result.responses || [];
+            responses = mergeResponses(result.responses || [], localResponses);
             return;
           } catch (error) {
-            dashboardStatus.textContent = `Google Sheets 조회에 실패하여 로컬 응답으로 대체합니다. (${error.message})`;
+            dashboardStatus.textContent = `Google Sheets 조회에 실패하여 현재 브라우저 저장 응답으로 대체합니다. (${error.message})`;
           }
         }
 
-        responses = JSON.parse(localStorage.getItem(storageKey) || "[]");
+        responses = localResponses;
       }
 
       function formatDate(iso) {

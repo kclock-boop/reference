@@ -1591,6 +1591,11 @@
       }
 
       async function saveResponseRemoteFirst(payload) {
+        const stored = JSON.parse(localStorage.getItem(storageKey) || "[]");
+        const dedupedLocal = stored.filter((item) => item.id !== payload.id);
+        dedupedLocal.unshift(payload);
+        localStorage.setItem(storageKey, JSON.stringify(dedupedLocal));
+
         if (useGoogleSheets) {
           try {
             const response = await fetch(googleSheetsWebAppUrl, {
@@ -1606,7 +1611,7 @@
               throw new Error(result.error || "Google Sheets 저장 실패");
             }
 
-            setSaveStatus(`${payload.respondentName || "응답자"}님의 결과가 Google Sheets에 저장되었습니다. AI훈련코치(강사회)가 결과분석 화면에서 확인할 수 있습니다.`);
+            setSaveStatus(`${payload.respondentName || "응답자"}님의 결과가 Google Sheets와 현재 브라우저에 저장되었습니다. AI훈련코치(강사회)가 결과분석 화면에서 확인할 수 있습니다.`);
             return;
           } catch (error) {
             if (!appConfig.saveFallbackToLocal) {
@@ -1618,9 +1623,6 @@
           }
         }
 
-        const stored = JSON.parse(localStorage.getItem(storageKey) || "[]");
-        stored.unshift(payload);
-        localStorage.setItem(storageKey, JSON.stringify(stored));
         if (!useGoogleSheets) {
           setSaveStatus(`${payload.respondentName || "응답자"}님의 결과가 현재 브라우저에 저장되었습니다. AI훈련코치(강사회)가 결과분석 화면에서 확인할 수 있습니다.`);
         }
