@@ -979,6 +979,188 @@
       padding: 16px;
     }
 
+    .report-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .report-sheet {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      padding: 20px;
+      box-shadow: 0 14px 28px rgba(148, 163, 184, 0.10);
+    }
+
+    .report-sheet h4 {
+      margin: 0 0 12px;
+      font-size: 1.05rem;
+      color: var(--brand-deep);
+    }
+
+    .report-kicker {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .report-title {
+      margin: 0 0 14px;
+      font-size: 1.28rem;
+      color: var(--ink);
+    }
+
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      margin-top: 12px;
+      background: #fff;
+    }
+
+    .report-table th,
+    .report-table td {
+      border: 1px solid #d7e0ea;
+      padding: 11px 12px;
+      vertical-align: top;
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+
+    .report-table th {
+      background: #f4f8fc;
+      color: #26415a;
+      font-size: 0.92rem;
+      font-weight: 800;
+    }
+
+    .report-code {
+      font-weight: 800;
+      color: var(--brand-deep);
+      white-space: nowrap;
+    }
+
+    .report-score {
+      font-weight: 800;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+
+    .report-score.risk {
+      color: #b91c1c;
+    }
+
+    .report-score.mid {
+      color: #b45309;
+    }
+
+    .report-score.strong {
+      color: #0f766e;
+    }
+
+    .report-note {
+      color: #475569;
+    }
+
+    .report-total-row td {
+      background: #f8fbfe;
+      font-weight: 700;
+    }
+
+    .report-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .report-summary-card {
+      border: 1px solid #d7e3f0;
+      border-radius: 18px;
+      background: #fff;
+      padding: 16px;
+    }
+
+    .report-summary-card strong {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .report-summary-card span {
+      display: block;
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .report-summary-card p {
+      margin: 8px 0 0;
+      color: #334155;
+      line-height: 1.6;
+    }
+
+    .report-definition {
+      margin-top: 14px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.06), rgba(15, 118, 110, 0.08));
+      border: 1px solid #d9e8f4;
+      color: #334155;
+      line-height: 1.75;
+    }
+
+    .report-definition strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--brand-deep);
+    }
+
+    .report-bullets {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .report-bullets li + li {
+      margin-top: 6px;
+    }
+
+    .report-guide-grid {
+      display: grid;
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    .report-guide-card {
+      border: 1px solid #dbe6ee;
+      border-radius: 18px;
+      padding: 18px;
+      background: #fff;
+    }
+
+    .report-guide-card h5 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      color: var(--brand-deep);
+    }
+
+    .report-guide-card p {
+      margin: 0;
+      color: #475569;
+      line-height: 1.7;
+    }
+
+    .report-guide-card ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: #334155;
+      line-height: 1.7;
+    }
+
     .analysis-bullets {
       display: grid;
       gap: 10px;
@@ -2055,6 +2237,256 @@
         `;
       }
 
+      function getScoreBandText(code) {
+        const bands = {
+          A1: "2 / 4 / 6 / 8 / 10",
+          A2: "2 / 4 / 6 / 8 / 10",
+          B1: "2 / 4 / 7 / 10",
+          B2: "2 / 4 / 8 / 10",
+          B3: "2 / 5 / 8 / 10",
+          B4: "2 / 5 / 8 / 10",
+          B5: "3 / 6 / 10 / 15",
+          B6: "3 / 6 / 10 / 15",
+          B7: "2 / 4 / 7 / 10"
+        };
+
+        return bands[code] || "확인 필요";
+      }
+
+      function getDiagnosisPointText(code) {
+        const points = {
+          A1: "ERP, MES, POP, SCM, CRM, PLM 등 실사용 정보시스템 보유 및 활용 수준",
+          A2: "생산, 품질, 유통 데이터가 수기인지, 엑셀인지, 시스템 자동 수집인지 확인",
+          B1: "임직원의 생성형 AI 사용 경험과 실무 적용 정착 수준",
+          B2: "민감정보 처리 방식, 계정 관리, 사내 AI 보안 가이드 존재 여부",
+          B3: "엑셀 AI, 시각화 툴, RPA 등 비개발형 도구 활용 수준",
+          B4: "AI가 만든 수치, 그래프, 수식을 현업이 검수할 수 있는 수준인지 확인",
+          B5: "웹 챗봇, 에디터 연동 AI, CLI 에이전트 등 개발형 AI 도구 활용 수준",
+          B6: "설비, 센서, 비전검사, 예지보전 등 제조 AI 접목 수준",
+          B7: "전산 전담 부서 또는 TFT 존재 여부와 내부 구축 리딩 가능성"
+        };
+
+        return points[code] || "핵심 진단 포인트 확인 필요";
+      }
+
+      function getScoreMemoText(code, value) {
+        const health = getScoreHealth(code, value);
+        const prefixMap = {
+          risk: "우선 보완 필요",
+          mid: "보완 과제 정리",
+          strong: "강점 활용 가능"
+        };
+        const guide = getScoreImprovementGuide(code, value)
+          .replace(/^[^:]+:\s*/, "")
+          .replace(/\s+/g, " ")
+          .trim();
+        const prefix = prefixMap[health.className] || "검토 메모";
+        return `${prefix}. ${guide}`;
+      }
+
+      function getLevelDefinition(level) {
+        const definitions = {
+          "Level 1": {
+            score: "20점 ~ 40점",
+            title: "AX 입문 단계",
+            status: "제조 현장 데이터가 파편화되어 있고, 임직원의 AI 활용이 개인 체험 수준에 머무는 상태",
+            guides: [
+              "프롬프트 활용 교육과 보안 가이드 수립부터 시작합니다.",
+              "텍스트 초안 작성, 문서 요약, 기본 행정 자동화 중심의 입문 과제를 권장합니다."
+            ]
+          },
+          "Level 2": {
+            score: "41점 ~ 70점",
+            title: "노코드 분석 단계",
+            status: "ERP/MES 등 기본 시스템이 구축되어 있으며, 데이터 자동화와 분석 니즈가 구체화되는 단계",
+            guides: [
+              "엑셀 AI 기능과 노코드 툴을 결합한 데이터 분석 실습을 진행합니다.",
+              "현업 담당자가 오류를 검증하고 반복 정형 업무를 자동화하도록 유도합니다."
+            ]
+          },
+          "Level 3": {
+            score: "71점 ~ 100점",
+            title: "바이브코딩 및 제조 AI 단계",
+            status: "데이터 인프라와 전산/TF 조직이 비교적 우수하며, 피지컬 AI와 연동 가능성이 높은 고도화 상태",
+            guides: [
+              "바이브코딩 기반의 현장형 대시보드 빌드와 업무 도구 내재화를 추진합니다.",
+              "품질 비전검사, 예지보전, 생산계획 최적화 중심의 AX 로드맵을 구체화합니다."
+            ]
+          }
+        };
+
+        return definitions[level] || definitions["Level 1"];
+      }
+
+      function getConsultingGuideRows() {
+        return [
+          {
+            axis: "생산/공정",
+            check: "프레스, 조립, 검사 공정의 작업지시 흐름이 수기인지, MES 기반인지, 그리고 다품종 소량 생산 시 일정 재편성이 얼마나 자주 발생하는지 확인",
+            task: "공정 스케줄링 대시보드, 작업일보 자동 요약, 납기 지연 사유 데이터화"
+          },
+          {
+            axis: "품질",
+            check: "모터 성능 검사 데이터, 외관 검사 기록, 클레임 이력의 저장 위치와 불량 분류 기준의 표준화 여부 확인",
+            task: "불량 유형 분류 체계 정비, 비전검사 PoC, 클레임 원인 추적 리포트 자동화"
+          },
+          {
+            axis: "설비/보전",
+            check: "설비별 고장 이력, 교체 주기, 알람 로그, 센서 데이터 취득 가능 범위 확인",
+            task: "예지보전 후보 설비 선정, 설비 이상 패턴 탐색, 정비 이력 표준화"
+          },
+          {
+            axis: "전산/데이터",
+            check: "ERP, MES, POP, 엑셀, 공용 폴더 사이에 데이터가 어떻게 이동하는지와 API 또는 파일 연계 가능성 확인",
+            task: "현행 데이터맵 작성, AI 입력용 마스킹 규칙 수립, 부서별 공용 데이터셋 설계"
+          }
+        ];
+      }
+
+      function buildStructuredAnalysisReport(item) {
+        const companyLabel = getCompanyLabel(item);
+        const levelLabel = item.level || "미산정";
+        const recommendation = item.recommendation || "AI 도입 준비도 추가 점검";
+        const priorities = getPriorityTasks(item);
+        const scoredItems = getScoredItems(item);
+        const issues = (item.managementIssues || []).slice(0, 3);
+        const departments = (item.targetDepartments || []).slice(0, 3);
+        const goals = (item.consultingGoals || []).slice(0, 3);
+        const levelDefinition = getLevelDefinition(levelLabel);
+        const consultingRows = getConsultingGuideRows();
+        const missingCount = scoredItems.filter((entry) => typeof entry.value !== "number").length;
+        const summaryText = getOverallScoreInsight(item, priorities);
+
+        return `
+          <div class="report-stack">
+            <div class="report-sheet">
+              <div class="report-kicker">
+                <span>${escapeHtml(formatDate(item.submittedAt))}</span>
+                <span>${escapeHtml(companyLabel)} AI 컨설팅 사전 수준진단지 & 컨설팅 가이드</span>
+              </div>
+              <h3 class="report-title">${escapeHtml(companyLabel)} 결과분석표</h3>
+              <table class="report-table">
+                <thead>
+                  <tr>
+                    <th style="width:72px;">문항</th>
+                    <th style="width:140px;">평가 항목</th>
+                    <th>핵심 진단 포인트</th>
+                    <th style="width:120px;">배점 구간</th>
+                    <th style="width:95px;">체크 점수</th>
+                    <th>종합 해석 메모</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${scoredItems.map((entry) => `
+                    <tr>
+                      <td class="report-code">${entry.code}</td>
+                      <td>${escapeHtml(entry.name)}</td>
+                      <td>${escapeHtml(getDiagnosisPointText(entry.code))}</td>
+                      <td>${escapeHtml(getScoreBandText(entry.code))}</td>
+                      <td class="report-score ${entry.health.className}">${entry.value ?? "-"}점</td>
+                      <td class="report-note">${escapeHtml(getScoreMemoText(entry.code, entry.value))}</td>
+                    </tr>
+                  `).join("")}
+                  <tr class="report-total-row">
+                    <td>합계</td>
+                    <td colspan="3">A1~B7 점수 합산</td>
+                    <td>${item.totalScore || 0}점</td>
+                    <td>총점 기준 ${escapeHtml(levelLabel)} 판정과 우선 컨설팅 방향을 함께 정리</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="report-summary-grid">
+                <div class="report-summary-card">
+                  <strong>현재 총점</strong>
+                  <span>${item.totalScore || 0}점</span>
+                </div>
+                <div class="report-summary-card">
+                  <strong>진단 등급</strong>
+                  <span>${escapeHtml(levelLabel)}</span>
+                </div>
+                <div class="report-summary-card">
+                  <strong>미입력 항목</strong>
+                  <span>${missingCount}개</span>
+                </div>
+                <div class="report-summary-card">
+                  <strong>권장 방향</strong>
+                  <p>${escapeHtml(recommendation)}</p>
+                </div>
+              </div>
+
+              <div class="report-definition">
+                <strong>자동 계산 결과 해석</strong>
+                ${escapeHtml(summaryText)}
+              </div>
+            </div>
+
+            <div class="report-sheet">
+              <h4>최종 총평 및 권장 컨설팅 방향</h4>
+              <table class="report-table">
+                <thead>
+                  <tr>
+                    <th style="width:130px;">최종 총점</th>
+                    <th style="width:140px;">진단 등급</th>
+                    <th>기업 현재 상태 정의</th>
+                    <th>권장 컨설팅 방향 가이드</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>${escapeHtml(levelDefinition.score)}</td>
+                    <td><strong>${escapeHtml(levelLabel)}</strong><br>${escapeHtml(levelDefinition.title)}</td>
+                    <td>${escapeHtml(levelDefinition.status)}</td>
+                    <td>
+                      <ul class="report-bullets">
+                        ${levelDefinition.guides.map((guide) => `<li>${escapeHtml(guide)}</li>`).join("")}
+                      </ul>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="report-guide-grid">
+                <div class="report-guide-card">
+                  <h5>강사회 종합 해석 메모</h5>
+                  <p>${escapeHtml(item.consultingMemo || "추가 메모 없음")}</p>
+                </div>
+                <div class="report-guide-card">
+                  <h5>주요 경영 이슈 / 우선 조직 / 컨설팅 목표</h5>
+                  <ul>
+                    <li>주요 경영 이슈: ${escapeHtml(issues.join(", ") || "추가 확인 필요")}</li>
+                    <li>우선 조직: ${escapeHtml(departments.join(", ") || "추가 확인 필요")}</li>
+                    <li>컨설팅 목표: ${escapeHtml(goals.join(", ") || "추가 확인 필요")}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="report-sheet">
+              <h4>태화기업 맞춤 컨설팅 가이드</h4>
+              <table class="report-table">
+                <thead>
+                  <tr>
+                    <th style="width:120px;">컨설팅 축</th>
+                    <th>현장 확인 포인트</th>
+                    <th>우선 제안 가능 과제</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${consultingRows.map((row) => `
+                    <tr>
+                      <td><strong>${escapeHtml(row.axis)}</strong></td>
+                      <td>${escapeHtml(row.check)}</td>
+                      <td>${escapeHtml(row.task)}</td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
       function renderSnapshot(item) {
         const companyLabel = getCompanyLabel(item);
         const totalScore = Number(item.totalScore || 0);
@@ -2233,7 +2665,7 @@
           </div>
         `;
 
-        detailAnalysis.innerHTML = buildAnalysisReport(item);
+        detailAnalysis.innerHTML = buildStructuredAnalysisReport(item);
         detailMaterials.innerHTML = "제출 자료 목록을 불러오는 중입니다.";
         loadCompanyMaterials(companyLabel);
         renderSnapshot(item);
