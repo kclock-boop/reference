@@ -1503,6 +1503,21 @@
         topSaveStatusMessage.textContent = message;
       }
 
+      function setSaveButtonsState(label, disabled) {
+        saveResponseButtons.forEach((button) => {
+          button.textContent = label;
+          button.disabled = disabled;
+        });
+      }
+
+      function showSubmitCompleteState(message) {
+        setSaveButtonsState("제출완료", true);
+        setSaveStatus(message);
+        window.setTimeout(() => {
+          setSaveButtonsState("사전 수준진단 저장", false);
+        }, 2500);
+      }
+
       function getLevelInfo(totalScore, isComplete) {
         const baseLevelInfo = (() => {
           if (totalScore >= 71) {
@@ -1589,6 +1604,7 @@
         }
 
         const payload = getResponsePayload();
+        setSaveButtonsState("저장 중...", true);
         saveResponseRemoteFirst(payload);
         if (missing.length > 0) {
           setSaveStatus(`현재는 임시 결과로 저장되었습니다. 남은 문항: ${missing.join(", ")}.`);
@@ -1616,20 +1632,22 @@
               throw new Error(result.error || "Google Sheets 저장 실패");
             }
 
-            setSaveStatus(`${payload.respondentName || "응답자"}님의 결과가 Google Sheets와 현재 브라우저에 저장되었습니다. AI훈련코치(강사회)가 결과분석 화면에서 확인할 수 있습니다.`);
+            showSubmitCompleteState("제출완료: 저장이 정상적으로 접수되었습니다. AI훈련코치(강사회)가 결과분석 화면에서 확인할 수 있습니다.");
             return;
           } catch (error) {
             if (!appConfig.saveFallbackToLocal) {
+              setSaveButtonsState("사전 수준진단 저장", false);
               setSaveStatus(`Google Sheets 저장 실패: ${error.message}`);
               return;
             }
 
+            setSaveButtonsState("사전 수준진단 저장", false);
             setSaveStatus(`Google Sheets 저장에 실패하여 현재 브라우저에 임시 저장했습니다. (${error.message})`);
           }
         }
 
         if (!useGoogleSheets) {
-          setSaveStatus(`${payload.respondentName || "응답자"}님의 결과가 현재 브라우저에 저장되었습니다. AI훈련코치(강사회)가 결과분석 화면에서 확인할 수 있습니다.`);
+          showSubmitCompleteState("제출완료: 저장이 정상적으로 접수되었습니다. AI훈련코치(강사회)가 결과분석 화면에서 확인할 수 있습니다.");
         }
       }
 
