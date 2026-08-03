@@ -1002,14 +1002,23 @@
       display: flex;
       justify-content: space-between;
       gap: 14px;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
       color: var(--muted);
-      font-size: 0.88rem;
+      font-size: 0.82rem;
+    }
+
+    .report-orgline {
+      margin: 0 0 8px;
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      color: #53708b;
     }
 
     .report-title {
-      margin: 0 0 14px;
-      font-size: 1.28rem;
+      margin: 0 0 12px;
+      font-size: 1.18rem;
       color: var(--ink);
     }
 
@@ -1024,9 +1033,9 @@
     .report-table th,
     .report-table td {
       border: 1px solid #d7e0ea;
-      padding: 11px 12px;
+      padding: 9px 10px;
       vertical-align: top;
-      line-height: 1.6;
+      line-height: 1.48;
       word-break: keep-all;
     }
 
@@ -2131,9 +2140,14 @@
             fill: { color: "0F766E" },
             line: { color: "0F766E" }
           });
-          slide3.addText(`${companyLabel} 문항별 결과분석표`, {
-            x: 0.65, y: 0.48, w: 6.0, h: 0.24,
+          slide3.addText(`${companyLabel} AI 컨설팅 사전 수준진단 결과분석표`, {
+            x: 0.65, y: 0.44, w: 8.6, h: 0.24,
             fontFace: "Malgun Gothic", fontSize: 20, bold: true, color: "FFFFFF"
+          });
+          slide3.addText("HRDK 한국산업인력공단 · 경남경영자총협회 중소기업AI훈련확산센터", {
+            x: 8.55, y: 0.5, w: 3.8, h: 0.14,
+            align: "right",
+            fontFace: "Malgun Gothic", fontSize: 7.5, color: "DFF7F3"
           });
           slide3.addTable(
             [
@@ -2187,8 +2201,13 @@
             line: { color: "155E75" }
           });
           slide4.addText(`${companyLabel} 맞춤 컨설팅 가이드`, {
-            x: 0.65, y: 0.48, w: 6.2, h: 0.24,
+            x: 0.65, y: 0.44, w: 6.2, h: 0.24,
             fontFace: "Malgun Gothic", fontSize: 20, bold: true, color: "FFFFFF"
+          });
+          slide4.addText("HRDK 한국산업인력공단 · 경남경영자총협회 중소기업AI훈련확산센터", {
+            x: 8.45, y: 0.5, w: 3.9, h: 0.14,
+            align: "right",
+            fontFace: "Malgun Gothic", fontSize: 7.5, color: "DDF7FA"
           });
           slide4.addTable(
             [
@@ -2535,15 +2554,16 @@
                 <span>${escapeHtml(formatDate(item.submittedAt))}</span>
                 <span>${escapeHtml(companyLabel)} AI 컨설팅 사전 수준진단지 & 컨설팅 가이드</span>
               </div>
-              <h3 class="report-title">${escapeHtml(companyLabel)} 결과분석표</h3>
+              <div class="report-orgline">HRDK 한국산업인력공단 · 경남경영자총협회 중소기업AI훈련확산센터</div>
+              <h3 class="report-title">${escapeHtml(companyLabel)} AI 컨설팅 사전 수준진단 결과분석표</h3>
               <table class="report-table">
                 <thead>
                   <tr>
-                    <th style="width:72px;">문항</th>
-                    <th style="width:140px;">평가 항목</th>
+                    <th style="width:64px;">문항</th>
+                    <th style="width:118px;">평가 항목</th>
                     <th>핵심 진단 포인트</th>
-                    <th style="width:120px;">배점 구간</th>
-                    <th style="width:95px;">체크 점수</th>
+                    <th style="width:104px;">배점 구간</th>
+                    <th style="width:84px;">체크 점수</th>
                     <th>종합 해석 메모</th>
                   </tr>
                 </thead>
