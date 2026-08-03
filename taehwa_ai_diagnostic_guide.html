@@ -739,6 +739,10 @@
       font-size: 0.94rem;
     }
 
+    .coach-only {
+      display: none !important;
+    }
+
     .guide-list {
       margin: 0;
       padding-left: 18px;
@@ -875,12 +879,11 @@
       <p class="field-help">이 문서는 기업별로 배포되므로 회사명은 직접 입력해 주세요.</p>
 
       <div class="action-row top-cta">
-        <button type="button" class="primary-button" data-role="show-results">결과 보기</button>
-        <button type="button" class="secondary-button" data-role="save-response">응답 저장</button>
-        <button type="button" class="secondary-button" data-role="reset-results">결과 초기화</button>
-        <span class="helper-text">설문 작성 중간에도 임시 결과 확인과 응답 저장을 바로 진행할 수 있도록 상단에도 버튼을 배치했습니다.</span>
+        <button type="button" class="primary-button" data-role="save-response">사전 수준진단 저장</button>
+        <button type="button" class="secondary-button" data-role="reset-results">작성 초기화</button>
+        <span class="helper-text">기업은 사전 수준진단 작성과 저장만 진행해 주세요. 결과분석 보고서는 AI훈련코치(강사회) 확인용 화면에서 검토합니다.</span>
       </div>
-      <div class="status-message" id="topSaveStatusMessage">응답 저장을 누르면 이 위치에 저장 결과가 표시됩니다.</div>
+      <div class="status-message" id="topSaveStatusMessage">사전 수준진단 저장을 누르면 이 위치에 저장 결과가 표시됩니다.</div>
 
       <div class="subhead">Part 0. 기업 경영환경 및 조직 구성 분석</div>
       <table>
@@ -1074,15 +1077,13 @@
       </div>
 
       <div class="action-row">
-        <button type="button" class="primary-button" data-role="show-results">결과 보기</button>
-        <button type="button" class="secondary-button" data-role="save-response">응답 저장</button>
-        <button type="button" class="secondary-button" data-role="reset-results">결과 초기화</button>
-        <button type="button" class="ghost-button" id="openAdminButton">관리자 대시보드</button>
-        <span class="helper-text" id="storageHelperText">점수 문항을 모두 선택하면 최종 결과가 확정되며, 중간 단계에서는 임시 결과를 먼저 확인할 수 있습니다.</span>
+        <button type="button" class="primary-button" data-role="save-response">사전 수준진단 저장</button>
+        <button type="button" class="secondary-button" data-role="reset-results">작성 초기화</button>
+        <span class="helper-text" id="storageHelperText">저장된 응답은 AI훈련코치(강사회)가 결과분석 화면에서 확인합니다. 회사에서는 응답 저장까지만 진행해 주세요.</span>
       </div>
     </section>
 
-    <section class="section results-block is-hidden" id="resultsSection">
+    <section class="section results-block is-hidden coach-only" id="resultsSection">
       <h2>2. AI 수준진단 점수 산출 및 종합 결과표</h2>
       <p class="lead">기업 현장에서 진단표 수거 후 각 문항의 점수를 합산하여 등급을 매기고, 컨설팅 방향성을 설정할 수 있도록 정리한 종합표입니다.</p>
 
@@ -1385,7 +1386,7 @@
       </table>
     </section>
 
-    <section class="section">
+    <section class="section coach-only">
       <h2>3. 맞춤 컨설팅 가이드</h2>
       <p class="lead">모터 제조업 특성과 PDF 원문의 진단 의도를 바탕으로, 현장 인터뷰 시 바로 활용할 수 있도록 정리한 교수용 체크 포인트입니다.</p>
 
@@ -1474,7 +1475,7 @@
 
       storageModeBadge.textContent = useGoogleSheets ? "Google Sheets 중앙 저장" : "현재 브라우저 로컬 저장";
       storageHelperText.textContent = useGoogleSheets
-        ? "현재 설정은 Google Sheets 중앙 저장 방식입니다. 응답 저장 시 관리자 대시보드에서 통합 조회할 수 있습니다."
+        ? "현재 설정은 Google Sheets 중앙 저장 방식입니다. 저장된 응답은 AI훈련코치(강사회) 결과분석 화면에서 통합 조회할 수 있습니다."
         : "현재는 이 브라우저에 저장되는 로컬 배포 방식입니다. Google Sheets로 통합하려면 sheet_config.js에 Apps Script URL을 넣어 주세요.";
 
       sourceInputs.forEach((input) => {
@@ -1583,8 +1584,6 @@
         }
 
         const payload = getResponsePayload();
-        resultsSection.classList.remove("is-hidden");
-        resultPanel.classList.remove("is-hidden");
         saveResponseRemoteFirst(payload);
         if (missing.length > 0) {
           setSaveStatus(`현재는 임시 결과로 저장되었습니다. 남은 문항: ${missing.join(", ")}.`);
@@ -1607,7 +1606,7 @@
               throw new Error(result.error || "Google Sheets 저장 실패");
             }
 
-            setSaveStatus(`${payload.respondentName || "응답자"}님의 결과가 Google Sheets에 저장되었습니다. 관리자 대시보드에서 통합 조회할 수 있습니다.`);
+            setSaveStatus(`${payload.respondentName || "응답자"}님의 결과가 Google Sheets에 저장되었습니다. AI훈련코치(강사회)가 결과분석 화면에서 확인할 수 있습니다.`);
             return;
           } catch (error) {
             if (!appConfig.saveFallbackToLocal) {
@@ -1623,7 +1622,7 @@
         stored.unshift(payload);
         localStorage.setItem(storageKey, JSON.stringify(stored));
         if (!useGoogleSheets) {
-          setSaveStatus(`${payload.respondentName || "응답자"}님의 결과가 현재 브라우저에 저장되었습니다. 관리자 대시보드에서 확인할 수 있습니다.`);
+          setSaveStatus(`${payload.respondentName || "응답자"}님의 결과가 현재 브라우저에 저장되었습니다. AI훈련코치(강사회)가 결과분석 화면에서 확인할 수 있습니다.`);
         }
       }
 
@@ -1724,7 +1723,7 @@
         window.print();
       });
 
-      [openAdminButton, openAdminFromResultsButton].forEach((button) => {
+      [openAdminButton, openAdminFromResultsButton].filter(Boolean).forEach((button) => {
         button.addEventListener("click", () => {
           window.location.href = "./admin_dashboard.html";
         });
