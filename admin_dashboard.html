@@ -584,7 +584,7 @@
 
     .score-detail-row {
       display: grid;
-      grid-template-columns: 70px 1fr 58px;
+      grid-template-columns: 70px 1fr 88px 58px;
       gap: 10px;
       align-items: center;
       padding: 10px 12px;
@@ -602,6 +602,34 @@
       line-height: 1.35;
       font-size: 0.92rem;
       color: var(--ink);
+    }
+
+    .score-detail-badge {
+      justify-self: start;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      line-height: 1;
+      border: 1px solid transparent;
+    }
+
+    .score-detail-badge.risk {
+      background: #fff1f2;
+      border-color: #fecdd3;
+      color: #be123c;
+    }
+
+    .score-detail-badge.mid {
+      background: #fff7ed;
+      border-color: #fed7aa;
+      color: #b45309;
+    }
+
+    .score-detail-badge.strong {
+      background: #ecfdf5;
+      border-color: #bbf7d0;
+      color: #15803d;
     }
 
     .score-detail-point {
@@ -1090,14 +1118,51 @@
         return labels[code] || "세부 항목";
       }
 
+      function getScoreItemMax(code) {
+        const maxMap = {
+          A1: 10,
+          A2: 10,
+          B1: 10,
+          B2: 10,
+          B3: 10,
+          B4: 10,
+          B5: 15,
+          B6: 15,
+          B7: 10
+        };
+
+        return maxMap[code] || 10;
+      }
+
+      function getScoreHealth(code, value) {
+        if (typeof value !== "number") {
+          return { label: "미입력", className: "mid" };
+        }
+
+        const max = getScoreItemMax(code);
+        const ratio = max === 0 ? 0 : value / max;
+
+        if (ratio < 0.4) {
+          return { label: "위험", className: "risk" };
+        }
+
+        if (ratio < 0.75) {
+          return { label: "보완", className: "mid" };
+        }
+
+        return { label: "강점", className: "strong" };
+      }
+
       function buildScoreDetailRows(item) {
         const scoreMap = item.scoreMap || {};
         return ["A1", "A2", "B1", "B2", "B3", "B4", "B5", "B6", "B7"].map((code) => {
-          const value = scoreMap[code];
+          const value = typeof scoreMap[code] === "number" ? scoreMap[code] : null;
+          const health = getScoreHealth(code, value);
           return `
             <div class="score-detail-row">
               <div class="score-detail-code">${code}</div>
               <div class="score-detail-name">${escapeHtml(getScoreItemMeta(code))}</div>
+              <div class="score-detail-badge ${health.className}">${health.label}</div>
               <div class="score-detail-point">${value ?? "-"}점</div>
             </div>
           `;
