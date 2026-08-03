@@ -880,6 +880,7 @@
         <button type="button" class="secondary-button" data-role="reset-results">결과 초기화</button>
         <span class="helper-text">설문 작성 중간에도 임시 결과 확인과 응답 저장을 바로 진행할 수 있도록 상단에도 버튼을 배치했습니다.</span>
       </div>
+      <div class="status-message" id="topSaveStatusMessage">응답 저장을 누르면 이 위치에 저장 결과가 표시됩니다.</div>
 
       <div class="subhead">Part 0. 기업 경영환경 및 조직 구성 분석</div>
       <table>
@@ -1463,6 +1464,7 @@
       const saveResponseButton = document.getElementById("saveResponseButton");
       const openAdminButton = document.getElementById("openAdminButton");
       const openAdminFromResultsButton = document.getElementById("openAdminFromResultsButton");
+      const topSaveStatusMessage = document.getElementById("topSaveStatusMessage");
       const saveStatusMessage = document.getElementById("saveStatusMessage");
       const resultsSection = document.getElementById("resultsSection");
       const resultPanel = document.getElementById("resultPanel");
@@ -1489,6 +1491,11 @@
           });
         });
       });
+
+      function setSaveStatus(message) {
+        saveStatusMessage.textContent = message;
+        topSaveStatusMessage.textContent = message;
+      }
 
       function getLevelInfo(totalScore, isComplete) {
         const baseLevelInfo = (() => {
@@ -1570,7 +1577,7 @@
       function saveResponse() {
         const missing = syncScoresFromSurvey();
         if (!respondentNameInput.value.trim()) {
-          saveStatusMessage.textContent = "응답자명을 입력한 뒤 저장해 주세요.";
+          setSaveStatus("응답자명을 입력한 뒤 저장해 주세요.");
           respondentNameInput.focus();
           return;
         }
@@ -1580,7 +1587,7 @@
         resultPanel.classList.remove("is-hidden");
         saveResponseRemoteFirst(payload);
         if (missing.length > 0) {
-          saveStatusMessage.textContent = `현재는 임시 결과로 저장되었습니다. 남은 문항: ${missing.join(", ")}.`;
+          setSaveStatus(`현재는 임시 결과로 저장되었습니다. 남은 문항: ${missing.join(", ")}.`);
         }
       }
 
@@ -1600,15 +1607,15 @@
               throw new Error(result.error || "Google Sheets 저장 실패");
             }
 
-            saveStatusMessage.textContent = `${payload.respondentName || "응답자"}님의 결과가 Google Sheets에 저장되었습니다. 관리자 대시보드에서 통합 조회할 수 있습니다.`;
+            setSaveStatus(`${payload.respondentName || "응답자"}님의 결과가 Google Sheets에 저장되었습니다. 관리자 대시보드에서 통합 조회할 수 있습니다.`);
             return;
           } catch (error) {
             if (!appConfig.saveFallbackToLocal) {
-              saveStatusMessage.textContent = `Google Sheets 저장 실패: ${error.message}`;
+              setSaveStatus(`Google Sheets 저장 실패: ${error.message}`);
               return;
             }
 
-            saveStatusMessage.textContent = `Google Sheets 저장에 실패하여 현재 브라우저에 임시 저장했습니다. (${error.message})`;
+            setSaveStatus(`Google Sheets 저장에 실패하여 현재 브라우저에 임시 저장했습니다. (${error.message})`);
           }
         }
 
@@ -1616,7 +1623,7 @@
         stored.unshift(payload);
         localStorage.setItem(storageKey, JSON.stringify(stored));
         if (!useGoogleSheets) {
-          saveStatusMessage.textContent = `${payload.respondentName || "응답자"}님의 결과가 현재 브라우저에 저장되었습니다. 관리자 대시보드에서 확인할 수 있습니다.`;
+          setSaveStatus(`${payload.respondentName || "응답자"}님의 결과가 현재 브라우저에 저장되었습니다. 관리자 대시보드에서 확인할 수 있습니다.`);
         }
       }
 
