@@ -770,6 +770,39 @@
       color: var(--ink);
     }
 
+    .analysis-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+      padding-right: 90px;
+    }
+
+    .analysis-summary-item {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid #d9e8e3;
+      box-shadow: 0 8px 16px rgba(148, 163, 184, 0.08);
+    }
+
+    .analysis-summary-item strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .analysis-summary-item span {
+      display: block;
+      font-size: 1rem;
+      font-weight: 800;
+      line-height: 1.45;
+      color: var(--ink);
+    }
+
     .analysis-grid {
       display: grid;
       grid-template-columns: 1.15fr 0.85fr;
@@ -874,6 +907,15 @@
       .snapshot-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
+
+      .analysis-summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding-right: 0;
+      }
+
+      .analysis-hero p {
+        padding-right: 0;
+      }
     }
 
     @media (max-width: 900px) {
@@ -895,6 +937,11 @@
 
       .journey-step::after {
         display: none;
+      }
+
+      .analysis-grid,
+      .analysis-summary-grid {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -1317,6 +1364,9 @@
         const departments = (item.targetDepartments || []).slice(0, 2);
         const goals = (item.consultingGoals || []).slice(0, 2);
         const priorities = getPriorityTasks(item);
+        const primaryIssue = issues[0] || "핵심 이슈 추가 확인";
+        const primaryDepartment = departments[0] || "우선 조직 추가 확인";
+        const primaryGoal = goals[0] || "컨설팅 목표 구체화 필요";
 
         const summaryText = [
           `${companyLabel}의 현재 진단 결과는 총점 ${item.totalScore || 0}점, ${levelLabel} 수준입니다.`,
@@ -1359,6 +1409,24 @@
             <div class="analysis-hero">
               <strong>자동 총평</strong>
               <p>${escapeHtml(summaryText)}</p>
+              <div class="analysis-summary-grid">
+                <div class="analysis-summary-item">
+                  <strong>진단 수준</strong>
+                  <span>${escapeHtml(levelLabel)} / ${item.totalScore || 0}점</span>
+                </div>
+                <div class="analysis-summary-item">
+                  <strong>핵심 이슈</strong>
+                  <span>${escapeHtml(primaryIssue)}</span>
+                </div>
+                <div class="analysis-summary-item">
+                  <strong>우선 조직</strong>
+                  <span>${escapeHtml(primaryDepartment)}</span>
+                </div>
+                <div class="analysis-summary-item">
+                  <strong>컨설팅 목표</strong>
+                  <span>${escapeHtml(primaryGoal)}</span>
+                </div>
+              </div>
             </div>
             <div class="analysis-grid">
               <div class="analysis-card">
