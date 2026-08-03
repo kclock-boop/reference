@@ -1473,10 +1473,15 @@
       const googleSheetsWebAppUrl = appConfig.googleSheetsWebAppUrl || "";
       const useGoogleSheets = appConfig.storageMode === "google-sheets" && googleSheetsWebAppUrl !== "";
 
-      storageModeBadge.textContent = useGoogleSheets ? "Google Sheets 중앙 저장" : "현재 브라우저 로컬 저장";
-      storageHelperText.textContent = useGoogleSheets
-        ? "현재 설정은 Google Sheets 중앙 저장 방식입니다. 저장된 응답은 AI훈련코치(강사회) 결과분석 화면에서 통합 조회할 수 있습니다."
-        : "현재는 이 브라우저에 저장되는 로컬 배포 방식입니다. Google Sheets로 통합하려면 sheet_config.js에 Apps Script URL을 넣어 주세요.";
+      if (storageModeBadge) {
+        storageModeBadge.textContent = useGoogleSheets ? "Google Sheets 중앙 저장" : "현재 브라우저 로컬 저장";
+      }
+
+      if (storageHelperText) {
+        storageHelperText.textContent = useGoogleSheets
+          ? "현재 설정은 Google Sheets 중앙 저장 방식입니다. 저장된 응답은 AI훈련코치(강사회) 결과분석 화면에서 통합 조회할 수 있습니다."
+          : "현재는 이 브라우저에 저장되는 로컬 배포 방식입니다. Google Sheets로 통합하려면 sheet_config.js에 Apps Script URL을 넣어 주세요.";
+      }
 
       sourceInputs.forEach((input) => {
         input.addEventListener("change", () => {
