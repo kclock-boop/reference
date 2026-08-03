@@ -1470,6 +1470,7 @@
       const resultsSection = document.getElementById("resultsSection");
       const resultPanel = document.getElementById("resultPanel");
       const storageKey = "taehwa_ai_assessment_responses";
+      const remoteSaveTimeoutMs = 5000;
       const googleSheetsWebAppUrl = appConfig.googleSheetsWebAppUrl || "";
       const useGoogleSheets = appConfig.storageMode === "google-sheets" && googleSheetsWebAppUrl !== "";
 
@@ -1595,7 +1596,7 @@
         };
       }
 
-      function saveResponse() {
+      async function saveResponse() {
         const missing = syncScoresFromSurvey();
         if (!respondentNameInput.value.trim()) {
           setSaveStatus("응답자명을 입력한 뒤 저장해 주세요.");
@@ -1605,7 +1606,7 @@
 
         const payload = getResponsePayload();
         setSaveButtonsState("저장 중...", true);
-        saveResponseRemoteFirst(payload);
+        await saveResponseRemoteFirst(payload);
         if (missing.length > 0) {
           setSaveStatus(`현재는 임시 결과로 저장되었습니다. 남은 문항: ${missing.join(", ")}.`);
         }
@@ -1619,13 +1620,17 @@
 
         if (useGoogleSheets) {
           try {
+            const controller = new AbortController();
+            const timeoutId = window.setTimeout(() => controller.abort(), remoteSaveTimeoutMs);
             const response = await fetch(googleSheetsWebAppUrl, {
               method: "POST",
               headers: {
                 "Content-Type": "text/plain;charset=utf-8"
               },
-              body: JSON.stringify(payload)
+              body: JSON.stringify(payload),
+              signal: controller.signal
             });
+            window.clearTimeout(timeoutId);
 
             const result = await response.json();
             if (!response.ok || !result.ok) {
@@ -1642,6 +1647,11 @@
             }
 
             setSaveButtonsState("사전 수준진단 저장", false);
+            if (error.name === "AbortError") {
+              setSaveStatus("Google Sheets 응답이 지연되어 현재 브라우저에 먼저 임시 저장했습니다. 잠시 후 다시 저장하거나 강사회 화면에서 반영 여부를 확인해 주세요.");
+              return;
+            }
+
             setSaveStatus(`Google Sheets 저장에 실패하여 현재 브라우저에 임시 저장했습니다. (${error.message})`);
           }
         }
