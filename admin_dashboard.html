@@ -656,6 +656,25 @@
       color: var(--brand);
     }
 
+    .priority-score-item + .priority-score-item {
+      margin-top: 8px;
+    }
+
+    .priority-score-fix {
+      grid-column: 1 / -1;
+      padding-top: 4px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .analysis-summary-text {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
     .score-detail-row {
       display: grid;
       grid-template-columns: 70px 1fr 88px 58px;
@@ -1428,6 +1447,68 @@
         });
       }
 
+      function getScoreImprovementGuide(code, value) {
+        const guides = {
+          A1: {
+            title: "시스템 개선책",
+            text: "수기·개별 엑셀 중심 운영에서 벗어나 공용 그룹웨어, 업무관리 도구, 기초 ERP 가운데 하나를 우선 정하고 현장 입력 기준을 표준화해야 합니다."
+          },
+          A2: {
+            title: "데이터 관리 개선책",
+            text: "흩어진 파일과 구두 보고를 공용 양식으로 통합하고, 누가 어떤 데이터를 언제 입력·검토할지 책임 체계를 먼저 정해야 합니다."
+          },
+          B1: {
+            title: "AI 활용 개선책",
+            text: "생성형 AI 기초 교육을 끝내는 데서 멈추지 말고, 보고서 작성·문서 요약·현장 질의응답 같은 실무 과제로 바로 연결해야 합니다."
+          },
+          B2: {
+            title: "보안 개선책",
+            text: "민감정보 입력 금지 기준, 사내 AI 사용 가이드, 결과 검토 책임자를 먼저 정해 AI 활용과 보안을 같이 관리해야 합니다."
+          },
+          B3: {
+            title: "분석 개선책",
+            text: "엑셀 기초 분석 자동화와 차트 시각화부터 시작한 뒤, 노코드 도구를 이용한 반복 보고 자동화로 확장하는 것이 좋습니다."
+          },
+          B4: {
+            title: "검증 개선책",
+            text: "AI가 만든 숫자와 문장을 그대로 쓰지 않도록 원본 대조, 교차 검증, 승인 절차를 업무 흐름 안에 넣어야 합니다."
+          },
+          B5: {
+            title: "바이브코딩 개선책",
+            text: "단순 체험 수준을 넘어서 프롬프트 템플릿, 간단한 자동화 스크립트, 현장용 미니 앱 제작 실습으로 확장해야 합니다."
+          },
+          B6: {
+            title: "제조 AI 개선책",
+            text: "설비·품질·생산 데이터 중 하나를 골라 파일럿 과제를 만들고, 예지보전이나 품질 이상 탐지처럼 범위를 좁혀 빠르게 검증해야 합니다."
+          },
+          B7: {
+            title: "조직 개선책",
+            text: "전산 전담자 또는 소규모 TF를 명확히 지정해 데이터 관리, 보안 검토, AI 과제 실행 책임을 한곳으로 모아야 합니다."
+          }
+        };
+
+        const guide = guides[code] || {
+          title: "개선책",
+          text: "현재 진단 항목에 맞는 실행 과제를 정리해 우선순위부터 다시 설정해야 합니다."
+        };
+
+        if (typeof value !== "number") {
+          return `${guide.title}: 미입력 항목이므로 현 수준을 먼저 확인한 뒤 ${guide.text}`;
+        }
+
+        return `${guide.title}: ${guide.text}`;
+      }
+
+      function getOverallScoreInsight(item, priorities) {
+        const companyLabel = getCompanyLabel(item);
+        if (!priorities.length) {
+          return `${companyLabel}은 현재 핵심 진단 항목이 전반적으로 안정권에 있어, 다음 단계에서는 파일럿 실행 과제와 확산 전략을 구체화하는 것이 좋습니다.`;
+        }
+
+        const names = priorities.map((entry) => entry.name).join(", ");
+        return `${companyLabel}은 현재 ${names} 영역의 기초 체계 보완이 우선이며, 시스템·데이터·현장 활용을 동시에 정비하는 접근이 가장 효과적입니다.`;
+      }
+
       function buildScoreDetailRows(item) {
         return getScoredItems(item).map(({ code, name, value, health }) => {
           return `
@@ -1453,6 +1534,7 @@
             return aValue - bValue;
           })
           .slice(0, 3);
+        const overallInsight = getOverallScoreInsight(item, priorities);
 
         return `
           <div class="score-health-overview">
@@ -1470,6 +1552,10 @@
             </div>
           </div>
           <div class="mini-item">
+            <strong>전체 분석</strong>
+            <p class="analysis-summary-text">${escapeHtml(overallInsight)}</p>
+          </div>
+          <div class="mini-item">
             <strong>우선 보완 3개</strong>
             <div class="priority-score-list">
               ${priorities.map((entry) => `
@@ -1477,6 +1563,7 @@
                   <div class="priority-score-code">${entry.code}</div>
                   <div class="priority-score-name">${escapeHtml(entry.name)}</div>
                   <div class="priority-score-point">${entry.value ?? "-"}점</div>
+                  <div class="priority-score-fix">${escapeHtml(getScoreImprovementGuide(entry.code, entry.value))}</div>
                 </div>
               `).join("")}
             </div>
