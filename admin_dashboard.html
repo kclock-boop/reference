@@ -1261,6 +1261,11 @@
     }
 
     @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
+      }
+
       body {
         background: #fff;
       }
@@ -1273,13 +1278,70 @@
       .hero,
       .section {
         box-shadow: none;
+        border-radius: 0;
+        border-color: #d5dde7;
       }
 
       .hero-actions,
       .toolbar,
       #dashboardStatus,
-      #detailEmpty {
+      #detailEmpty,
+      .hero,
+      .section:first-of-type,
+      .section:nth-of-type(2),
+      #selectedCompanyStatus,
+      .viz-layout,
+      .detail-grid > .detail-box:not(:nth-last-child(2)):not(:last-child) {
         display: none !important;
+      }
+
+      .section {
+        margin-top: 0;
+        padding: 0;
+        border: 0;
+        background: #fff;
+      }
+
+      .detail-grid,
+      .report-stack {
+        gap: 10px;
+        margin-top: 0;
+      }
+
+      .report-sheet {
+        box-shadow: none;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        padding: 12px;
+      }
+
+      .report-title {
+        font-size: 1.05rem;
+      }
+
+      .report-table th,
+      .report-table td {
+        padding: 7px 8px;
+        font-size: 11px;
+        line-height: 1.45;
+      }
+
+      .report-summary-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+
+      .report-summary-card {
+        padding: 10px;
+      }
+
+      .report-summary-card span {
+        font-size: 1.05rem;
+      }
+
+      .report-guide-card,
+      .report-definition {
+        padding: 12px;
       }
     }
   </style>
@@ -2059,6 +2121,115 @@
           slide2.addText(item.recommendation || "AI 도입 준비도 추가 점검", {
             x: 7.95, y: 6.62, w: 4.2, h: 0.18,
             fontFace: "Malgun Gothic", fontSize: 11.5, color: "334155"
+          });
+
+          const slide3 = pptx.addSlide();
+          slide3.background = { color: "FFFFFF" };
+          slide3.addShape(pptx.ShapeType.roundRect, {
+            x: 0.35, y: 0.3, w: 12.6, h: 0.8,
+            rectRadius: 0.08,
+            fill: { color: "0F766E" },
+            line: { color: "0F766E" }
+          });
+          slide3.addText(`${companyLabel} 문항별 결과분석표`, {
+            x: 0.65, y: 0.48, w: 6.0, h: 0.24,
+            fontFace: "Malgun Gothic", fontSize: 20, bold: true, color: "FFFFFF"
+          });
+          slide3.addTable(
+            [
+              [
+                { text: "문항" },
+                { text: "평가 항목" },
+                { text: "배점 구간" },
+                { text: "체크 점수" },
+                { text: "종합 해석 메모" }
+              ],
+              ...scoredItems.map((entry) => ([
+                { text: entry.code },
+                { text: entry.name },
+                { text: getScoreBandText(entry.code) },
+                { text: `${entry.value ?? "-"}점` },
+                { text: getScoreMemoText(entry.code, entry.value) }
+              ])),
+              [
+                { text: "합계" },
+                { text: "A1~B7 점수 합산" },
+                { text: "-" },
+                { text: `${item.totalScore || 0}점` },
+                { text: `${item.level || "미산정"} / ${item.recommendation || "-"}` }
+              ]
+            ],
+            {
+              x: 0.45,
+              y: 1.3,
+              w: 12.2,
+              h: 5.6,
+              colW: [0.8, 1.9, 1.5, 1.0, 7.0],
+              rowH: 0.48,
+              border: { type: "solid", pt: 1, color: "D7E0EA" },
+              fill: "FFFFFF",
+              color: "1F2937",
+              fontFace: "Malgun Gothic",
+              fontSize: 9,
+              margin: 0.06,
+              valign: "mid",
+              autoFit: false,
+              bold: false
+            }
+          );
+
+          const slide4 = pptx.addSlide();
+          slide4.background = { color: "F8FBFF" };
+          slide4.addShape(pptx.ShapeType.roundRect, {
+            x: 0.35, y: 0.3, w: 12.6, h: 0.8,
+            rectRadius: 0.08,
+            fill: { color: "155E75" },
+            line: { color: "155E75" }
+          });
+          slide4.addText(`${companyLabel} 맞춤 컨설팅 가이드`, {
+            x: 0.65, y: 0.48, w: 6.2, h: 0.24,
+            fontFace: "Malgun Gothic", fontSize: 20, bold: true, color: "FFFFFF"
+          });
+          slide4.addTable(
+            [
+              [
+                { text: "컨설팅 축" },
+                { text: "현장 확인 포인트" },
+                { text: "우선 제안 가능 과제" }
+              ],
+              ...getConsultingGuideRows().map((row) => ([
+                { text: row.axis },
+                { text: row.check },
+                { text: row.task }
+              ]))
+            ],
+            {
+              x: 0.45,
+              y: 1.28,
+              w: 12.2,
+              h: 4.2,
+              colW: [1.4, 5.5, 5.3],
+              rowH: 0.72,
+              border: { type: "solid", pt: 1, color: "D7E0EA" },
+              fill: "FFFFFF",
+              color: "1F2937",
+              fontFace: "Malgun Gothic",
+              fontSize: 10,
+              margin: 0.08,
+              valign: "mid",
+              autoFit: false
+            }
+          );
+          slide4.addShape(pptx.ShapeType.roundRect, {
+            x: 0.45, y: 5.9, w: 12.2, h: 1.1,
+            rectRadius: 0.08,
+            fill: { color: "FFFFFF" },
+            line: { color: "D7E3F0", width: 1.0 }
+          });
+          slide4.addText(`자동 총평: ${overallInsight}`, {
+            x: 0.7, y: 6.15, w: 11.6, h: 0.5,
+            fontFace: "Malgun Gothic", fontSize: 11, color: "334155",
+            margin: 0
           });
 
           await pptx.writeFile({ fileName: `${sanitizeFileName(companyLabel)}_AI결과분석보고서.pptx` });
