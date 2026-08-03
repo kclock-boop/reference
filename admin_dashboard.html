@@ -726,6 +726,146 @@
       line-height: 1.6;
     }
 
+    .analysis-board {
+      display: grid;
+      gap: 14px;
+    }
+
+    .analysis-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 20px 22px;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at top right, rgba(45, 212, 191, 0.18), transparent 28%),
+        linear-gradient(135deg, rgba(15, 118, 110, 0.08), rgba(37, 99, 235, 0.05)),
+        #ffffff;
+      border: 1px solid #cfe7df;
+    }
+
+    .analysis-hero::after {
+      content: "";
+      position: absolute;
+      right: 20px;
+      top: 18px;
+      width: 72px;
+      height: 72px;
+      border-radius: 999px;
+      border: 10px solid rgba(15, 118, 110, 0.08);
+      border-top-color: rgba(15, 118, 110, 0.24);
+      border-right-color: rgba(37, 99, 235, 0.22);
+    }
+
+    .analysis-hero strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+      color: var(--brand-deep);
+    }
+
+    .analysis-hero p {
+      margin: 0;
+      padding-right: 90px;
+      line-height: 1.7;
+      color: var(--ink);
+    }
+
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 14px;
+    }
+
+    .analysis-card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 10px 22px rgba(148, 163, 184, 0.1);
+    }
+
+    .analysis-card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .analysis-card-head.teal {
+      background: linear-gradient(135deg, #0f766e, #14b8a6);
+    }
+
+    .analysis-card-head.orange {
+      background: linear-gradient(135deg, #d97706, #f59e0b);
+    }
+
+    .analysis-card-head.blue {
+      background: linear-gradient(135deg, #2563eb, #38bdf8);
+    }
+
+    .analysis-card-head.purple {
+      background: linear-gradient(135deg, #7c3aed, #a78bfa);
+    }
+
+    .analysis-card-body {
+      padding: 16px;
+    }
+
+    .analysis-bullets {
+      display: grid;
+      gap: 10px;
+    }
+
+    .analysis-bullet {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f8fbff;
+      border: 1px solid #d9e7f4;
+      line-height: 1.55;
+    }
+
+    .analysis-steps {
+      display: grid;
+      gap: 10px;
+    }
+
+    .analysis-step {
+      position: relative;
+      padding: 14px 14px 14px 54px;
+      border-radius: 16px;
+      background: #fbfdff;
+      border: 1px solid #dce7f5;
+      min-height: 72px;
+    }
+
+    .analysis-step-index {
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--blue);
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .memo-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fff7ed, #fffdf8);
+      border: 1px solid #f6d4a7;
+      line-height: 1.65;
+      color: #7c4a0f;
+      min-height: 120px;
+    }
+
     @media (max-width: 1100px) {
       .viz-layout {
         grid-template-columns: 1fr;
@@ -1178,26 +1318,29 @@
         const goals = (item.consultingGoals || []).slice(0, 2);
         const priorities = getPriorityTasks(item);
 
-        const summaryParts = [
+        const summaryText = [
           `${companyLabel}의 현재 진단 결과는 총점 ${item.totalScore || 0}점, ${levelLabel} 수준입니다.`,
-          `${recommendation} 방향으로 접근하는 것이 적절합니다.`
-        ];
+          `${recommendation} 방향으로 접근하는 것이 적절합니다.`,
+          issues.length > 0 ? `주요 경영 이슈는 ${issues.join(", ")} 중심으로 나타났습니다.` : "",
+          departments.length > 0 ? `우선 검토 대상 조직은 ${departments.join(", ")} 입니다.` : "",
+          goals.length > 0
+            ? `컨설팅 목표는 ${goals.join(", ")} 중심으로 설계하는 것이 좋습니다.`
+            : "컨설팅 목표는 현장 문제와 데이터 활용 과제를 연결하는 방향으로 구체화하는 것이 좋습니다."
+        ].filter(Boolean).join(" ");
 
-        if (issues.length > 0) {
-          summaryParts.push(`주요 경영 이슈는 ${issues.join(", ")} 중심으로 나타났습니다.`);
-        }
-
-        if (departments.length > 0) {
-          summaryParts.push(`우선 검토 대상 조직은 ${departments.join(", ")} 입니다.`);
-        }
-
-        const goalSentence = goals.length > 0
-          ? `컨설팅 목표는 ${goals.join(", ")} 중심으로 설계하는 것이 좋습니다.`
-          : "컨설팅 목표는 현장 문제와 데이터 활용 과제를 연결하는 방향으로 구체화하는 것이 좋습니다.";
-
-        const priorityHtml = priorities.length > 0
-          ? priorities.map((priority) => `<div style="margin-top:10px;"><strong>${priority.order}. ${escapeHtml(priority.key)} (${priority.value}점)</strong><br>${escapeHtml(priority.text)}</div>`).join("")
-          : `<div style="margin-top:10px;"><strong>1.</strong><br>세부 점수를 바탕으로 우선 과제를 추가 점검해 주세요.</div>`;
+        const priorityBlocks = priorities.length > 0
+          ? priorities.map((priority) => `
+              <div class="analysis-bullet">
+                <strong>${priority.order}. ${escapeHtml(priority.key)} (${priority.value}점)</strong><br>
+                ${escapeHtml(priority.text)}
+              </div>
+            `).join("")
+          : `
+            <div class="analysis-bullet">
+              <strong>1. 우선 점검</strong><br>
+              세부 점수를 바탕으로 우선 과제를 추가 점검해 주세요.
+            </div>
+          `;
 
         const roadmap = priorities.length > 0
           ? [
@@ -1212,10 +1355,41 @@
             ];
 
         return `
-          <div><strong>자동 총평</strong><br>${escapeHtml(summaryParts.join(" "))} ${escapeHtml(goalSentence)}</div>
-          <div style="margin-top:14px;"><strong>도입 우선과제</strong>${priorityHtml}</div>
-          <div style="margin-top:14px;"><strong>권장 실행순서</strong><br>${roadmap.map((text) => escapeHtml(text)).join("<br>")}</div>
-          <div style="margin-top:14px;"><strong>강사회 검토 메모</strong><br>${escapeHtml(item.consultingMemo || "추가 메모 없음")}</div>
+          <div class="analysis-board">
+            <div class="analysis-hero">
+              <strong>자동 총평</strong>
+              <p>${escapeHtml(summaryText)}</p>
+            </div>
+            <div class="analysis-grid">
+              <div class="analysis-card">
+                <div class="analysis-card-head orange">도입 우선과제</div>
+                <div class="analysis-card-body">
+                  <div class="analysis-bullets">
+                    ${priorityBlocks}
+                  </div>
+                </div>
+              </div>
+              <div class="analysis-card">
+                <div class="analysis-card-head blue">권장 실행순서</div>
+                <div class="analysis-card-body">
+                  <div class="analysis-steps">
+                    ${roadmap.map((text, index) => `
+                      <div class="analysis-step">
+                        <div class="analysis-step-index">${index + 1}</div>
+                        ${escapeHtml(text)}
+                      </div>
+                    `).join("")}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="analysis-card">
+              <div class="analysis-card-head purple">강사회 검토 메모</div>
+              <div class="analysis-card-body">
+                <div class="memo-card">${escapeHtml(item.consultingMemo || "추가 메모 없음")}</div>
+              </div>
+            </div>
+          </div>
         `;
       }
 
