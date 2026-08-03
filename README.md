@@ -4,9 +4,10 @@
 
 ## 바로 열기
 
-- 실행형 웹페이지: [https://kclock-boop.github.io/reference/taehwa_ai_diagnostic_guide.html](https://kclock-boop.github.io/reference/taehwa_ai_diagnostic_guide.html)
-- 기본 진입 주소: [https://kclock-boop.github.io/reference/](https://kclock-boop.github.io/reference/)
-- 저장소 화면: [https://github.com/kclock-boop/reference](https://github.com/kclock-boop/reference)
+- 기업용 진단 화면: [https://kclock-boop.github.io/reference/taehwa_ai_diagnostic_guide.html](https://kclock-boop.github.io/reference/taehwa_ai_diagnostic_guide.html)
+- 강사회 결과분석 화면: [https://kclock-boop.github.io/reference/admin_dashboard.html](https://kclock-boop.github.io/reference/admin_dashboard.html)
+- GitHub Pages 기본 주소: [https://kclock-boop.github.io/reference/](https://kclock-boop.github.io/reference/)
+- GitHub 저장소 화면: [https://github.com/kclock-boop/reference](https://github.com/kclock-boop/reference)
 
 주의: `github.com` 저장소 화면은 파일 보기용이며, 실제 웹페이지처럼 사용하려면 반드시 `github.io` 주소로 접속해야 합니다.
 
