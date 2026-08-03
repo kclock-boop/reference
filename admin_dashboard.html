@@ -576,6 +576,40 @@
       line-height: 1.4;
     }
 
+    .score-detail-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .score-detail-row {
+      display: grid;
+      grid-template-columns: 70px 1fr 58px;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid #dbe7f5;
+    }
+
+    .score-detail-code {
+      font-weight: 800;
+      color: var(--brand-deep);
+    }
+
+    .score-detail-name {
+      line-height: 1.35;
+      font-size: 0.92rem;
+      color: var(--ink);
+    }
+
+    .score-detail-point {
+      text-align: right;
+      font-weight: 800;
+      color: var(--brand);
+    }
+
     .score-orbit {
       display: grid;
       justify-items: center;
@@ -1040,6 +1074,36 @@
         ];
       }
 
+      function getScoreItemMeta(code) {
+        const labels = {
+          A1: "시스템",
+          A2: "데이터 관리",
+          B1: "AI 이해도 및 활용",
+          B2: "AI 데이터 보안",
+          B3: "노코드 데이터 분석",
+          B4: "데이터 리터러시 및 검증",
+          B5: "바이브코딩 활용 수준",
+          B6: "제조/피지컬 AI 응용",
+          B7: "전산/IT 조직 부서"
+        };
+
+        return labels[code] || "세부 항목";
+      }
+
+      function buildScoreDetailRows(item) {
+        const scoreMap = item.scoreMap || {};
+        return ["A1", "A2", "B1", "B2", "B3", "B4", "B5", "B6", "B7"].map((code) => {
+          const value = scoreMap[code];
+          return `
+            <div class="score-detail-row">
+              <div class="score-detail-code">${code}</div>
+              <div class="score-detail-name">${escapeHtml(getScoreItemMeta(code))}</div>
+              <div class="score-detail-point">${value ?? "-"}점</div>
+            </div>
+          `;
+        }).join("");
+      }
+
       function buildAnalysisReport(item) {
         const companyLabel = getCompanyLabel(item);
         const levelLabel = item.level || "미산정";
@@ -1225,8 +1289,10 @@
               </div>
             </div>
             <div class="mini-item">
-              <strong>세부 점수</strong>
-              <span>${Object.entries(item.scoreMap || {}).map(([key, value]) => `${escapeHtml(key)} ${escapeHtml(value ?? "-")}`).join(" / ")}</span>
+              <strong>세부 점수 해석</strong>
+              <div class="score-detail-list">
+                ${buildScoreDetailRows(item)}
+              </div>
             </div>
           </div>
         `;
