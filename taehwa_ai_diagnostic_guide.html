@@ -876,8 +876,9 @@
 
       <div class="action-row top-cta">
         <button type="button" class="primary-button" data-role="show-results">결과 보기</button>
+        <button type="button" class="secondary-button" data-role="save-response">응답 저장</button>
         <button type="button" class="secondary-button" data-role="reset-results">결과 초기화</button>
-        <span class="helper-text">설문 작성 중간에도 임시 결과를 확인할 수 있도록 상단에도 버튼을 배치했습니다.</span>
+        <span class="helper-text">설문 작성 중간에도 임시 결과 확인과 응답 저장을 바로 진행할 수 있도록 상단에도 버튼을 배치했습니다.</span>
       </div>
 
       <div class="subhead">Part 0. 기업 경영환경 및 조직 구성 분석</div>
@@ -1073,6 +1074,7 @@
 
       <div class="action-row">
         <button type="button" class="primary-button" data-role="show-results">결과 보기</button>
+        <button type="button" class="secondary-button" data-role="save-response">응답 저장</button>
         <button type="button" class="secondary-button" data-role="reset-results">결과 초기화</button>
         <button type="button" class="ghost-button" id="openAdminButton">관리자 대시보드</button>
         <span class="helper-text" id="storageHelperText">점수 문항을 모두 선택하면 최종 결과가 확정되며, 중간 단계에서는 임시 결과를 먼저 확인할 수 있습니다.</span>
@@ -1455,6 +1457,7 @@
       const storageModeBadge = document.getElementById("storageModeBadge");
       const storageHelperText = document.getElementById("storageHelperText");
       const showResultsButtons = Array.from(document.querySelectorAll('[data-role="show-results"]'));
+      const saveResponseButtons = Array.from(document.querySelectorAll('[data-role="save-response"]'));
       const resetResultsButtons = Array.from(document.querySelectorAll('[data-role="reset-results"]'));
       const printResultsButton = document.getElementById("printResultsButton");
       const saveResponseButton = document.getElementById("saveResponseButton");
@@ -1695,6 +1698,10 @@
 
       resetResultsButtons.forEach((button) => {
         button.addEventListener("click", handleResetResults);
+      });
+
+      saveResponseButtons.forEach((button) => {
+        button.addEventListener("click", saveResponse);
       });
 
       saveResponseButton.addEventListener("click", saveResponse);
