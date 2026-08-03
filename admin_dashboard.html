@@ -988,13 +988,13 @@
       border: 1px solid var(--line);
       border-radius: 20px;
       background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
-      padding: 20px;
+      padding: 16px 16px 15px;
       box-shadow: 0 14px 28px rgba(148, 163, 184, 0.10);
     }
 
     .report-sheet h4 {
-      margin: 0 0 12px;
-      font-size: 1.05rem;
+      margin: 0 0 10px;
+      font-size: 1rem;
       color: var(--brand-deep);
     }
 
@@ -1017,8 +1017,8 @@
     }
 
     .report-title {
-      margin: 0 0 12px;
-      font-size: 1.18rem;
+      margin: 0 0 10px;
+      font-size: 1.12rem;
       color: var(--ink);
     }
 
@@ -1026,23 +1026,23 @@
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
-      margin-top: 12px;
+      margin-top: 10px;
       background: #fff;
     }
 
     .report-table th,
     .report-table td {
       border: 1px solid #d7e0ea;
-      padding: 9px 10px;
+      padding: 7px 8px;
       vertical-align: top;
-      line-height: 1.48;
+      line-height: 1.38;
       word-break: keep-all;
     }
 
     .report-table th {
       background: #f4f8fc;
       color: #26415a;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
       font-weight: 800;
     }
 
@@ -1090,42 +1090,42 @@
       border: 1px solid #d7e3f0;
       border-radius: 18px;
       background: #fff;
-      padding: 16px;
+      padding: 11px 12px;
     }
 
     .report-summary-card strong {
       display: block;
-      font-size: 0.9rem;
+      font-size: 0.84rem;
       color: var(--muted);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .report-summary-card span {
       display: block;
-      font-size: 1.45rem;
+      font-size: 1.22rem;
       font-weight: 800;
       color: var(--ink);
     }
 
     .report-summary-card p {
-      margin: 8px 0 0;
+      margin: 6px 0 0;
       color: #334155;
-      line-height: 1.6;
+      line-height: 1.45;
     }
 
     .report-definition {
-      margin-top: 14px;
-      padding: 16px 18px;
+      margin-top: 12px;
+      padding: 12px 14px;
       border-radius: 18px;
       background: linear-gradient(135deg, rgba(37, 99, 235, 0.06), rgba(15, 118, 110, 0.08));
       border: 1px solid #d9e8f4;
       color: #334155;
-      line-height: 1.75;
+      line-height: 1.52;
     }
 
     .report-definition strong {
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       color: var(--brand-deep);
     }
 
@@ -1147,27 +1147,27 @@
     .report-guide-card {
       border: 1px solid #dbe6ee;
       border-radius: 18px;
-      padding: 18px;
+      padding: 12px 14px;
       background: #fff;
     }
 
     .report-guide-card h5 {
-      margin: 0 0 10px;
-      font-size: 1rem;
+      margin: 0 0 8px;
+      font-size: 0.93rem;
       color: var(--brand-deep);
     }
 
     .report-guide-card p {
       margin: 0;
       color: #475569;
-      line-height: 1.7;
+      line-height: 1.48;
     }
 
     .report-guide-card ul {
-      margin: 10px 0 0;
-      padding-left: 18px;
+      margin: 8px 0 0;
+      padding-left: 16px;
       color: #334155;
-      line-height: 1.7;
+      line-height: 1.48;
     }
 
     .analysis-bullets {
@@ -1909,11 +1909,11 @@
       function getOverallScoreInsight(item, priorities) {
         const companyLabel = getCompanyLabel(item);
         if (!priorities.length) {
-          return `${companyLabel}은 현재 핵심 진단 항목이 전반적으로 안정권에 있어, 다음 단계에서는 파일럿 실행 과제와 확산 전략을 구체화하는 것이 좋습니다.`;
+          return `${companyLabel}은 현재 핵심 진단 항목이 전반적으로 안정권입니다. 다음 단계에서는 파일럿 과제 선정과 확산 계획 구체화에 집중하는 것이 적절합니다.`;
         }
 
         const names = priorities.map((entry) => entry.name).join(", ");
-        return `${companyLabel}은 현재 ${names} 영역의 기초 체계 보완이 우선이며, 시스템·데이터·현장 활용을 동시에 정비하는 접근이 가장 효과적입니다.`;
+        return `${companyLabel}은 현재 ${names} 영역의 기초 체계 보완이 우선입니다. 시스템, 데이터, 현장 활용 기준을 함께 정비하는 단계적 접근이 가장 효과적입니다.`;
       }
 
       function getSelectedResponse() {
@@ -2462,16 +2462,16 @@
       function getScoreMemoText(code, value) {
         const health = getScoreHealth(code, value);
         const prefixMap = {
-          risk: "우선 보완 필요",
-          mid: "보완 과제 정리",
-          strong: "강점 활용 가능"
+          risk: "우선 보완",
+          mid: "보완 과제",
+          strong: "강점 활용"
         };
         const guide = getScoreImprovementGuide(code, value)
           .replace(/^[^:]+:\s*/, "")
           .replace(/\s+/g, " ")
           .trim();
         const prefix = prefixMap[health.className] || "검토 메모";
-        return `${prefix}. ${guide}`;
+        return `${prefix}: ${guide}`;
       }
 
       function getLevelDefinition(level) {
@@ -2559,11 +2559,11 @@
               <table class="report-table">
                 <thead>
                   <tr>
-                    <th style="width:64px;">문항</th>
-                    <th style="width:118px;">평가 항목</th>
+                    <th style="width:58px;">문항</th>
+                    <th style="width:108px;">평가 항목</th>
                     <th>핵심 진단 포인트</th>
-                    <th style="width:104px;">배점 구간</th>
-                    <th style="width:84px;">체크 점수</th>
+                    <th style="width:94px;">배점 구간</th>
+                    <th style="width:76px;">체크 점수</th>
                     <th>종합 해석 메모</th>
                   </tr>
                 </thead>
@@ -2617,8 +2617,8 @@
               <table class="report-table">
                 <thead>
                   <tr>
-                    <th style="width:130px;">최종 총점</th>
-                    <th style="width:140px;">진단 등급</th>
+                    <th style="width:112px;">최종 총점</th>
+                    <th style="width:126px;">진단 등급</th>
                     <th>기업 현재 상태 정의</th>
                     <th>권장 컨설팅 방향</th>
                   </tr>
@@ -2658,7 +2658,7 @@
               <table class="report-table">
                 <thead>
                   <tr>
-                    <th style="width:120px;">컨설팅 축</th>
+                    <th style="width:106px;">컨설팅 축</th>
                     <th>현장 확인 포인트</th>
                     <th>우선 제안 가능 과제</th>
                   </tr>
