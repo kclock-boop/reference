@@ -375,6 +375,79 @@
       color: var(--muted);
     }
 
+    .materials-panel {
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid #d9e8f3;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+    }
+
+    .materials-panel strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1rem;
+    }
+
+    .materials-panel p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .file-input {
+      width: 100%;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border: 1px dashed #b7cde2;
+      border-radius: 14px;
+      background: #fff;
+      font: inherit;
+      color: var(--ink);
+    }
+
+    .materials-meta {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .materials-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .materials-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .materials-item strong {
+      margin: 0 0 4px;
+      font-size: 0.96rem;
+    }
+
+    .materials-item span {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .materials-empty {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: #f8fbfe;
+      border: 1px solid #e3edf6;
+    }
+
     @media (max-width: 980px) {
       .hero {
         padding: 20px 24px 40px;
@@ -877,6 +950,19 @@
         </div>
       </div>
       <p class="field-help">이 문서는 기업별로 배포되므로 회사명은 직접 입력해 주세요.</p>
+
+      <div class="materials-panel">
+        <strong>기업 자료실</strong>
+        <p>기업소개서, 제품 카탈로그, 공정 설명서, 조직도, 발표자료 등 컨설팅 참고 자료를 함께 제출할 수 있습니다.</p>
+        <input class="file-input" id="materialFileInput" type="file" multiple accept=".pdf,.ppt,.pptx,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.zip,.hwp">
+        <div class="materials-meta" id="materialsHelperText">Google Drive 중앙 업로드가 연결되면 강사회가 제출 자료를 함께 검토할 수 있습니다.</div>
+        <div class="action-row">
+          <button type="button" class="secondary-button" id="uploadMaterialsButton">자료 업로드</button>
+        </div>
+        <div class="status-message" id="materialsStatusMessage">회사명을 입력한 뒤 파일을 선택하면 자료 업로드를 진행할 수 있습니다.</div>
+        <div class="materials-empty" id="materialsEmptyState">아직 업로드된 자료가 없습니다.</div>
+        <div class="materials-list" id="materialsList"></div>
+      </div>
 
       <div class="action-row top-cta">
         <button type="button" class="primary-button" data-role="save-response">사전 수준진단 저장</button>
@@ -1456,6 +1542,12 @@
       const departmentInput = document.getElementById("departmentInput");
       const positionInput = document.getElementById("positionInput");
       const consultingMemoInput = document.getElementById("consultingMemoInput");
+      const materialFileInput = document.getElementById("materialFileInput");
+      const uploadMaterialsButton = document.getElementById("uploadMaterialsButton");
+      const materialsHelperText = document.getElementById("materialsHelperText");
+      const materialsStatusMessage = document.getElementById("materialsStatusMessage");
+      const materialsEmptyState = document.getElementById("materialsEmptyState");
+      const materialsList = document.getElementById("materialsList");
       const storageModeBadge = document.getElementById("storageModeBadge");
       const storageHelperText = document.getElementById("storageHelperText");
       const showResultsButtons = Array.from(document.querySelectorAll('[data-role="show-results"]'));
@@ -1470,7 +1562,9 @@
       const resultsSection = document.getElementById("resultsSection");
       const resultPanel = document.getElementById("resultPanel");
       const storageKey = "taehwa_ai_assessment_responses";
+      const materialsStorageKey = "taehwa_ai_uploaded_materials";
       const remoteSaveTimeoutMs = 5000;
+      const remoteUploadTimeoutMs = 20000;
       const googleSheetsWebAppUrl = appConfig.googleSheetsWebAppUrl || "";
       const useGoogleSheets = appConfig.storageMode === "google-sheets" && googleSheetsWebAppUrl !== "";
 
@@ -1482,6 +1576,16 @@
         storageHelperText.textContent = useGoogleSheets
           ? "현재 설정은 Google Sheets 중앙 저장 방식입니다. 저장된 응답은 AI훈련코치(강사회) 결과분석 화면에서 통합 조회할 수 있습니다."
           : "현재는 이 브라우저에 저장되는 로컬 배포 방식입니다. Google Sheets로 통합하려면 sheet_config.js에 Apps Script URL을 넣어 주세요.";
+      }
+
+      if (materialsHelperText) {
+        materialsHelperText.textContent = useGoogleSheets
+          ? "현재 설정은 Google Drive 중앙 업로드를 사용할 수 있습니다. 회사명별 제출 자료가 강사회 검토용 폴더에 저장됩니다."
+          : "현재는 자료 업로드가 비활성화되어 있습니다. Google Sheets 연동용 Apps Script URL이 연결되면 자료실 업로드를 사용할 수 있습니다.";
+      }
+
+      if (!useGoogleSheets) {
+        uploadMaterialsButton.disabled = true;
       }
 
       sourceInputs.forEach((input) => {
@@ -1499,9 +1603,180 @@
         });
       });
 
+      companyNameInput.addEventListener("change", () => {
+        loadRemoteMaterials(companyNameInput.value);
+      });
+
+      companyNameInput.addEventListener("blur", () => {
+        loadRemoteMaterials(companyNameInput.value);
+      });
+
       function setSaveStatus(message) {
         saveStatusMessage.textContent = message;
         topSaveStatusMessage.textContent = message;
+      }
+
+      function setMaterialsStatus(message) {
+        materialsStatusMessage.textContent = message;
+      }
+
+      function setUploadButtonState(label, disabled) {
+        uploadMaterialsButton.textContent = label;
+        uploadMaterialsButton.disabled = disabled;
+      }
+
+      function formatFileSize(bytes) {
+        if (!bytes) return "크기 정보 없음";
+        if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)}MB`;
+        if (bytes >= 1024) return `${Math.round(bytes / 1024)}KB`;
+        return `${bytes}B`;
+      }
+
+      function getMaterialsCacheKey(companyName) {
+        return `${materialsStorageKey}:${(companyName || "").trim().toLowerCase()}`;
+      }
+
+      function getCachedMaterials(companyName) {
+        if (!companyName.trim()) return [];
+        return JSON.parse(localStorage.getItem(getMaterialsCacheKey(companyName)) || "[]");
+      }
+
+      function cacheMaterials(companyName, files) {
+        if (!companyName.trim()) return;
+        const existing = getCachedMaterials(companyName);
+        const merged = [...files, ...existing].filter((item, index, array) => {
+          return index === array.findIndex((candidate) => candidate.fileId === item.fileId || candidate.name === item.name);
+        });
+        localStorage.setItem(getMaterialsCacheKey(companyName), JSON.stringify(merged.slice(0, 20)));
+      }
+
+      function renderMaterialsList(files) {
+        if (!files || files.length === 0) {
+          materialsList.innerHTML = "";
+          materialsEmptyState.style.display = "block";
+          return;
+        }
+
+        materialsEmptyState.style.display = "none";
+        materialsList.innerHTML = files.map((file) => `
+          <div class="materials-item">
+            <div>
+              <strong>${escapeHtml(file.name || "제출 자료")}</strong>
+              <span>${escapeHtml(file.mimeType || "파일 형식")} · ${escapeHtml(formatFileSize(file.size || 0))}</span>
+            </div>
+            <span>${escapeHtml(file.uploadedAt || "업로드 완료")}</span>
+          </div>
+        `).join("");
+      }
+
+      async function loadRemoteMaterials(companyName) {
+        if (!useGoogleSheets || !companyName.trim()) {
+          renderMaterialsList(getCachedMaterials(companyName));
+          return;
+        }
+
+        try {
+          const response = await fetch(`${googleSheetsWebAppUrl}?action=list-files&companyName=${encodeURIComponent(companyName.trim())}`);
+          const result = await response.json();
+          if (!response.ok || !result.ok) {
+            throw new Error(result.error || "자료 목록 조회 실패");
+          }
+          cacheMaterials(companyName, result.files || []);
+          renderMaterialsList(result.files || []);
+        } catch (error) {
+          renderMaterialsList(getCachedMaterials(companyName));
+        }
+      }
+
+      function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const result = String(reader.result || "");
+            resolve(result.includes(",") ? result.split(",")[1] : result);
+          };
+          reader.onerror = () => reject(new Error(`${file.name} 파일을 읽지 못했습니다.`));
+          reader.readAsDataURL(file);
+        });
+      }
+
+      async function uploadMaterials() {
+        const companyName = companyNameInput.value.trim();
+        if (!companyName) {
+          setMaterialsStatus("회사명을 먼저 입력한 뒤 자료를 업로드해 주세요.");
+          companyNameInput.focus();
+          return;
+        }
+
+        const files = Array.from(materialFileInput.files || []);
+        if (files.length === 0) {
+          setMaterialsStatus("업로드할 파일을 먼저 선택해 주세요.");
+          return;
+        }
+
+        if (!useGoogleSheets) {
+          setMaterialsStatus("현재 설정에서는 중앙 자료 업로드를 사용할 수 없습니다. Apps Script 연동 후 다시 시도해 주세요.");
+          return;
+        }
+
+        const hasOversizedFile = files.some((file) => file.size > 8 * 1024 * 1024);
+        if (hasOversizedFile) {
+          setMaterialsStatus("파일당 최대 8MB까지 업로드할 수 있습니다. 파일 크기를 줄이거나 나누어 올려 주세요.");
+          return;
+        }
+
+        const totalSize = files.reduce((sum, file) => sum + file.size, 0);
+        if (totalSize > 18 * 1024 * 1024) {
+          setMaterialsStatus("한 번에 업로드하는 전체 용량은 18MB 이내로 맞춰 주세요.");
+          return;
+        }
+
+        setUploadButtonState("자료 업로드 중...", true);
+        setMaterialsStatus("자료를 업로드하고 있습니다. 잠시만 기다려 주세요.");
+
+        try {
+          const encodedFiles = await Promise.all(files.map(async (file) => ({
+            name: file.name,
+            mimeType: file.type || "application/octet-stream",
+            size: file.size,
+            base64: await readFileAsBase64(file)
+          })));
+
+          const controller = new AbortController();
+          const timeoutId = window.setTimeout(() => controller.abort(), remoteUploadTimeoutMs);
+          const response = await fetch(googleSheetsWebAppUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "text/plain;charset=utf-8"
+            },
+            body: JSON.stringify({
+              action: "upload-materials",
+              companyName,
+              respondentName: respondentNameInput.value.trim(),
+              files: encodedFiles
+            }),
+            signal: controller.signal
+          });
+          window.clearTimeout(timeoutId);
+
+          const result = await response.json();
+          if (!response.ok || !result.ok) {
+            throw new Error(result.error || "자료 업로드 실패");
+          }
+
+          cacheMaterials(companyName, result.files || []);
+          renderMaterialsList(getCachedMaterials(companyName));
+          materialFileInput.value = "";
+          setMaterialsStatus(`자료 제출완료: ${files.length}개 파일이 접수되었습니다. 강사회가 기업 자료와 함께 검토할 수 있습니다.`);
+        } catch (error) {
+          if (error.name === "AbortError") {
+            setMaterialsStatus("업로드 시간이 길어져 중단되었습니다. 파일 수를 줄이거나 용량을 나누어 다시 시도해 주세요.");
+          } else {
+            setMaterialsStatus(`자료 업로드에 실패했습니다. (${error.message})`);
+          }
+        } finally {
+          setUploadButtonState("자료 업로드", false);
+        }
       }
 
       function setSaveButtonsState(label, disabled) {
@@ -1746,6 +2021,7 @@
       });
 
       saveResponseButton.addEventListener("click", saveResponse);
+      uploadMaterialsButton.addEventListener("click", uploadMaterials);
 
       printResultsButton.addEventListener("click", () => {
         const missing = syncScoresFromSurvey();
@@ -1764,6 +2040,7 @@
         });
       });
 
+      renderMaterialsList([]);
       updateScoreSummary();
     })();
   </script>

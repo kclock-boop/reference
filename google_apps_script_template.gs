@@ -1,5 +1,7 @@
 const SHEET_NAME = "responses";
+const MATERIALS_SHEET_NAME = "materials";
 const REPORT_FOLDER_NAME = "AI훈련코치_기업별_결과보고서";
+const MATERIAL_ROOT_FOLDER_NAME = "AI훈련코치_기업제출자료";
 const CREATE_GOOGLE_DOC_REPORTS = true;
 
 function doGet(e) {
@@ -13,6 +15,14 @@ function doGet(e) {
     });
   }
 
+  if (action === "list-files") {
+    return jsonResponse({
+      ok: true,
+      source: "google-drive",
+      files: listCompanyFiles_((e && e.parameter && e.parameter.companyName) || "")
+    });
+  }
+
   return jsonResponse({
     ok: true,
     source: "google-sheets",
@@ -23,6 +33,14 @@ function doGet(e) {
 function doPost(e) {
   try {
     const payload = JSON.parse(e.postData.contents || "{}");
+    if (payload.action === "upload-materials") {
+      return jsonResponse({
+        ok: true,
+        source: "google-drive",
+        files: uploadMaterials_(payload)
+      });
+    }
+
     const result = appendResponse_(payload);
     return jsonResponse({
       ok: true,
@@ -123,6 +141,28 @@ function getSheet_() {
   return spreadsheet.getSheetByName(SHEET_NAME) || spreadsheet.insertSheet(SHEET_NAME);
 }
 
+function getMaterialsSheet_() {
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  return spreadsheet.getSheetByName(MATERIALS_SHEET_NAME) || spreadsheet.insertSheet(MATERIALS_SHEET_NAME);
+}
+
+function ensureMaterialsHeader_(sheet) {
+  if (sheet.getLastRow() > 0) {
+    return;
+  }
+
+  sheet.appendRow([
+    "uploadedAt",
+    "companyName",
+    "respondentName",
+    "fileName",
+    "mimeType",
+    "fileSize",
+    "driveFileId",
+    "driveFileUrl"
+  ]);
+}
+
 function ensureHeader_(sheet) {
   if (sheet.getLastRow() > 0) {
     return;
@@ -212,6 +252,106 @@ function createOrUpdateCompanyReport_(payload, submittedAt) {
 function getOrCreateFolder_(folderName) {
   const folders = DriveApp.getFoldersByName(folderName);
   return folders.hasNext() ? folders.next() : DriveApp.createFolder(folderName);
+}
+
+function getOrCreateChildFolder_(parentFolder, folderName) {
+  const folders = parentFolder.getFoldersByName(folderName);
+  return folders.hasNext() ? folders.next() : parentFolder.createFolder(folderName);
+}
+
+function uploadMaterials_(payload) {
+  const companyName = (payload.companyName || "").trim();
+  if (!companyName) {
+    throw new Error("회사명이 없어 자료를 업로드할 수 없습니다.");
+  }
+
+  const files = payload.files || [];
+  if (!files.length) {
+    throw new Error("업로드할 파일이 없습니다.");
+  }
+
+  const rootFolder = getOrCreateFolder_(MATERIAL_ROOT_FOLDER_NAME);
+  const companyFolder = getOrCreateChildFolder_(rootFolder, companyName);
+  const materialsSheet = getMaterialsSheet_();
+  ensureMaterialsHeader_(materialsSheet);
+
+  return files.map(function(file) {
+    const originalName = sanitizeDriveName_(file.name || "제출자료");
+    const bytes = Utilities.base64Decode(file.base64 || "");
+    const blob = Utilities.newBlob(bytes, file.mimeType || "application/octet-stream", buildUploadFileName_(originalName));
+    const driveFile = companyFolder.createFile(blob);
+    const uploadedAt = formatDateKst_(new Date());
+
+    materialsSheet.appendRow([
+      new Date(),
+      companyName,
+      payload.respondentName || "",
+      driveFile.getName(),
+      driveFile.getMimeType(),
+      driveFile.getSize(),
+      driveFile.getId(),
+      driveFile.getUrl()
+    ]);
+
+    return {
+      fileId: driveFile.getId(),
+      name: driveFile.getName(),
+      mimeType: driveFile.getMimeType(),
+      size: driveFile.getSize(),
+      uploadedAt: uploadedAt,
+      url: driveFile.getUrl()
+    };
+  });
+}
+
+function listCompanyFiles_(companyName) {
+  const trimmedName = String(companyName || "").trim();
+  if (!trimmedName) {
+    return [];
+  }
+
+  const rootFolders = DriveApp.getFoldersByName(MATERIAL_ROOT_FOLDER_NAME);
+  if (!rootFolders.hasNext()) {
+    return [];
+  }
+
+  const rootFolder = rootFolders.next();
+  const companyFolders = rootFolder.getFoldersByName(trimmedName);
+  if (!companyFolders.hasNext()) {
+    return [];
+  }
+
+  const companyFolder = companyFolders.next();
+  const files = companyFolder.getFiles();
+  const items = [];
+
+  while (files.hasNext()) {
+    const file = files.next();
+    items.push({
+      fileId: file.getId(),
+      name: file.getName(),
+      mimeType: file.getMimeType(),
+      size: file.getSize(),
+      createdMs: file.getDateCreated().getTime(),
+      uploadedAt: formatDateKst_(file.getDateCreated()),
+      url: file.getUrl()
+    });
+  }
+
+  return items.sort(function(a, b) {
+    return b.createdMs - a.createdMs;
+  }).map(function(item) {
+    delete item.createdMs;
+    return item;
+  });
+}
+
+function buildUploadFileName_(originalName) {
+  return formatDateKst_(new Date()).replace(/[^\d]/g, "").slice(0, 14) + "_" + originalName;
+}
+
+function sanitizeDriveName_(value) {
+  return String(value || "제출자료").replace(/[\\/:*?"<>|#%]/g, "_");
 }
 
 function appendSection_(body, title, rows) {
