@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>(주)태화기업 AI 컨설팅 사전 수준진단지 & 컨설팅 가이드</title>
+  <title>AI 컨설팅 사전 수준진단지 & 컨설팅 가이드</title>
   <style>
     :root {
       --ink: #1d2733;
@@ -11,9 +11,10 @@
       --line: #d8dee6;
       --panel: #ffffff;
       --soft: #f6f8fb;
-      --brand: #0f766e;
+      --brand: #1e63ff;
+      --brand-deep: #1c2f6e;
       --brand-soft: #dff5f1;
-      --accent: #b45309;
+      --accent: #ffbf1f;
       --accent-soft: #fff1e6;
     }
 
@@ -31,6 +32,59 @@
       line-height: 1.6;
     }
 
+    @keyframes heroAmbientShift {
+      0% {
+        transform: scale(1) translate3d(0, 0, 0);
+        opacity: 0.34;
+      }
+      50% {
+        transform: scale(1.02) translate3d(0, -6px, 0);
+        opacity: 0.42;
+      }
+      100% {
+        transform: scale(1) translate3d(0, 0, 0);
+        opacity: 0.34;
+      }
+    }
+
+    @keyframes heroGlowDrift {
+      0% {
+        opacity: 0.7;
+        transform: translate3d(0, 0, 0);
+      }
+      50% {
+        opacity: 1;
+        transform: translate3d(0, 8px, 0);
+      }
+      100% {
+        opacity: 0.7;
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    @keyframes fadeRise {
+      from {
+        opacity: 0;
+        transform: translate3d(0, 22px, 0);
+      }
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    @keyframes softFloat {
+      0% {
+        transform: translate3d(0, 0, 0);
+      }
+      50% {
+        transform: translate3d(0, -3px, 0);
+      }
+      100% {
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
     .page {
       max-width: 1180px;
       margin: 0 auto;
@@ -38,56 +92,204 @@
     }
 
     .hero {
-      background: linear-gradient(135deg, rgba(15, 118, 110, 0.98), rgba(21, 94, 117, 0.92));
-      color: #fff;
+      position: relative;
+      overflow: hidden;
       border-radius: 28px;
-      padding: 40px;
-      box-shadow: 0 22px 44px rgba(15, 23, 42, 0.16);
+      padding: 12px 24px 30px;
+      color: #fff;
+      box-shadow: 0 26px 48px rgba(15, 23, 42, 0.18);
+      background:
+        linear-gradient(135deg, rgba(16, 29, 74, 0.9), rgba(40, 58, 125, 0.82)),
+        radial-gradient(circle at 18% 24%, rgba(255, 255, 255, 0.08), transparent 20%),
+        radial-gradient(circle at 82% 18%, rgba(69, 190, 255, 0.16), transparent 18%),
+        radial-gradient(circle at 72% 74%, rgba(255, 255, 255, 0.07), transparent 16%),
+        linear-gradient(120deg, rgba(255, 255, 255, 0.05) 0 3%, transparent 3% 12%, rgba(255, 255, 255, 0.04) 12% 15%, transparent 15% 100%),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 100%),
+        linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 100%),
+        linear-gradient(180deg, #142454, #243d87);
+      background-size: auto, auto, auto, auto, auto, 110px 110px, 110px 110px, auto;
+      animation: fadeRise 0.9s ease-out both;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.34;
+      background:
+        linear-gradient(90deg, rgba(8, 16, 44, 0.72), rgba(8, 16, 44, 0.22) 34%, rgba(8, 16, 44, 0.58) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 720'%3E%3Cg fill='none' stroke='%23cfe1ff' stroke-opacity='.25' stroke-width='6'%3E%3Crect x='88' y='84' width='240' height='500' rx='10'/%3E%3Crect x='118' y='114' width='180' height='440' rx='8'/%3E%3Cpath d='M390 160h250v330H390z'/%3E%3Cpath d='M420 190h190v110H420zM420 330h190v130H420z'/%3E%3Cpath d='M690 148h158v390H690zM720 188h98v84H720zM720 304h98v84H720zM720 420h98v84H720z'/%3E%3Cpath d='M904 250c46-40 114-48 170-18 44 24 62 54 92 110 36 66 70 100 140 142'/%3E%3Cpath d='M900 308c68-8 130 6 186 44 36 24 72 68 108 134'/%3E%3Cpath d='M1086 138h150v230h-150zM1120 172h82v62h-82zM1120 258h82v76h-82z'/%3E%3Cpath d='M1278 200h190v304h-190zM1310 236h126v104h-126zM1310 368h126v104h-126z'/%3E%3Ccircle cx='1450' cy='150' r='44'/%3E%3Ccircle cx='1450' cy='150' r='18'/%3E%3Cpath d='M104 606h1368' stroke-width='8' stroke-opacity='.18'/%3E%3C/g%3E%3Cg fill='%23ffffff' fill-opacity='.08'%3E%3Crect x='96' y='96' width='56' height='56' rx='6'/%3E%3Crect x='176' y='96' width='56' height='56' rx='6'/%3E%3Crect x='456' y='210' width='36' height='36' rx='4'/%3E%3Crect x='516' y='210' width='36' height='36' rx='4'/%3E%3Crect x='744' y='206' width='48' height='48' rx='6'/%3E%3Crect x='744' y='322' width='48' height='48' rx='6'/%3E%3Crect x='744' y='438' width='48' height='48' rx='6'/%3E%3Ccircle cx='1162' cy='204' r='14'/%3E%3Ccircle cx='1162' cy='294' r='14'/%3E%3Ccircle cx='1370' cy='286' r='18'/%3E%3Ccircle cx='1370' cy='416' r='18'/%3E%3C/g%3E%3C/svg%3E") center/cover no-repeat;
+      filter: blur(0.5px);
+      pointer-events: none;
+      transform-origin: center center;
+      animation: heroAmbientShift 15s ease-in-out infinite;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0)),
+        radial-gradient(circle at top center, rgba(65, 187, 255, 0.24), transparent 35%),
+        linear-gradient(180deg, rgba(5, 12, 34, 0.02) 0%, rgba(5, 12, 34, 0.34) 100%);
+      pointer-events: none;
+      animation: heroGlowDrift 9s ease-in-out infinite;
+    }
+
+    .hero > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-layout {
+      display: block;
+    }
+
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      width: 100%;
+    }
+
+    .hero-partners {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+
+    .hrdk-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 0;
+      border-radius: 0;
+      background: transparent;
+      border: 0;
+      backdrop-filter: none;
+      box-shadow: none;
+      animation: fadeRise 0.78s ease-out both;
+      min-height: 0;
+      max-width: 280px;
+    }
+
+    .hrdk-mark-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      position: relative;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+      flex: 0 0 auto;
+    }
+
+    .hrdk-mark-badge img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hrdk-mark-text {
+      display: grid;
+      gap: 2px;
+    }
+
+    .hrdk-mark-text strong {
+      font-size: 0.58rem;
+      color: #62c0ff;
+      letter-spacing: 0.03em;
+      font-weight: 800;
+    }
+
+    .hrdk-mark-text span {
+      font-size: 0.74rem;
+      line-height: 1.1;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .aix-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.09);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 24px rgba(7, 15, 40, 0.16);
+      animation: fadeRise 0.82s ease-out both;
+      flex: 0 0 auto;
+    }
+
+    .aix-mark-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      position: relative;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2), transparent 44%),
+        linear-gradient(160deg, #2391ff, #0e63ff 60%, #0047d4);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24), 0 6px 14px rgba(0, 56, 180, 0.28);
+    }
+
+    .aix-mark-badge::before,
+    .aix-mark-badge::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    .aix-mark-badge::before {
+      width: 12px;
+      height: 12px;
+      box-shadow:
+        0 -8px 0 -5px rgba(255, 255, 255, 0.95),
+        0 8px 0 -5px rgba(255, 255, 255, 0.95),
+        8px 0 0 -5px rgba(255, 255, 255, 0.95),
+        -8px 0 0 -5px rgba(255, 255, 255, 0.95);
+    }
+
+    .aix-mark-badge::after {
+      width: 6px;
+      height: 6px;
+      background: #0e63ff;
     }
 
     .hero h1 {
-      margin: 0 0 12px;
-      font-size: 2rem;
-      line-height: 1.25;
+      margin: 0;
+      font-size: clamp(2.15rem, 4.4vw, 3.75rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      font-weight: 900;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+      animation: fadeRise 0.95s ease-out 0.12s both;
+      white-space: nowrap;
+    }
+
+    .hero h1 .accent {
+      color: #3eb8ff;
     }
 
     .hero p {
-      margin: 0;
+      margin: 22px auto 0;
       max-width: 860px;
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-top: 24px;
-    }
-
-    .summary-card {
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 20px;
-      padding: 18px 20px;
-      backdrop-filter: blur(8px);
-    }
-
-    .summary-card strong {
-      display: block;
-      font-size: 0.82rem;
-      letter-spacing: 0.02em;
-      color: rgba(255, 255, 255, 0.78);
-    }
-
-    .summary-card span {
-      display: block;
-      margin-top: 8px;
-      font-size: 1.08rem;
+      color: rgba(255, 255, 255, 0.94);
+      font-size: clamp(1.05rem, 2vw, 1.22rem);
       font-weight: 700;
-    }
-
-    .summary-card a {
-      color: #fff;
+      line-height: 1.65;
+      text-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
     }
 
     .section {
@@ -97,6 +299,14 @@
       border-radius: 24px;
       padding: 28px;
       box-shadow: 0 16px 36px rgba(148, 163, 184, 0.10);
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+      animation: fadeRise 0.8s ease-out both;
+    }
+
+    .section:hover {
+      transform: translate3d(0, -2px, 0);
+      box-shadow: 0 20px 40px rgba(148, 163, 184, 0.14);
+      border-color: #ced8e6;
     }
 
     .section h2 {
@@ -120,6 +330,7 @@
       color: var(--brand);
       font-size: 0.92rem;
       font-weight: 700;
+      animation: softFloat 6s ease-in-out infinite;
     }
 
     .form-grid {
@@ -148,6 +359,75 @@
       background: #fff;
       font: inherit;
       color: var(--ink);
+      transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+    }
+
+    .text-input:focus {
+      outline: none;
+      border-color: #8eb7ff;
+      box-shadow: 0 0 0 4px rgba(30, 99, 255, 0.10);
+      transform: translate3d(0, -1px, 0);
+    }
+
+    .field-help {
+      margin: 12px 0 0;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 980px) {
+      .hero {
+        padding: 20px 24px 40px;
+      }
+
+      .hero-layout {
+        display: block;
+      }
+
+      .hero-copy {
+        align-items: center;
+        text-align: center;
+      }
+
+      .hero-partners {
+        align-items: flex-start;
+        max-width: 760px;
+        margin-bottom: 16px;
+      }
+
+      .hrdk-mark {
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 16px 12px 60px;
+      }
+
+      .hero {
+        border-radius: 24px;
+        padding: 10px 12px 24px;
+      }
+
+      .hero h1 {
+        white-space: normal;
+      }
+
+      .hero-layout {
+        gap: 20px;
+      }
+
+      .hero-partners {
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .aix-mark {
+        width: 42px;
+        height: 42px;
+      }
+
     }
 
     table {
@@ -203,6 +483,43 @@
       color: var(--accent);
     }
 
+    .analysis-signoff {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 14px;
+      width: fit-content;
+      margin-left: auto;
+    }
+
+    .analysis-signoff img {
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      flex: 0 0 auto;
+      box-shadow: 0 6px 14px rgba(161, 122, 66, 0.18);
+    }
+
+    .analysis-signoff-text {
+      display: grid;
+      gap: 2px;
+      text-align: right;
+    }
+
+    .analysis-signoff-label {
+      font-size: 0.82rem;
+      color: #1e63ff;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .analysis-signoff-name {
+      font-size: 1.08rem;
+      line-height: 1.2;
+      font-weight: 900;
+      color: #1d2733;
+    }
+
     .score-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -215,6 +532,13 @@
       border-radius: 20px;
       padding: 18px;
       background: linear-gradient(180deg, #ffffff 0%, #f9fbfd 100%);
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    }
+
+    .score-card:hover {
+      transform: translate3d(0, -3px, 0);
+      box-shadow: 0 16px 30px rgba(148, 163, 184, 0.14);
+      border-color: #d2ddea;
     }
 
     .score-card h3 {
@@ -250,6 +574,12 @@
       border: 1px solid var(--line);
       border-radius: 20px;
       background: linear-gradient(180deg, #fcfffe 0%, #f3faf8 100%);
+      transition: transform 220ms ease, box-shadow 220ms ease;
+    }
+
+    .result-panel:hover {
+      transform: translate3d(0, -2px, 0);
+      box-shadow: 0 18px 30px rgba(148, 163, 184, 0.12);
     }
 
     .result-grid {
@@ -310,6 +640,56 @@
       border: 1px solid #cde8e3;
       border-radius: 18px;
       background: linear-gradient(180deg, #f7fffd 0%, #eefaf7 100%);
+      transition: transform 220ms ease, box-shadow 220ms ease;
+    }
+
+    .action-row.top-cta:hover {
+      transform: translate3d(0, -2px, 0);
+      box-shadow: 0 14px 26px rgba(181, 214, 208, 0.18);
+    }
+
+    button,
+    .ghost-button,
+    .primary-button,
+    .secondary-button {
+      transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+    }
+
+    button:hover,
+    .ghost-button:hover,
+    .primary-button:hover,
+    .secondary-button:hover {
+      transform: translate3d(0, -1px, 0);
+      filter: saturate(1.04);
+    }
+
+    button:active,
+    .ghost-button:active,
+    .primary-button:active,
+    .secondary-button:active {
+      transform: translate3d(0, 0, 0);
+    }
+
+    .section:nth-of-type(2) {
+      animation-delay: 0.14s;
+    }
+
+    .section:nth-of-type(3) {
+      animation-delay: 0.22s;
+    }
+
+    .section:nth-of-type(4) {
+      animation-delay: 0.3s;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
     }
 
     .primary-button,
@@ -443,28 +823,27 @@
 <body>
   <main class="page">
     <section class="hero">
-      <h1>&lt;(주)태화기업 AI 컨설팅 사전 수준진단지 &amp; 컨설팅 가이드&gt;</h1>
-      <p>본 문서는 태화기업의 성공적인 AI 도입 및 디지털 전환(AX)을 위한 사전 진단표와 교수용 컨설팅 방향 가이드를 한 화면에서 함께 검토할 수 있도록 정리한 배포용 HTML 문서입니다.</p>
-      <div class="summary-grid">
-        <div class="summary-card">
-          <strong>진단 대상</strong>
-          <span>(주)태화기업</span>
-        </div>
-        <div class="summary-card">
-          <strong>주요 목적</strong>
-          <span>AI 도입 준비도 진단 및 AX 로드맵 수립</span>
-        </div>
-        <div class="summary-card">
-          <strong>중점 영역</strong>
-          <span>생산, 품질, 설비, 전산, 물류</span>
-        </div>
-      <div class="summary-card">
-          <strong>관리자 대시보드</strong>
-          <span><a href="./admin_dashboard.html">응답 통합 보기</a></span>
-        </div>
-        <div class="summary-card">
-          <strong>저장 방식</strong>
-          <span id="storageModeBadge">Google Sheets 연동 대기</span>
+      <div class="hero-layout">
+        <div class="hero-copy">
+          <div class="hero-partners">
+            <div class="hrdk-mark" aria-label="한국산업인력공단 마크">
+              <div class="hrdk-mark-badge" aria-hidden="true">
+                <img src="./hrdk-mascot.png" alt="">
+              </div>
+              <div class="hrdk-mark-text">
+                <strong>HRDK</strong>
+                <span>한국산업인력공단</span>
+              </div>
+            </div>
+            <div class="hrdk-mark" aria-label="AI 확산센터 마크">
+              <div class="aix-mark-badge" aria-hidden="true"></div>
+              <div class="hrdk-mark-text">
+                <strong>경남경영자총협회</strong>
+                <span>중소기업AI훈련확산센터</span>
+              </div>
+            </div>
+          </div>
+          <h1>AI 컨설팅 사전 수준진단 <span class="accent">&amp; 컨설팅 가이드</span></h1>
         </div>
       </div>
     </section>
@@ -477,7 +856,8 @@
       <div class="form-grid">
         <div class="field-block">
           <label for="companyNameInput">회사명</label>
-          <input class="text-input" id="companyNameInput" type="text" value="(주)태화기업">
+          <input class="text-input" id="companyNameInput" type="text" value="" placeholder="귀사명을 직접 입력해 주세요">
+
         </div>
         <div class="field-block">
           <label for="respondentNameInput">응답자명</label>
@@ -492,6 +872,7 @@
           <input class="text-input" id="positionInput" type="text" placeholder="예: 팀장">
         </div>
       </div>
+      <p class="field-help">이 문서는 기업별로 배포되므로 회사명은 직접 입력해 주세요.</p>
 
       <div class="action-row top-cta">
         <button type="button" class="primary-button" data-role="show-results">결과 보기</button>
@@ -1002,7 +1383,7 @@
     </section>
 
     <section class="section">
-      <h2>3. 태화기업 맞춤 컨설팅 가이드</h2>
+      <h2>3. 맞춤 컨설팅 가이드</h2>
       <p class="lead">모터 제조업 특성과 PDF 원문의 진단 의도를 바탕으로, 현장 인터뷰 시 바로 활용할 수 있도록 정리한 교수용 체크 포인트입니다.</p>
 
       <table>
@@ -1039,12 +1420,19 @@
       </table>
 
       <div class="note-box">
-        <strong>교수용 해석 팁</strong>
+        <strong>결과분석</strong>
         <div>M1에서 선택된 경영 과제와 C1의 최종 목표가 일치하는지 먼저 확인하시면, 단순 교육형 컨설팅이 아니라 실제 도입 과제형 컨설팅으로 연결하기가 훨씬 수월합니다.</div>
+        <div class="analysis-signoff">
+          <img src="./field-professor-mark.png" alt="산업현장교수 마크">
+          <div class="analysis-signoff-text">
+            <div class="analysis-signoff-label">산업현장교수 경남협의회</div>
+            <div class="analysis-signoff-name">AI훈련코치 강사회</div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <div class="footer">문서명: (주)태화기업 AI 컨설팅 사전 수준진단지 &amp; 컨설팅 가이드</div>
+    <div class="footer">문서명: AI 컨설팅 사전 수준진단지 &amp; 컨설팅 가이드</div>
   </main>
   <script src="./sheet_config.js"></script>
   <script>
@@ -1150,7 +1538,7 @@
         const level = levelDisplay.textContent;
         return {
           id: `resp-${Date.now()}`,
-          companyName: companyNameInput.value.trim() || "(주)태화기업",
+          companyName: companyNameInput.value.trim() || "",
           respondentName: respondentNameInput.value.trim(),
           department: departmentInput.value.trim(),
           position: positionInput.value.trim(),
@@ -1336,3 +1724,8 @@
   </script>
 </body>
 </html>
+
+
+
+
+
