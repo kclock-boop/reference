@@ -1072,6 +1072,7 @@
         <a class="button" href="./taehwa_ai_diagnostic_guide.html">기업 사전 수준진단 화면</a>
         <button type="button" class="button secondary" id="refreshDashboardButton">새로고침</button>
         <button type="button" class="button secondary" id="printReportButton">보고서 인쇄/PDF 저장</button>
+        <button type="button" class="button secondary" id="exportPptButton">PPT 저장</button>
       </div>
     </section>
 
@@ -1190,6 +1191,7 @@
   </main>
 
   <script src="./sheet_config.js"></script>
+  <script src="./vendor/pptxgen.bundle.js"></script>
   <script>
     (() => {
       const appConfig = window.TAEHWA_CONFIG || {};
@@ -1211,6 +1213,7 @@
       const clearStorageButton = document.getElementById("clearStorageButton");
       const refreshDashboardButton = document.getElementById("refreshDashboardButton");
       const printReportButton = document.getElementById("printReportButton");
+      const exportPptButton = document.getElementById("exportPptButton");
       const dashboardStatus = document.getElementById("dashboardStatus");
       const dataSourceBadge = document.getElementById("dataSourceBadge");
       const responsesTableBody = document.getElementById("responsesTableBody");
@@ -1281,6 +1284,13 @@
 
       function getCompanyLabel(item) {
         return (item && item.companyName && String(item.companyName).trim()) || "기업명 미입력";
+      }
+
+      function sanitizeFileName(value) {
+        return String(value || "ai_result_report")
+          .replace(/[\\/:*?"<>|]/g, "_")
+          .replace(/\s+/g, "_")
+          .slice(0, 80);
       }
 
       function escapeHtml(value) {
@@ -1507,6 +1517,231 @@
 
         const names = priorities.map((entry) => entry.name).join(", ");
         return `${companyLabel}은 현재 ${names} 영역의 기초 체계 보완이 우선이며, 시스템·데이터·현장 활용을 동시에 정비하는 접근이 가장 효과적입니다.`;
+      }
+
+      function getSelectedResponse() {
+        const selectedResponseId = detailContent.dataset.selectedResponseId || "";
+        return responses.find((item) => item.id === selectedResponseId) || null;
+      }
+
+      async function exportSelectedToPpt() {
+        const item = getSelectedResponse();
+        if (!item) {
+          window.alert("먼저 응답 목록에서 분석할 기업을 선택해 주세요.");
+          return;
+        }
+
+        if (typeof window.PptxGenJS !== "function") {
+          window.alert("PPT 생성 모듈을 불러오지 못했습니다. 페이지를 새로고침한 뒤 다시 시도해 주세요.");
+          return;
+        }
+
+        exportPptButton.disabled = true;
+        exportPptButton.textContent = "PPT 생성 중...";
+
+        try {
+          const pptx = new window.PptxGenJS();
+          const companyLabel = getCompanyLabel(item);
+          const issues = (item.managementIssues || []).slice(0, 3);
+          const departments = (item.targetDepartments || []).slice(0, 3);
+          const goals = (item.consultingGoals || []).slice(0, 3);
+          const scoredItems = getScoredItems(item);
+          const priorities = [...scoredItems]
+            .filter((entry) => entry.health.label === "위험" || entry.health.label === "보완" || entry.health.label === "미입력")
+            .sort((a, b) => (a.value ?? -1) - (b.value ?? -1))
+            .slice(0, 3);
+          const overallInsight = getOverallScoreInsight(item, priorities);
+
+          pptx.layout = "LAYOUT_WIDE";
+          pptx.author = "Codex";
+          pptx.company = "HRDK x 경남경영자총협회";
+          pptx.subject = `${companyLabel} AI훈련코치(강사회) 결과분석 보고서`;
+          pptx.title = `${companyLabel} AI 결과분석 보고서`;
+          pptx.lang = "ko-KR";
+
+          const slide1 = pptx.addSlide();
+          slide1.background = { color: "F6FAFD" };
+          slide1.addShape(pptx.ShapeType.roundRect, {
+            x: 0.35, y: 0.3, w: 12.6, h: 0.95,
+            rectRadius: 0.12,
+            fill: { color: "0F766E" },
+            line: { color: "0F766E" }
+          });
+          slide1.addText(`${companyLabel} AI훈련코치(강사회) 결과분석 보고서`, {
+            x: 0.65, y: 0.5, w: 9.2, h: 0.34,
+            fontFace: "Malgun Gothic", fontSize: 22, bold: true, color: "FFFFFF"
+          });
+          slide1.addText(`응답일시 ${formatDate(item.submittedAt)}`, {
+            x: 9.5, y: 0.56, w: 2.9, h: 0.2,
+            fontFace: "Malgun Gothic", fontSize: 10, color: "D9F7F2", align: "right"
+          });
+          slide1.addText("핵심 요약", {
+            x: 0.55, y: 1.45, w: 2.0, h: 0.24,
+            fontFace: "Malgun Gothic", fontSize: 18, bold: true, color: "155E75"
+          });
+          slide1.addText(overallInsight, {
+            x: 0.55, y: 1.78, w: 12.0, h: 0.72,
+            fontFace: "Malgun Gothic", fontSize: 14, color: "334155",
+            margin: 0
+          });
+
+          const summaryCards = [
+            { title: "총점", value: `${item.totalScore || 0}점`, accent: "2563EB" },
+            { title: "등급", value: item.level || "미산정", accent: "0F766E" },
+            { title: "권장 방향", value: item.recommendation || "-", accent: "7C3AED" },
+            { title: "우선 조직", value: departments[0] || "추가 확인 필요", accent: "EA580C" }
+          ];
+
+          summaryCards.forEach((card, index) => {
+            const x = 0.55 + (index * 3.05);
+            slide1.addShape(pptx.ShapeType.roundRect, {
+              x, y: 2.72, w: 2.78, h: 1.18,
+              rectRadius: 0.1,
+              fill: { color: "FFFFFF" },
+              line: { color: "D7E3F0", width: 1.1 }
+            });
+            slide1.addText(card.title, {
+              x: x + 0.18, y: 2.94, w: 1.5, h: 0.18,
+              fontFace: "Malgun Gothic", fontSize: 10, bold: true, color: card.accent
+            });
+            slide1.addText(card.value, {
+              x: x + 0.18, y: 3.18, w: 2.35, h: 0.36,
+              fontFace: "Malgun Gothic", fontSize: 15, bold: true, color: "1F2937"
+            });
+          });
+
+          slide1.addShape(pptx.ShapeType.roundRect, {
+            x: 0.55, y: 4.2, w: 4.0, h: 2.55,
+            rectRadius: 0.1,
+            fill: { color: "FFFFFF" },
+            line: { color: "D7E3F0", width: 1.0 }
+          });
+          slide1.addText("기업 기본 정보", {
+            x: 0.75, y: 4.42, w: 1.7, h: 0.2,
+            fontFace: "Malgun Gothic", fontSize: 14, bold: true, color: "155E75"
+          });
+          slide1.addText([
+            `회사명: ${companyLabel}`,
+            `응답자: ${item.respondentName || "-"}`,
+            `부서/직책: ${item.department || "-"} / ${item.position || "-"}`,
+            `메모: ${item.consultingMemo || "없음"}`
+          ].join("\n"), {
+            x: 0.75, y: 4.8, w: 3.4, h: 1.7,
+            fontFace: "Malgun Gothic", fontSize: 12, color: "334155", margin: 0.02
+          });
+
+          slide1.addShape(pptx.ShapeType.roundRect, {
+            x: 4.75, y: 4.2, w: 3.8, h: 2.55,
+            rectRadius: 0.1,
+            fill: { color: "FFF8F1" },
+            line: { color: "F3C58B", width: 1.0 }
+          });
+          slide1.addText("핵심 경영 이슈", {
+            x: 4.95, y: 4.42, w: 1.9, h: 0.2,
+            fontFace: "Malgun Gothic", fontSize: 14, bold: true, color: "B45309"
+          });
+          slide1.addText((issues.length ? issues : ["추가 확인 필요"]).map((text, index) => `${index + 1}. ${text}`).join("\n"), {
+            x: 4.95, y: 4.8, w: 3.15, h: 1.7,
+            fontFace: "Malgun Gothic", fontSize: 12, color: "7C4A03", margin: 0.02
+          });
+
+          slide1.addShape(pptx.ShapeType.roundRect, {
+            x: 8.75, y: 4.2, w: 4.15, h: 2.55,
+            rectRadius: 0.1,
+            fill: { color: "F2FBFA" },
+            line: { color: "B6E2DB", width: 1.0 }
+          });
+          slide1.addText("컨설팅 목표", {
+            x: 8.95, y: 4.42, w: 1.5, h: 0.2,
+            fontFace: "Malgun Gothic", fontSize: 14, bold: true, color: "0F766E"
+          });
+          slide1.addText((goals.length ? goals : ["추가 확인 필요"]).map((text, index) => `${index + 1}. ${text}`).join("\n"), {
+            x: 8.95, y: 4.8, w: 3.5, h: 1.7,
+            fontFace: "Malgun Gothic", fontSize: 12, color: "334155", margin: 0.02
+          });
+
+          const slide2 = pptx.addSlide();
+          slide2.background = { color: "F8FBFF" };
+          slide2.addShape(pptx.ShapeType.roundRect, {
+            x: 0.35, y: 0.3, w: 12.6, h: 0.95,
+            rectRadius: 0.12,
+            fill: { color: "155E75" },
+            line: { color: "155E75" }
+          });
+          slide2.addText(`${companyLabel} 우선 보완과 실행 제안`, {
+            x: 0.65, y: 0.5, w: 8.6, h: 0.34,
+            fontFace: "Malgun Gothic", fontSize: 22, bold: true, color: "FFFFFF"
+          });
+          slide2.addText("우선 보완 3개", {
+            x: 0.55, y: 1.45, w: 2.1, h: 0.24,
+            fontFace: "Malgun Gothic", fontSize: 18, bold: true, color: "155E75"
+          });
+
+          priorities.forEach((entry, index) => {
+            const y = 1.88 + (index * 1.45);
+            slide2.addShape(pptx.ShapeType.roundRect, {
+              x: 0.55, y, w: 12.0, h: 1.1,
+              rectRadius: 0.1,
+              fill: { color: "FFFFFF" },
+              line: { color: "D7E3F0", width: 1.0 }
+            });
+            slide2.addShape(pptx.ShapeType.roundRect, {
+              x: 0.75, y: y + 0.18, w: 0.78, h: 0.34,
+              rectRadius: 0.08,
+              fill: { color: "DBEAFE" },
+              line: { color: "BFDBFE", width: 1.0 }
+            });
+            slide2.addText(entry.code, {
+              x: 0.96, y: y + 0.24, w: 0.3, h: 0.12,
+              fontFace: "Malgun Gothic", fontSize: 11, bold: true, color: "1D4ED8", align: "center"
+            });
+            slide2.addText(`${entry.name} ${entry.value ?? "-"}점`, {
+              x: 1.7, y: y + 0.18, w: 2.2, h: 0.2,
+              fontFace: "Malgun Gothic", fontSize: 14, bold: true, color: "0F172A"
+            });
+            slide2.addText(getScoreImprovementGuide(entry.code, entry.value), {
+              x: 1.7, y: y + 0.46, w: 10.35, h: 0.42,
+              fontFace: "Malgun Gothic", fontSize: 10.5, color: "475569", margin: 0
+            });
+          });
+
+          slide2.addShape(pptx.ShapeType.roundRect, {
+            x: 0.55, y: 6.45, w: 5.9, h: 0.9,
+            rectRadius: 0.1,
+            fill: { color: "EFF6FF" },
+            line: { color: "BFDBFE", width: 1.0 }
+          });
+          slide2.addText("권장 실행순서", {
+            x: 0.78, y: 6.62, w: 1.5, h: 0.18,
+            fontFace: "Malgun Gothic", fontSize: 13, bold: true, color: "1D4ED8"
+          });
+          slide2.addText("1단계 진단 인터뷰 → 2단계 파일럿 선정 → 3단계 현장 적용 및 검증", {
+            x: 1.95, y: 6.62, w: 4.2, h: 0.18,
+            fontFace: "Malgun Gothic", fontSize: 11.5, color: "334155"
+          });
+
+          slide2.addShape(pptx.ShapeType.roundRect, {
+            x: 6.75, y: 6.45, w: 5.8, h: 0.9,
+            rectRadius: 0.1,
+            fill: { color: "F5F3FF" },
+            line: { color: "DDD6FE", width: 1.0 }
+          });
+          slide2.addText("자동 총평", {
+            x: 6.98, y: 6.62, w: 1.0, h: 0.18,
+            fontFace: "Malgun Gothic", fontSize: 13, bold: true, color: "7C3AED"
+          });
+          slide2.addText(item.recommendation || "AI 도입 준비도 추가 점검", {
+            x: 7.95, y: 6.62, w: 4.2, h: 0.18,
+            fontFace: "Malgun Gothic", fontSize: 11.5, color: "334155"
+          });
+
+          await pptx.writeFile({ fileName: `${sanitizeFileName(companyLabel)}_AI결과분석보고서.pptx` });
+        } catch (error) {
+          window.alert(`PPT 저장 중 오류가 발생했습니다. ${error.message}`);
+        } finally {
+          exportPptButton.disabled = false;
+          exportPptButton.textContent = "PPT 저장";
+        }
       }
 
       function buildScoreDetailRows(item) {
@@ -1920,6 +2155,7 @@
       exportCsvButton.addEventListener("click", () => downloadCsv(getFilteredResponses()));
       refreshDashboardButton.addEventListener("click", refreshDashboard);
       printReportButton.addEventListener("click", () => window.print());
+      exportPptButton.addEventListener("click", exportSelectedToPpt);
       clearStorageButton.addEventListener("click", () => {
         localStorage.removeItem(storageKey);
         detailEmpty.style.display = "block";
