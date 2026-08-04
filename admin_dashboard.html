@@ -155,6 +155,55 @@
       text-decoration: underline;
     }
 
+    .analysis-signoff {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px 10px 10px;
+      border-radius: 18px;
+      background: rgba(255, 248, 243, 0.92);
+      border: 1px solid #f0dfcf;
+      box-shadow: 0 10px 24px rgba(180, 146, 110, 0.10);
+    }
+
+    .analysis-signoff img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 6px 14px rgba(148, 163, 184, 0.18);
+      background: #fff;
+    }
+
+    .analysis-signoff-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+
+    .analysis-signoff-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #2563eb;
+      letter-spacing: -0.01em;
+    }
+
+    .analysis-signoff-name {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: #1f2937;
+      letter-spacing: -0.01em;
+    }
+
+    .page-signoff {
+      margin-top: 10px;
+      margin-right: -4px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
     .card strong,
     .viz-card strong {
       display: block;
@@ -1295,6 +1344,7 @@
       .toolbar,
       #dashboardStatus,
       #detailEmpty,
+      .page-signoff,
       .hero,
       .section:first-of-type,
       .section:nth-of-type(2),
@@ -2939,5 +2989,15 @@
       refreshDashboard();
     })();
   </script>
+
+  <div class="page-signoff" aria-label="산업현장교수 경남협의회 AI훈련코치 강사회">
+    <div class="analysis-signoff">
+      <img src="./field-professor-mark.png" alt="산업현장교수 마크">
+      <div class="analysis-signoff-text">
+        <div class="analysis-signoff-label">산업현장교수 경남협의회</div>
+        <div class="analysis-signoff-name">AI훈련코치 강사회</div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
