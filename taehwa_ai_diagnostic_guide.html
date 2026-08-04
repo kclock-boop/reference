@@ -844,6 +844,21 @@
       text-align: center;
     }
 
+    .page-signoff {
+      margin-top: 18px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .page-signoff .analysis-signoff {
+      margin-top: 0;
+      padding: 10px 14px 10px 10px;
+      border-radius: 18px;
+      background: rgba(255, 248, 243, 0.92);
+      border: 1px solid #f0dfcf;
+      box-shadow: 0 10px 24px rgba(180, 146, 110, 0.10);
+    }
+
     @media print {
       body {
         background: #fff;
@@ -854,6 +869,7 @@
       .action-row,
       .result-actions,
       .inline-note,
+      .page-signoff,
       .note-box,
       textarea,
       button {
@@ -1521,6 +1537,16 @@
         </div>
       </div>
     </section>
+
+    <div class="page-signoff" aria-label="산업현장교수 경남협의회 AI훈련코치 강사회">
+      <div class="analysis-signoff">
+        <img src="./field-professor-mark.png" alt="산업현장교수 마크">
+        <div class="analysis-signoff-text">
+          <div class="analysis-signoff-label">산업현장교수 경남협의회</div>
+          <div class="analysis-signoff-name">AI훈련코치 강사회</div>
+        </div>
+      </div>
+    </div>
 
     <div class="footer">문서명: AI 컨설팅 사전 수준진단지 &amp; 컨설팅 가이드</div>
   </main>
